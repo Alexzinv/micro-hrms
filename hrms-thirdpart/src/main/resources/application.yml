@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: third-part
+
+server:
+  port: 9000
