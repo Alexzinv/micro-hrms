@@ -1,0 +1,24 @@
+package com.alex.system.service;
+
+
+
+import com.alex.system.entity.UserRole;
+import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
+
+/**
+ * @Author _Alexzinv_
+ * @Date 2021/9/22
+ * @Description
+ */
+public interface UserRoleService extends IService<UserRole> {
+
+    /**
+     * 给用户分配角色
+     * @param userId 用户id
+     * @param roleIds 角色列表
+     */
+    void saveUserRoleRelation(Long userId, List<Long> roleIds);
+}
+

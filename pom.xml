@@ -12,6 +12,8 @@
 
     <modules>
         <module>hrms-common</module>
+        <module>hrms-gateway</module>
+        <module>hrms-system</module>
     </modules>
 
 

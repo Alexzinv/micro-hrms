@@ -21,11 +21,6 @@
     <dependencies>
         <dependency>
             <groupId>com.alex</groupId>
-            <artifactId>hrms-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.alex</groupId>
             <artifactId>common-utils</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
@@ -36,7 +31,6 @@
         </dependency>
     </dependencies>
 
-
     <build>
         <plugins>
             <plugin>
@@ -45,4 +39,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

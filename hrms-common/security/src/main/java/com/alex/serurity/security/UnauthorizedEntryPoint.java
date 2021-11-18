@@ -1,7 +1,7 @@
 package com.alex.serurity.security;
 
-import com.alex.util.ResponseUtil;
-import com.alex.util.R;
+import com.alex.common.util.R;
+import com.alex.common.util.ResponseUtil;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 

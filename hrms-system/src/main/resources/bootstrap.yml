@@ -1,0 +1,21 @@
+spring:
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.242.129:8848
+        namespace: e80e7bd4-e6a2-4e8a-9f71-8b3fb5c62c1e
+        group: DEFAULT_GROUP
+        file-extension: yaml
+        extension-configs:
+          - data-id: nacos.yml
+            refresh: true
+          - data-id: mysql.yml
+            refresh: true
+          - data-id: redis.yml
+            refresh: true
+          - data-id: mybatis-plus.yml
+            refresh: true
+          - data-id: jackson.yml
+            refresh: true
+          - data-id: log-level.yml
+            refresh: true

@@ -44,6 +44,7 @@
         <bootstrap.version>3.0.3</bootstrap.version>
         <poi.version>5.0.0</poi.version>
         <easyexcel.version>2.2.3</easyexcel.version>
+        <openfeign.version>3.0.4</openfeign.version>
         <!--<canal.client.version>1.1.0</canal.client.version>-->
     </properties>
 
@@ -196,6 +197,11 @@
             <version>${http-component.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>${openfeign.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
@@ -248,6 +254,7 @@
             </plugin>
         </plugins>
     </build>
+
 
 
 </project>
