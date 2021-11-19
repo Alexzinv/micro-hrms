@@ -3,7 +3,7 @@ package com.alex.common.consant;
 /**
  * @Author _Alexzinv_
  * @Date 2021/11/18
- * @Description
+ * @Description 用户常量
  */
 public interface UserConstant {
 
