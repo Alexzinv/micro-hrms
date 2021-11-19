@@ -74,6 +74,12 @@ public class R {
 		return r;
 	}
 
+	public R result(ResultCodeEnum codeEnum){
+		this.setCode(codeEnum.getCode());
+		this.setMessage(codeEnum.getMessage());
+		return this;
+	}
+
 	public R message(String message){
 		this.setMessage(message);
 		return this;

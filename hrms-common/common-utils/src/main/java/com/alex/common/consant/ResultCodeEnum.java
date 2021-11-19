@@ -29,7 +29,11 @@ public enum ResultCodeEnum {
     /**
      * 未知异常
      */
-    UNKNOWN_EXCEPTION(20005, "未知异常");
+    UNKNOWN_EXCEPTION(20005, "未知异常"),
+    /**
+     * 账号或密码错误
+     */
+    ACCOUNT_OR_PASSWORD_WRONG(20005, "未知异常");
     /**
      * 状态码
      */
