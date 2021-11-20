@@ -30,7 +30,7 @@ public interface UserConstant {
     /**
      * 账号状态
      */
-    interface EnableState{
+    interface EnableState {
         /**
          * 禁用
          */
@@ -40,5 +40,17 @@ public interface UserConstant {
          * 可用
          */
         int ENABLE = 1;
+    }
+
+    interface JobStatus {
+        /**
+         * 在职
+         */
+        int IN_ACTIVE_SERVICE = 0;
+
+        /**
+         * 离职
+         */
+        int LEAVE = 1;
     }
 }
