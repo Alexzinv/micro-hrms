@@ -33,6 +33,23 @@ public class Company implements Serializable {
     @NotBlank
     private String name;
 
+    @ApiModelProperty(value = "法人代表")
+    private String legalRepresentative;
+
+    @ApiModelProperty(value = "公司电话")
+    @Pattern(regexp = "0?(13|14|15|18|17)[0-9]{9}")
+    private String companyPhone;
+
+    @ApiModelProperty(value = "邮箱")
+    @Pattern(regexp = "\\w[-\\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\\.)+[A-Za-z]{2,14}")
+    private String mailbox;
+
+    @ApiModelProperty(value = "公司地址")
+    private String companyAddress;
+
+    @ApiModelProperty(value = "公司规模")
+    private String companySize;
+
     @ApiModelProperty(value = "企业登录账号ID")
     private Long managerId;
 
@@ -46,28 +63,9 @@ public class Company implements Serializable {
     @ApiModelProperty(value = "到期时间")
     private Date expirationDate;
 
-    @ApiModelProperty(value = "公司地区")
-    private String companyArea;
-
-    @ApiModelProperty(value = "公司地址")
-    private String companyAddress;
 
     @ApiModelProperty(value = "营业执照-图片ID")
     private String businessLicenseId;
-
-    @ApiModelProperty(value = "法人代表")
-    private String legalRepresentative;
-
-    @ApiModelProperty(value = "公司电话")
-    @Pattern(regexp = "0?(13|14|15|18|17)[0-9]{9}")
-    private String companyPhone;
-
-    @ApiModelProperty(value = "邮箱")
-    @Pattern(regexp = "\\w[-\\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\\.)+[A-Za-z]{2,14}")
-    private String mailbox;
-
-    @ApiModelProperty(value = "公司规模")
-    private String companySize;
 
     @ApiModelProperty(value = "所属行业")
     private String industry;
