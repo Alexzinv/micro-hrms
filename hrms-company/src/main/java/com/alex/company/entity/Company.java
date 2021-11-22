@@ -37,6 +37,7 @@ public class Company implements Serializable {
     private Long managerId;
 
     @ApiModelProperty(value = "当前版本")
+    @Version
     private String version;
 
     @ApiModelProperty(value = "续期时间")
