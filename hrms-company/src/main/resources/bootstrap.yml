@@ -19,5 +19,5 @@ spring:
             refresh: true
           - data-id: oss.yml
             refresh: true
-          - data-id: log-level
+          - data-id: log-level.yml
             refresh: true
