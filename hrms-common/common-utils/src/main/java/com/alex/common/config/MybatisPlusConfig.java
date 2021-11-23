@@ -10,11 +10,14 @@ import org.springframework.context.annotation.Configuration;
 /**
  * @Author _Alexzinv_
  * @Date 2021/9/26
- * @Description 分页插件
+ * @Description 插件
  */
 @Configuration
 public class MybatisPlusConfig {
 
+    /**
+     * 分页
+     */
     @Bean
     public MybatisPlusInterceptor interceptor(){
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
@@ -22,6 +25,9 @@ public class MybatisPlusConfig {
         return interceptor;
     }
 
+    /**
+     * 乐观锁
+     */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
