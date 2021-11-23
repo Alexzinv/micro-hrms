@@ -21,8 +21,8 @@ public class OssController {
 	@Autowired
 	private OssService ossService;
 
-	@RequestMapping("/policy")
-	public R policy(){
+	@RequestMapping("/upload")
+	public R upload(){
 		Map<String, String> respMap = ossService.use();
 		return R.ok().data("data", respMap);
 	}
