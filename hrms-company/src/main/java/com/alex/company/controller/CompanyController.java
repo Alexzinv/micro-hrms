@@ -1,14 +1,16 @@
 package com.alex.company.controller;
 
 import com.alex.common.util.R;
+import com.alex.company.dto.CompanyCheckVO;
 import com.alex.company.dto.CompanyQuery;
+import com.alex.company.dto.CompanySaveOrUpdateVO;
+import com.alex.company.dto.CompanyStateVO;
+import com.alex.company.dto.struct.CompanyStruct;
 import com.alex.company.entity.Company;
 import com.alex.company.service.CompanyService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author _Alexzinv_
@@ -29,16 +31,10 @@ public class CompanyController {
     @GetMapping("/get/{id}")
     public R get(@PathVariable("id") Long id){
         Company company = companyService.getById(id);
-        return R.ok().data("data", company);
+        return R.ok().data("company", company);
     }
 
-    @GetMapping("/list")
-    public R list(){
-        List<Company> companyList = companyService.list();
-        return R.ok().data("data", companyList);
-    }
-
-    @PostMapping("/list/{page}/{limit}")
+    @PostMapping("/listPage/{page}/{limit}")
     public R listCondition(@PathVariable Integer page,
                            @PathVariable Integer limit,
                            @RequestBody(required = false) CompanyQuery companyQuery){
@@ -48,13 +44,15 @@ public class CompanyController {
     }
 
     @PostMapping("/save")
-    public R save(@RequestBody Company company){
+    public R save(@RequestBody CompanySaveOrUpdateVO vo){
+        Company company = CompanyStruct.INSTANCE.saveOrUpdateVoToEntity(vo);
         boolean isSave = companyService.save(company);
         return isSave ? R.ok() : R.err();
     }
 
     @PostMapping("/update")
-    public R update(@RequestBody Company company){
+    public R update(@RequestBody CompanySaveOrUpdateVO vo){
+        Company company = CompanyStruct.INSTANCE.saveOrUpdateVoToEntity(vo);
         boolean isUpdate = companyService.updateById(company);
         return isUpdate ? R.ok() : R.err();
     }
@@ -63,6 +61,26 @@ public class CompanyController {
     public R update(@PathVariable("id") Long id){
         companyService.removeById(id);
         return R.ok();
+    }
+
+    /**
+     * 修改审核状态
+     */
+    @PostMapping("/check")
+    public R check(@RequestBody CompanyCheckVO vo){
+        Company company = CompanyStruct.INSTANCE.checkVoToEntity(vo);
+        boolean isUpdate = companyService.updateById(company);
+        return isUpdate ? R.ok() : R.err();
+    }
+
+    /**
+     * 修改审核状态
+     */
+    @PostMapping("/state")
+    public R state(@RequestBody CompanyStateVO vo){
+        Company company = CompanyStruct.INSTANCE.stateVoToEntity(vo);
+        boolean isUpdate = companyService.updateById(company);
+        return isUpdate ? R.ok() : R.err();
     }
 }
 

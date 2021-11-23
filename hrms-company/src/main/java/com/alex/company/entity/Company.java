@@ -63,9 +63,8 @@ public class Company implements Serializable {
     @ApiModelProperty(value = "到期时间")
     private Date expirationDate;
 
-
-    @ApiModelProperty(value = "营业执照-图片ID")
-    private String businessLicenseId;
+    @ApiModelProperty(value = "营业执照-图片地址")
+    private String businessLicenseUrl;
 
     @ApiModelProperty(value = "所属行业")
     private String industry;
@@ -89,6 +88,5 @@ public class Company implements Serializable {
     @ApiModelProperty(value = "更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
-
 
 }
