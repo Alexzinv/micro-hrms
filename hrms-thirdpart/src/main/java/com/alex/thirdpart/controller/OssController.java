@@ -18,8 +18,12 @@ import java.util.Map;
 @RequestMapping("/third-part/oss")
 public class OssController {
 
+	private final OssService ossService;
+
 	@Autowired
-	private OssService ossService;
+	OssController(OssService ossService){
+		this.ossService = ossService;
+	}
 
 	@RequestMapping("/upload")
 	public R upload(){

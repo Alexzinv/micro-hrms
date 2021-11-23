@@ -6,9 +6,9 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.common.utils.BinaryUtil;
 import com.aliyun.oss.model.MatchMode;
 import com.aliyun.oss.model.PolicyConditions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Date;
@@ -23,7 +23,7 @@ import java.util.Map;
 @Service
 public class OssServiceImpl implements OssService {
 
-    @Resource
+    @Autowired
     private OSS ossClient;
 
     @Override
@@ -57,12 +57,11 @@ public class OssServiceImpl implements OssService {
             respMap.put("dir", dir);
             respMap.put("host", host);
             respMap.put("expire", String.valueOf(expireEndTime / 1000));
-            return respMap;
         } catch (Exception e) {
             System.out.println(e.getMessage());
         } finally {
             ossClient.shutdown();
         }
-        return null;
+        return respMap;
     }
 }
