@@ -16,17 +16,17 @@ spring:
           filters:
             - RewritePath=/(?<segment>.*), /$\{segment}
 
-        - id: hrms-enterprise
-          uri: lb://hrms-enterprise
-          predicates:
-            - Path=/enterprise/**
-          filters:
-            - RewritePath=/(?<segment>.*), /$\{segment}
-
-        - id: third_part
+        - id: third-part
           uri: lb://third-part
           predicates:
             - Path=/third-part/**
+
+        - id: hrms-company
+          uri: lb://hrms-company
+          predicates:
+            - Path=/company/**
+          filters:
+            - RewritePath=/(?<segment>.*), /$\{segment}
 
 
 #        - id: admin_route

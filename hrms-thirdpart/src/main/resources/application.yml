@@ -3,4 +3,4 @@ spring:
     name: third-part
 
 server:
-  port: 9000
+  port: 9100
