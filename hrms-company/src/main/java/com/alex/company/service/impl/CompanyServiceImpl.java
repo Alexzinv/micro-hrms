@@ -13,6 +13,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
+
 /**
  *
  * @author _Alexzinv_
@@ -54,18 +56,23 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
     public Page<Company> listPage(Integer page, Integer limit, CompanyQuery companyQuery) {
         Page<Company> pageEntity = new Page<>(page, limit);
 
+        String name = companyQuery.getName();
+        Integer state = companyQuery.getState();
+        Integer auditState = companyQuery.getAuditState();
+        Date begin = companyQuery.getExpirationDateBegin();
+        Date end = companyQuery.getExpirationDateEnd();
         QueryWrapper<Company> wrapper = new QueryWrapper<>();
 
-        // TODO
-        // String name = enterpriseQueryDO.getName();
-        // String legalPerson = enterpriseQueryDO.getLegalPerson();
-        // Date renewalDateBegin = enterpriseQueryDO.getRenewalDateBegin();
-        // Date renewalDateEnd = enterpriseQueryDO.getRenewalDateEnd();
+        if(StringUtils.hasText(name)){
+            wrapper.and(item -> item.eq("name", name).or()
+                    .like("legal_representative", name)
+            );
+        }
 
-        // wrapper.like(org.springframework.util.StringUtils.hasText(name), "name", name).or()
-        //         .like(org.springframework.util.StringUtils.hasText(legalPerson), "legal_person", legalPerson)
-        //         .gt(null != renewalDateBegin, "renewal_date", renewalDateBegin)
-        //         .le(null != renewalDateEnd, "renewal_date", renewalDateEnd);
+        wrapper.eq(state != null, "state", state)
+                .eq(auditState != null, "audit_state", auditState)
+                .gt(null != begin, "expiration_date", begin)
+                .le(null != end, "expiration_date", end);
 
         return baseMapper.selectPage(pageEntity, wrapper);
     }
