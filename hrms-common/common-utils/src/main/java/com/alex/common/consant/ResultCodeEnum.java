@@ -33,7 +33,11 @@ public enum ResultCodeEnum {
     /**
      * 账号或密码错误
      */
-    ACCOUNT_OR_PASSWORD_WRONG(20005, "未知异常");
+    ACCOUNT_OR_PASSWORD_WRONG(20006, "账号或密码错误"),
+    /**
+     * 名字已存在
+     */
+    EXISTS_EXCEPTION(20007, "名字已存在");
     /**
      * 状态码
      */
