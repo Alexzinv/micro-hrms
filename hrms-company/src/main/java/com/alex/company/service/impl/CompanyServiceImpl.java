@@ -1,6 +1,8 @@
 package com.alex.company.service.impl;
 
 import com.alex.common.consant.CompanyConstant;
+import com.alex.common.consant.ResultCodeEnum;
+import com.alex.common.exception.HRMSException;
 import com.alex.company.dto.CompanyQuery;
 import com.alex.company.entity.Company;
 import com.alex.company.mapper.CompanyMapper;
@@ -43,7 +45,7 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
             return super.updateById(company);
         }
         if(isExist(name)){
-            return false;
+            throw new HRMSException(ResultCodeEnum.EXISTS_EXCEPTION);
         }
         return super.updateById(company);
     }
