@@ -37,6 +37,11 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
         if(!StringUtils.hasText(name)){
             return super.updateById(company);
         }
+        Company rawCompany = getById(company.getId());
+        String companyName = rawCompany.getName();
+        if(name.equals(companyName)){
+            return super.updateById(company);
+        }
         if(isExist(name)){
             return false;
         }
