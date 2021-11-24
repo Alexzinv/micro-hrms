@@ -25,7 +25,7 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
     public boolean save(Company company) {
         String name = company.getName();
         if(isExist(name)){
-            return false;
+            throw new HRMSException(ResultCodeEnum.EXISTS_EXCEPTION);
         }
         company.setAuditState(CompanyConstant.AuditState.UNREVIEWED);
         company.setState(CompanyConstant.State.NOT_ACTIVATED);

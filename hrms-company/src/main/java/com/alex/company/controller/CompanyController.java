@@ -46,15 +46,15 @@ public class CompanyController {
     @PostMapping("/save")
     public R save(@RequestBody CompanySaveOrUpdateVO vo){
         Company company = CompanyStruct.INSTANCE.saveOrUpdateVoToEntity(vo);
-        boolean isSave = companyService.save(company);
-        return isSave ? R.ok() : R.err();
+        companyService.save(company);
+        return R.ok();
     }
 
     @PostMapping("/update")
     public R update(@RequestBody CompanySaveOrUpdateVO vo){
         Company company = CompanyStruct.INSTANCE.saveOrUpdateVoToEntity(vo);
-        boolean isUpdate = companyService.updateById(company);
-        return isUpdate ? R.ok() : R.err();
+        companyService.updateById(company);
+        return R.ok();
     }
 
     @DeleteMapping("/delete/{id}")
@@ -69,8 +69,8 @@ public class CompanyController {
     @PostMapping("/check")
     public R check(@RequestBody CompanyCheckVO vo){
         Company company = CompanyStruct.INSTANCE.checkVoToEntity(vo);
-        boolean isUpdate = companyService.updateById(company);
-        return isUpdate ? R.ok() : R.err();
+        companyService.updateById(company);
+        return R.ok();
     }
 
     /**
@@ -79,8 +79,8 @@ public class CompanyController {
     @PostMapping("/state")
     public R state(@RequestBody CompanyStateVO vo){
         Company company = CompanyStruct.INSTANCE.stateVoToEntity(vo);
-        boolean isUpdate = companyService.updateById(company);
-        return isUpdate ? R.ok() : R.err();
+        companyService.updateById(company);
+        return R.ok();
     }
 }
 
