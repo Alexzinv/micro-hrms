@@ -38,11 +38,11 @@ public class UserInfoServiceImpl implements UserInfoService {
     private PermissionService permissionService;
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public Map<String, Object> mapInfo(String username) {
-        Map<String, Object> result = new HashMap<>(16);
+        Map<String, Object> result = new HashMap<>(32);
         User user = userService.getUserByUsername(username);
         if (null == user) {
             throw new HRMSException(ResultCodeEnum.UNKNOWN_EXCEPTION);
@@ -58,7 +58,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
         //根据用户id获取操作权限值
         List<String> permissionValueList = permissionService.listPermissionValueByUserId(user.getId());
-        redisTemplate.opsForValue().set(username, permissionValueList, 3, TimeUnit.DAYS);
+        redisTemplate.opsForValue().set(username, permissionValueList);
 
         result.put("name", user.getUsername());
         result.put("avatar", user.getAvatar());
