@@ -1,6 +1,7 @@
 package com.alex.system.controller;
 
 import cn.hutool.json.JSONObject;
+import com.alex.system.entity.User;
 import com.alex.system.service.UserInfoService;
 import com.alex.common.util.R;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,27 @@ import java.util.Map;
 @RequestMapping("/admin/acl/info")
 public class UserInfoController {
 
+    private final UserInfoService userInfoService;
+
     @Autowired
-    private UserInfoService userInfoService;
+    UserInfoController(UserInfoService userInfoService){
+        this.userInfoService = userInfoService;
+    }
 
     /**
      * 根据token获取用户信息
+     * 不包含权限
+     */
+    @GetMapping("user")
+    public R user(){
+        //获取当前登录用户账号
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User userInfo = userInfoService.userInfo(username);
+        return R.ok().data("user", userInfo);
+    }
+
+    /**
+     * 根据token获取用户信息包含权限
      */
     @GetMapping("info")
     public R info(){
