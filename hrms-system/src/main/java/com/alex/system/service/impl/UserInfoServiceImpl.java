@@ -1,7 +1,6 @@
 package com.alex.system.service.impl;
 
 import cn.hutool.json.JSONObject;
-
 import com.alex.common.consant.ResultCodeEnum;
 import com.alex.common.exception.HRMSException;
 import com.alex.system.entity.Role;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -39,6 +37,15 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+
+    @Override
+    public User userInfo(String username) {
+        User user = userService.getUserByUsername(username);
+        if (user == null) {
+            throw new HRMSException(ResultCodeEnum.UNKNOWN_EXCEPTION);
+        }
+        return user;
+    }
 
     @Override
     public Map<String, Object> mapInfo(String username) {

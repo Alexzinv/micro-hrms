@@ -1,6 +1,7 @@
 package com.alex.system.service.impl;
 
 
+import com.alex.common.consant.UserConstant;
 import com.alex.common.exception.HRMSException;
 import com.alex.system.dto.ForgetPasswordVO;
 import com.alex.system.dto.RegisterVO;
@@ -75,7 +76,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setNickname(nickname);
 
         user.setPassword(bCryptPasswordEncoder.encode(password));
-        user.setEnableState(1);
+        user.setEnableState(UserConstant.EnableState.ENABLE);
+        user.setLevel(UserConstant.Level.CO_USER);
         save(user);
     }
 
@@ -91,12 +93,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
             // FIXME 后续改进
             Long departmentId = userQuery.getDepartmentId();
-            Long enterpriseId = userQuery.getEnterpriseId();
+            Long companyId = userQuery.getCompanyId();
 
             wrapper.ge(StringUtils.hasText(nickname), "nickname", nickname)
                     .ge(StringUtils.hasText(username), "username", username)
                     .ge(enableState != null, "enable_status", enableState)
-                    .ge(enterpriseId != null, "enterprise_id", enterpriseId)
+                    .ge(companyId != null, "company_id", companyId)
                     .ge(departmentId != null, "department_id", departmentId);
         }
 
@@ -110,7 +112,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new HRMSException(20001, "账号已存在");
         }
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setEnableState(1);
+        user.setEnableState(UserConstant.EnableState.ENABLE);
         baseMapper.insert(user);
     }
 

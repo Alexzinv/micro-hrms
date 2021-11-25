@@ -1,15 +1,15 @@
 package com.alex.system.service.impl;
 
 
+import com.alex.common.consant.UserConstant;
 import com.alex.common.exception.HRMSException;
+import com.alex.serurity.entity.LoginUser;
+import com.alex.serurity.entity.SecurityUser;
 import com.alex.system.entity.User;
 import com.alex.system.service.PermissionService;
 import com.alex.system.service.UserService;
 import com.alex.system.stuct.UserStruct;
-import com.alex.serurity.entity.LoginUser;
-import com.alex.serurity.entity.SecurityUser;
 import org.springframework.beans.factory.annotation.Autowired;
-;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,11 +26,14 @@ import java.util.List;
 @Service("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final PermissionService permissionService;
 
     @Autowired
-    private PermissionService permissionService;
+    UserDetailsServiceImpl(UserService userService, PermissionService permissionService){
+        this.userService = userService;
+        this.permissionService = permissionService;
+    }
 
     /***
      * 根据账号获取用户信息
@@ -48,7 +51,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
         // 判断账号是否禁用
-        if (user.getEnableState() == 0){
+        if (Integer.valueOf(UserConstant.EnableState.DISABLE).equals(user.getEnableState())){
             throw new HRMSException(20001, "账号已停用！");
         }
         // 封装UserDetails实现类

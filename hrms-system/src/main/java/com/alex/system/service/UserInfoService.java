@@ -1,6 +1,7 @@
 package com.alex.system.service;
 
 import cn.hutool.json.JSONObject;
+import com.alex.system.entity.User;
 
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,14 @@ import java.util.Map;
 public interface UserInfoService {
 
     /**
-     * 根据用户名获取用户登录信息
+     * 根据用户名获取用户信息
+     * @param username 用户名
+     * @return 基本显示信息
+     */
+    User userInfo(String username);
+
+    /**
+     * 根据用户名获取用户登录信息，包括权限
      * @param username 用户名
      * @return 基本显示信息
      */

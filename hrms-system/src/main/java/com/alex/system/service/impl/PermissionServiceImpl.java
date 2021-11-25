@@ -2,6 +2,7 @@ package com.alex.system.service.impl;
 
 import cn.hutool.json.JSONObject;
 ;
+import com.alex.common.consant.UserConstant;
 import com.alex.system.entity.Permission;
 import com.alex.system.entity.RolePermission;
 import com.alex.system.entity.User;
@@ -237,7 +238,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
 
     private boolean isSysAdmin(Long userId){
         User user = userService.getById(userId);
-        return user != null && "root".equalsIgnoreCase(user.getUsername());
+        return user != null && user.getLevel().equals(UserConstant.Level.SYS_ADMIN);
     }
 
     /**
