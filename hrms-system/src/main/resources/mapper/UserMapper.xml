@@ -12,7 +12,7 @@
         <result property="avatar" column="avatar"/>
         <result property="token" column="token"/>
         <result property="enableState" column="enable_state"/>
-        <result property="enterpriseId" column="enterprise_id"/>
+        <result property="companyId" column="company_id"/>
         <result property="departmentId" column="department_id"/>
         <result property="joinTime" column="join_time"/>
         <result property="resignTime" column="resign_time"/>
