@@ -29,7 +29,7 @@ public class UserQueryVO {
     /**
      * 企业ID
      */
-    private Long enterpriseId;
+    private Long companyId;
 
     /**
      * 部门ID
