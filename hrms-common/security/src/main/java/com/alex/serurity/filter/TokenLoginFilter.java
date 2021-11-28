@@ -1,5 +1,6 @@
 package com.alex.serurity.filter;
 
+import com.alex.common.consant.ResultCodeEnum;
 import com.alex.common.util.R;
 import com.alex.common.util.ResponseUtil;
 import com.alex.serurity.entity.LoginUser;
@@ -18,11 +19,11 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.Duration;
 import java.util.ArrayList;
 
 /**
  * 登录过滤器，继承UsernamePasswordAuthenticationFilter，对用户名密码进行登录校验
+ * @author _
  */
 public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -64,7 +65,7 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
                                             Authentication auth) {
         SecurityUser user = (SecurityUser) auth.getPrincipal();
         String token = tokenManager.createToken(user.getCurrentUserInfo().getUsername());
-        redisTemplate.opsForValue().set(user.getCurrentUserInfo().getUsername(), user.getPermissionValueList(), Duration.ofMillis(24 * 60 * 60 * 1000));
+        redisTemplate.opsForValue().set(user.getCurrentUserInfo().getUsername(), user.getPermissionValueList());
 
         ResponseUtil.out(res, R.ok().data("token", token));
     }
@@ -75,6 +76,6 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                               AuthenticationException e) {
-        ResponseUtil.out(response, R.err());
+        ResponseUtil.out(response, R.err().result(ResultCodeEnum.ACCOUNT_OR_PASSWORD_WRONG));
     }
 }
