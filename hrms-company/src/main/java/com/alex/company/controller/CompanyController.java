@@ -29,13 +29,13 @@ public class CompanyController {
     }
 
     @GetMapping("/get/{id}")
-    public R get(@PathVariable("id") Long id){
+    public R getCompany(@PathVariable("id") Long id){
         Company company = companyService.getById(id);
         return R.ok().data("company", company);
     }
 
     @PostMapping("/listPage/{page}/{limit}")
-    public R listCondition(@PathVariable Integer page,
+    public R listCompanyCondition(@PathVariable Integer page,
                            @PathVariable Integer limit,
                            @RequestBody(required = false) CompanyQuery companyQuery){
 
@@ -44,21 +44,21 @@ public class CompanyController {
     }
 
     @PostMapping("/save")
-    public R save(@RequestBody CompanySaveOrUpdateVO vo){
+    public R saveCompany(@RequestBody CompanySaveOrUpdateVO vo){
         Company company = CompanyStruct.INSTANCE.saveOrUpdateVoToEntity(vo);
         companyService.save(company);
         return R.ok();
     }
 
     @PostMapping("/update")
-    public R update(@RequestBody CompanySaveOrUpdateVO vo){
+    public R updateCompany(@RequestBody CompanySaveOrUpdateVO vo){
         Company company = CompanyStruct.INSTANCE.saveOrUpdateVoToEntity(vo);
         companyService.updateById(company);
         return R.ok();
     }
 
     @DeleteMapping("/delete/{id}")
-    public R update(@PathVariable("id") Long id){
+    public R deleteCompany(@PathVariable("id") Long id){
         companyService.removeById(id);
         return R.ok();
     }
@@ -67,7 +67,7 @@ public class CompanyController {
      * 修改审核状态
      */
     @PostMapping("/check")
-    public R check(@RequestBody CompanyCheckVO vo){
+    public R checkCompany(@RequestBody CompanyCheckVO vo){
         Company company = CompanyStruct.INSTANCE.checkVoToEntity(vo);
         companyService.updateById(company);
         return R.ok();
@@ -77,7 +77,7 @@ public class CompanyController {
      * 修改审核状态
      */
     @PostMapping("/state")
-    public R state(@RequestBody CompanyStateVO vo){
+    public R stateCompany(@RequestBody CompanyStateVO vo){
         Company company = CompanyStruct.INSTANCE.stateVoToEntity(vo);
         companyService.updateById(company);
         return R.ok();

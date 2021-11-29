@@ -35,19 +35,19 @@ public class DepartmentController {
     }
 
     @GetMapping("/get/{id}")
-    public R get(@PathVariable("id") Long id){
+    public R getDepartment(@PathVariable("id") Long id){
         Department department = departmentService.getById(id);
         return R.ok().data("data", department);
     }
 
     @GetMapping("/list")
-    public R list(){
+    public R listDepartments(){
         List<Department> departmentList = departmentService.list();
         return R.ok().data("data", departmentList);
     }
 
     @PostMapping("/list/{page}/{limit}/{companyId}")
-    public R listByCompanyId(@PathVariable("page") Integer page,
+    public R listDepartmentByCompanyId(@PathVariable("page") Integer page,
                              @PathVariable("limit") Integer limit,
                              @PathVariable("companyId") Long companyId){
         Company company = companyService.getById(companyId);
@@ -57,7 +57,7 @@ public class DepartmentController {
     }
 
     @PostMapping("/list/{page}/{limit}")
-    public R listCondition(@PathVariable Integer page,
+    public R listDepartmentCondition(@PathVariable Integer page,
                            @PathVariable Integer limit,
                            @RequestBody(required = false) DepartmentQuery departmentQuery){
         Page<Department> result = departmentService.listPage(page, limit, departmentQuery);
@@ -65,19 +65,19 @@ public class DepartmentController {
     }
 
     @PostMapping("/save")
-    public R save(@RequestBody Department department){
+    public R saveDepartment(@RequestBody Department department){
         boolean isSave = departmentService.save(department);
         return isSave ? R.ok() : R.err();
     }
 
     @PostMapping("/update")
-    public R update(@RequestBody Department department){
+    public R updateDepartment(@RequestBody Department department){
         boolean isUpdate = departmentService.updateById(department);
         return isUpdate ? R.ok() : R.err();
     }
 
     @DeleteMapping("/delete/{id}")
-    public R update(@PathVariable("id") Long id){
+    public R deleteDepartment(@PathVariable("id") Long id){
         departmentService.removeById(id);
         return R.ok();
     }
