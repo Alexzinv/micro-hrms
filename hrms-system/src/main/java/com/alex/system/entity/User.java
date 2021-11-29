@@ -59,7 +59,7 @@ public class User implements Serializable {
 	/**
 	 * 企业ID
 	 */
-	private Long enterpriseId;
+	private Long companyId;
 	/**
 	 * 部门ID
 	 */
@@ -100,6 +100,10 @@ public class User implements Serializable {
 	 * 员工照片
 	 */
 	private String staffPhoto;
+	/**
+	 * 用户级别
+	 */
+	private Integer level;
 	/**
 	 * 创建时间
 	 */
