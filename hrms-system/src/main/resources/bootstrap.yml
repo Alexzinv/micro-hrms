@@ -7,7 +7,9 @@ spring:
         group: DEFAULT_GROUP
         file-extension: yaml
         extension-configs:
-          - data-id: nacos.yml
+          - data-id: nacos-sentinel.yml
+            refresh: true
+          - data-id: feign-sentinel.yml
             refresh: true
           - data-id: mysql.yml
             refresh: true
