@@ -37,7 +37,12 @@ public enum ResultCodeEnum {
     /**
      * 名字已存在
      */
-    EXISTS_EXCEPTION(20007, "名字已存在");
+    EXISTS_EXCEPTION(20007, "名字已存在"),
+    /**
+     * 系统繁忙
+     */
+    SYSTEM_BUSY(20008, "系统繁忙");
+
     /**
      * 状态码
      */
