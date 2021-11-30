@@ -16,10 +16,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface CompanyClient {
 
     /**
-     * 根据id获取公司信息
+     * 根据公司id获取公司信息
      * @param id 公司id
      * @return 公司信息
      */
     @GetMapping("/company/company/get/{id}")
-    R get(@PathVariable("id") Long id);
+    R getCompany(@PathVariable("id") Long id);
+
+    /**
+     * 根据部门id获取部门信息
+     * @param id 部门id
+     * @return 部门信息
+     */
+    @GetMapping("/company/department/get/{id}")
+    R getDepartment(@PathVariable("id") Long id);
 }
