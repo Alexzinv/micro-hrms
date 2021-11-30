@@ -1,4 +1,4 @@
-package com.alex.system.stuct;
+package com.alex.system.dto.stuct;
 
 import com.alex.system.entity.User;
 import com.alex.serurity.entity.LoginUser;
