@@ -9,6 +9,7 @@ import com.alex.company.entity.Company;
 import com.alex.company.entity.Department;
 import com.alex.company.service.CompanyService;
 import com.alex.company.service.DepartmentService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -46,8 +47,14 @@ public class DepartmentController {
         return R.ok().data("data", departmentList);
     }
 
+    @GetMapping("/list/{companyId}")
+    public R listDepartmentByCompanyId(@PathVariable("companyId") Long companyId){
+        List<Department> departments = departmentService.list(new QueryWrapper<Department>().eq("company_id", companyId));
+        return R.ok().data("departments", departments);
+    }
+
     @PostMapping("/list/{page}/{limit}/{companyId}")
-    public R listDepartmentByCompanyId(@PathVariable("page") Integer page,
+    public R listDepartmentPageByCompanyId(@PathVariable("page") Integer page,
                              @PathVariable("limit") Integer limit,
                              @PathVariable("companyId") Long companyId){
         Company company = companyService.getById(companyId);
