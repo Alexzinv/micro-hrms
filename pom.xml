@@ -14,6 +14,8 @@
         <module>hrms-common</module>
         <module>hrms-gateway</module>
         <module>hrms-system</module>
+        <module>hrms-thirdpart</module>
+        <module>hrms-company</module>
     </modules>
 
 
