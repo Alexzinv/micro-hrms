@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * @Date 2021/11/29
  * @Description RPC - CompanyController
  */
-@FeignClient("hrms-company")
+@FeignClient(value = "hrms-company", fallback = CompanyDegradeService.class)
 @Component
 public interface CompanyClient {
 
