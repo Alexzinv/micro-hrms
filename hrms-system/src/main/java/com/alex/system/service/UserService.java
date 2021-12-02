@@ -7,8 +7,6 @@ import com.alex.system.entity.User;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
-;
-
 /**
  * @Author _Alexzinv_
  * @Date 2021/9/22
@@ -39,7 +37,7 @@ public interface UserService extends IService<User> {
     Page<User> listPage(Integer current, Integer limit, UserQueryVO userQuery);
 
     /**
-     * 新增用户
+     * 新增用户,并保存信息到关联表，扩展表
      * @param user 用户信息
      */
     void saveUser(User user);
@@ -51,7 +49,7 @@ public interface UserService extends IService<User> {
     void updateUser(User user);
 
     /**
-     * 删除用户及关联表
+     * 删除用户及关联表扩展表
      * @param id 用户id
      */
     void removeUser(Long id);
