@@ -3,6 +3,7 @@ package com.alex.system.service.impl;
 
 import com.alex.common.consant.UserConstant;
 import com.alex.common.exception.HRMSException;
+import com.alex.system.client.MemberClient;
 import com.alex.system.dto.ForgetPasswordVO;
 import com.alex.system.dto.RegisterVO;
 import com.alex.system.dto.UserQueryVO;
@@ -14,6 +15,7 @@ import com.alex.system.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -40,6 +42,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private UserRoleService userRoleService;
+
+    @Autowired
+    private MemberClient memberClient;
 
     @Override
     public User getUserByUsername(String username) {
@@ -129,11 +134,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         baseMapper.updateById(user);
     }
 
+    /**
+     * 远程调用删除，需要开启分布式事务
+     * @param id 用户id
+     */
+    @GlobalTransactional(rollbackFor = Exception.class)
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void removeUser(Long id) {
-        super.removeById(id);
+        /*
+          - 分别删除
+          1.用户信息扩展表
+          2.公司用户信息表
+          3.用户角色关联表
+          4.本地用户表
+         */
+        memberClient.deleteUserCompany(id);
+        memberClient.deletePersonalInfo(id);
         userRoleService.remove(new QueryWrapper<UserRole>().eq("user_id", id));
+        super.removeById(id);
     }
 
     @Override
