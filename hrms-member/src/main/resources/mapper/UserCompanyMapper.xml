@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.alex.member.mapper.UserCompanyMapper">
+
+    <resultMap type="com.alex.member.entity.UserCompany" id="UserCompanyMap">
+        <result property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="workNumber" column="work_number"/>
+        <result property="nickname" column="nickname"/>
+        <result property="enableState" column="enable_state"/>
+        <result property="companyId" column="company_id"/>
+        <result property="departmentId" column="department_id"/>
+        <result property="position" column="position"/>
+        <result property="joinTime" column="join_time"/>
+        <result property="resignTime" column="resign_time"/>
+        <result property="employForm" column="employ_form"/>
+        <result property="workingCity" column="working_city"/>
+        <result property="correctionTime" column="correction_time"/>
+        <result property="jobStatus" column="job_status"/>
+        <result property="staffPhoto" column="staff_photo"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+</mapper>
