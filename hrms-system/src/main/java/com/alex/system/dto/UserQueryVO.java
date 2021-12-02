@@ -12,14 +12,9 @@ import lombok.Data;
 public class UserQueryVO {
 
     /**
-     * 账号
+     * 账号或昵称
      */
-    private String username;
-
-    /**
-     * 昵称
-     */
-    private String nickname;
+    private String name;
 
     /**
      * 启用状态 0是禁用，1是启用
@@ -32,7 +27,7 @@ public class UserQueryVO {
     private Long companyId;
 
     /**
-     * 部门ID
+     * 账号级别
      */
-    private Long departmentId;
+    private Integer level;
 }
