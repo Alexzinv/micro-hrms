@@ -16,6 +16,7 @@
         <module>hrms-system</module>
         <module>hrms-thirdpart</module>
         <module>hrms-company</module>
+        <module>hrms-member</module>
     </modules>
 
 
