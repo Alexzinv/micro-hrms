@@ -16,7 +16,7 @@ import java.util.Date;
  * @Description 权限角色关联表
  */
 @Data
-@TableName("acl_role_permission")
+@TableName("sys_role_permission")
 public class RolePermission implements Serializable {
 	private static final long serialVersionUID = 1L;
 

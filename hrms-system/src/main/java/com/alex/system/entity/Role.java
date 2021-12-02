@@ -17,7 +17,7 @@ import java.util.Date;
  * @Description 角色
  */
 @Data
-@TableName("acl_role")
+@TableName("sys_role")
 public class Role implements Serializable {
 	private static final long serialVersionUID = 1L;
 

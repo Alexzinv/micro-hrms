@@ -17,7 +17,7 @@ import java.util.Date;
  * @Description 用户角色关联表
  */
 @Data
-@TableName("acl_user_role")
+@TableName("sys_user_role")
 public class UserRole implements Serializable {
 	private static final long serialVersionUID = 1L;
 

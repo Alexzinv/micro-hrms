@@ -18,7 +18,7 @@ import java.util.List;
  * @Description 权限
  */
 @Data
-@TableName("acl_permission")
+@TableName("sys_permission")
 public class Permission implements Serializable {
 	private static final long serialVersionUID = 1L;
 
