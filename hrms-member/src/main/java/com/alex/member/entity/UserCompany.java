@@ -38,9 +38,6 @@ public class UserCompany implements Serializable {
     @ApiModelProperty(value = "昵称")
     private String nickname;
 
-    @ApiModelProperty(value = "启用状态 0是禁用，1是启用")
-    private Integer enableState;
-
     @ApiModelProperty(value = "企业ID")
     private Long companyId;
 
@@ -78,6 +75,4 @@ public class UserCompany implements Serializable {
     @ApiModelProperty(value = "更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
-
-
 }

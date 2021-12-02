@@ -7,7 +7,6 @@
         <result property="username" column="username"/>
         <result property="workNumber" column="work_number"/>
         <result property="nickname" column="nickname"/>
-        <result property="enableState" column="enable_state"/>
         <result property="companyId" column="company_id"/>
         <result property="departmentId" column="department_id"/>
         <result property="position" column="position"/>

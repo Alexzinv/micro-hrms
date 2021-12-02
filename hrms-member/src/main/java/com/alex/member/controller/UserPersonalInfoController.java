@@ -1,9 +1,11 @@
 package com.alex.member.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import com.alex.common.util.R;
+import com.alex.member.entity.UserPersonalInfo;
+import com.alex.member.service.UserPersonalInfoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -17,5 +19,35 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/member/userPersonalInfo")
 public class UserPersonalInfoController {
 
+    private final UserPersonalInfoService userPersonalInfoService;
+
+    @Autowired
+    UserPersonalInfoController(UserPersonalInfoService userPersonalInfoService){
+        this.userPersonalInfoService = userPersonalInfoService;
+    }
+
+    @GetMapping("/get/{id}")
+    public R getPersonalInfo(@PathVariable("id") Long id){
+        UserPersonalInfo userPersonalInfo = userPersonalInfoService.getById(id);
+        return R.ok().data("userPersonalInfo", userPersonalInfo);
+    }
+
+    @PostMapping("/save")
+    public R savePersonalInfo(@RequestBody UserPersonalInfo userPersonalInfo){
+        userPersonalInfoService.save(userPersonalInfo);
+        return R.ok();
+    }
+
+    @PostMapping("/update")
+    public R updatePersonalInfo(@RequestBody UserPersonalInfo userPersonalInfo){
+        userPersonalInfoService.updateById(userPersonalInfo);
+        return R.ok();
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public R deletePersonalInfo(@PathVariable("id") Long id){
+        userPersonalInfoService.removeById(id);
+        return R.ok();
+    }
 }
 
