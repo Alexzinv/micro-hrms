@@ -1,7 +1,7 @@
 package com.alex.system.dto.stuct;
 
 import com.alex.system.entity.User;
-import com.alex.serurity.entity.LoginUser;
+import com.alex.security.entity.LoginUser;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
