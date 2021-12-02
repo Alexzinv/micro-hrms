@@ -61,10 +61,6 @@ public class User implements Serializable {
 	 */
 	private Long companyId;
 	/**
-	 * 部门ID
-	 */
-	private Long departmentId;
-	/**
 	 * 账号级别
 	 */
 	private Integer level;
