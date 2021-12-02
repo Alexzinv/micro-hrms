@@ -32,6 +32,6 @@ public class ForgetPasswordVO {
     /**
      * 验证码
      */
-    @NotEmpty
+    @NotBlank
     private String validCode;
 }

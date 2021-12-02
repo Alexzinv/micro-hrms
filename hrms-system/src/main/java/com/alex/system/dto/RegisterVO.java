@@ -27,6 +27,6 @@ public class RegisterVO {
     @Length(min = 6, max = 20)
     private String password;
 
-    @NotEmpty
+    @NotBlank
     private String validCode;
 }
