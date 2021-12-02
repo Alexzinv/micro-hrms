@@ -65,43 +65,7 @@ public class User implements Serializable {
 	 */
 	private Long departmentId;
 	/**
-	 * 入职时间
-	 */
-	private Date joinTime;
-	/**
-	 * 离职时间
-	 */
-	private Date resignTime;
-	/**
-	 * 聘用形式
-	 */
-	private Integer employForm;
-	/**
-	 * 工号
-	 */
-	private String workNumber;
-	/**
-	 * 管理形式
-	 */
-	private String manageForm;
-	/**
-	 * 工作城市
-	 */
-	private String workingCity;
-	/**
-	 * 转正时间
-	 */
-	private Date correctionTime;
-	/**
-	 * 在职状态 1.在职  2.离职
-	 */
-	private Integer jobStatus;
-	/**
-	 * 员工照片
-	 */
-	private String staffPhoto;
-	/**
-	 * 用户级别
+	 * 账号级别
 	 */
 	private Integer level;
 	/**
