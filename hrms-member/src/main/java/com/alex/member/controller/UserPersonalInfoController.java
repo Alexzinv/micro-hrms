@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-12-02
  */
 @RestController
-@RequestMapping("/member/user-personal-info")
+@RequestMapping("/member/userPersonalInfo")
 public class UserPersonalInfoController {
 
 }
