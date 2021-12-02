@@ -1,8 +1,8 @@
-package com.alex.serurity.filter;
+package com.alex.security.filter;
 
 import com.alex.common.util.R;
 import com.alex.common.util.ResponseUtil;
-import com.alex.serurity.security.TokenManager;
+import com.alex.security.security.TokenManager;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

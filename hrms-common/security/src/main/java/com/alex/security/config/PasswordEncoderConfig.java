@@ -1,4 +1,4 @@
-package com.alex.serurity.config;
+package com.alex.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

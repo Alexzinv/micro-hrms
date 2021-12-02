@@ -1,10 +1,10 @@
-package com.alex.serurity.config;
+package com.alex.security.config;
 
-import com.alex.serurity.filter.TokenAuthenticationFilter;
-import com.alex.serurity.filter.TokenLoginFilter;
-import com.alex.serurity.security.TokenLogoutHandler;
-import com.alex.serurity.security.TokenManager;
-import com.alex.serurity.security.UnauthorizedEntryPoint;
+import com.alex.security.filter.TokenAuthenticationFilter;
+import com.alex.security.filter.TokenLoginFilter;
+import com.alex.security.security.TokenLogoutHandler;
+import com.alex.security.security.TokenManager;
+import com.alex.security.security.UnauthorizedEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;

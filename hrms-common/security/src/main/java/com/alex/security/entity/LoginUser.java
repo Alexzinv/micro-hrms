@@ -1,4 +1,4 @@
-package com.alex.serurity.entity;
+package com.alex.security.entity;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Data;

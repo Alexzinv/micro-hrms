@@ -1,4 +1,4 @@
-package com.alex.serurity.entity;
+package com.alex.security.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

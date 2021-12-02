@@ -1,4 +1,4 @@
-package com.alex.serurity.security;
+package com.alex.security.security;
 
 import com.alex.common.util.R;
 import com.alex.common.util.ResponseUtil;

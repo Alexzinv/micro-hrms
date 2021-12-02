@@ -1,4 +1,4 @@
-package com.alex.serurity.security;
+package com.alex.security.security;
 
 import io.jsonwebtoken.CompressionCodecs;
 import io.jsonwebtoken.Jwts;
