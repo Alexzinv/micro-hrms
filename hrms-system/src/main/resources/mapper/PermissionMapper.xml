@@ -26,16 +26,16 @@
     <select id="listAllPermissionValue" resultType="java.lang.String">
         select
             permission_value
-        from acl_permission
+        from sys_permission
         where type = 2
     </select>
 
     <select id="listPermissionValueByUserId" resultType="java.lang.String">
         select
             p.permission_value
-        from acl_user_role ur
-                 inner join acl_role_permission rp on rp.role_id = ur.role_id
-                 inner join acl_permission p on p.id = rp.permission_id
+        from sys_user_role ur
+                 inner join sys_role_permission rp on rp.role_id = ur.role_id
+                 inner join sys_permission p on p.id = rp.permission_id
         where ur.user_id = #{userId}
           and p.type = 2
     </select>
@@ -43,18 +43,18 @@
     <select id="listPermissionValue" resultMap="permissionMap">
         select
         <include refid="columns" />
-        from acl_user_role ur
-        inner join acl_role_permission rp on rp.role_id = ur.role_id
-        inner join acl_permission p on p.id = rp.permission_id
+        from sys_user_role ur
+        inner join sys_role_permission rp on rp.role_id = ur.role_id
+        inner join sys_permission p on p.id = rp.permission_id
         where ur.user_id = #{userId}
           and p.type = 2
     </select>
     <select id="listPermissionByUserId" resultType="com.alex.system.entity.Permission">
         select
         <include refid="columns" />
-        from acl_user_role ur
-        inner join acl_role_permission rp on rp.role_id = ur.role_id
-        inner join acl_permission p on p.id = rp.permission_id
+        from sys_user_role ur
+        inner join sys_role_permission rp on rp.role_id = ur.role_id
+        inner join sys_permission p on p.id = rp.permission_id
         where ur.user_id = #{userId}
         and p.type = 2
     </select>
