@@ -13,7 +13,7 @@ public class SerialGenerator {
     /**
      * 初始数值
      */
-    private static final AtomicLong AL = new AtomicLong(10001);
+    private static final AtomicLong AL = new AtomicLong(10000);
 
     public static Long initSerial() {
         /// 自定义开始和步长

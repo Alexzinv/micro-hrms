@@ -8,10 +8,9 @@ import com.alex.member.util.SerialGenerator;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * <p>
@@ -64,11 +63,11 @@ public class UserCompanyServiceImpl extends ServiceImpl<UserCompanyMapper, UserC
 
     private Long getCurrentWorkNumber() {
         // 查询出工号最大值
-        AtomicLong maxWorkNumber = baseMapper.getMaxWorkNumber();
+        Long maxWorkNumber = baseMapper.getMaxWorkNumber();
         // 为空则是第一次添加，初始化，否则按最大值自增
         return maxWorkNumber == null
                 ? SerialGenerator.initSerial()
-                : maxWorkNumber.incrementAndGet();
+                : ++maxWorkNumber;
     }
 
     private boolean isNotBlank(String s){
