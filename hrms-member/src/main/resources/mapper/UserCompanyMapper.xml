@@ -20,5 +20,9 @@
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
     </resultMap>
+    <select id="getMaxWorkNumber" resultType="java.lang.Long">
+        select max(work_number) from mem_user_company;
+    </select>
+
 
 </mapper>
