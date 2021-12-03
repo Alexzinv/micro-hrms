@@ -12,25 +12,16 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class CustomIdGenerator implements IdentifierGenerator {
-
-    /// 自定义生成id初始数
-    // private final AtomicLong al = new AtomicLong(100001);
+    /**
+     * 生成器选项
+     */
+    private static final IdGeneratorOptions ID_GENERATOR_OPTIONS = new IdGeneratorOptions();
 
     @Override
     public Long nextId(Object entity) {
-        // String bizKey = entity.getClass().getName();
-
-        /// 自定义开始和步长
-        // MetaObject metaObject = SystemMetaObject.forObject(entity);
-        // final long id = al.getAndAdd(1);
-        // return id;
-
-        // 雪花漂移生成id
-        IdGeneratorOptions options = new IdGeneratorOptions();
-        // options.WorkerIdBitLength = 10;
-        YitIdHelper.setIdGenerator(options);
-
-
+        // ID_GENERATOR_OPTIONS.SeqBitLength = 6;
+        // ID_GENERATOR_OPTIONS.MinSeqNumber = 5;
+        YitIdHelper.setIdGenerator(ID_GENERATOR_OPTIONS);
         return YitIdHelper.nextId();
     }
 }
