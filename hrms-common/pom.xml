@@ -45,6 +45,10 @@
         <poi.version>5.0.0</poi.version>
         <easyexcel.version>2.2.3</easyexcel.version>
         <openfeign.version>3.0.4</openfeign.version>
+        <commons-lang.version>2.6</commons-lang.version>
+        <jode-time.version>2.9.9</jode-time.version>
+        <jakarta.validation.version>2.0.2</jakarta.validation.version>
+        <hibernate-validator.version>6.1.7.Final</hibernate-validator.version>
         <!--<canal.client.version>1.1.0</canal.client.version>-->
     </properties>
 
@@ -61,6 +65,29 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>${jode-time.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>${commons-lang.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>${jakarta.validation.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate-validator.version}</version>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>com.github.yitter</groupId>
             <artifactId>yitter-idgenerator</artifactId>
