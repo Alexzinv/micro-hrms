@@ -33,7 +33,7 @@ public class UserCompany implements Serializable {
     private String username;
 
     @ApiModelProperty(value = "工号")
-    private String workNumber;
+    private Long workNumber;
 
     @ApiModelProperty(value = "昵称")
     private String nickname;

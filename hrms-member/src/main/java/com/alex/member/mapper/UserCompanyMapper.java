@@ -3,6 +3,8 @@ package com.alex.member.mapper;
 import com.alex.member.entity.UserCompany;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 /**
  * <p>
  * user公司扩展表 Mapper 接口
@@ -13,4 +15,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface UserCompanyMapper extends BaseMapper<UserCompany> {
 
+    /**
+     *
+     * 获取最大工号
+     * @return 工号
+     */
+    AtomicLong getMaxWorkNumber();
 }

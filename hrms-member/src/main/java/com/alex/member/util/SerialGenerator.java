@@ -5,15 +5,18 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * @author _Alexzinv_
  * @date 2021/12/2
- * @description 工号序列生成
+ * @description 自增序列生成
  */
 
 public class SerialGenerator {
 
-    private static final AtomicLong AL = new AtomicLong(10000001);
+    /**
+     * 初始数值
+     */
+    private static final AtomicLong AL = new AtomicLong(10001);
 
-    public static Long getSerial() {
+    public static Long initSerial() {
         /// 自定义开始和步长
-        return AL.getAndAdd(1);
+        return AL.get();
     }
 }
