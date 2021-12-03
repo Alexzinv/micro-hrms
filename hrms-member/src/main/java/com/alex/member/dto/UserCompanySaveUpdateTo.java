@@ -1,4 +1,4 @@
-package com.alex.member.entity;
+package com.alex.member.dto;
 
 import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
@@ -10,30 +10,21 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * <p>
- * user公司扩展表
- * </p>
- *
  * @author _Alexzinv_
- * @since 2021-12-02
+ * @date 2021/12/3
+ * @description 更新数据
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("mem_user_company")
-@ApiModel(value="UserCompany对象", description="user公司扩展表")
-public class UserCompany implements Serializable {
-
+@ApiModel(value="数据更新对象")
+public class UserCompanySaveUpdateTo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "ID")
-    @TableId(value = "id", type = IdType.INPUT)
     private Long id;
 
     @ApiModelProperty(value = "账号")
     private String username;
-
-    @ApiModelProperty(value = "工号")
-    private Long workNumber;
 
     @ApiModelProperty(value = "昵称")
     private String nickname;
@@ -46,9 +37,6 @@ public class UserCompany implements Serializable {
 
     @ApiModelProperty(value = "岗位名称")
     private String position;
-
-    @ApiModelProperty(value = "入职时间")
-    private Date joinTime;
 
     @ApiModelProperty(value = "离职时间")
     private Date resignTime;
@@ -67,12 +55,4 @@ public class UserCompany implements Serializable {
 
     @ApiModelProperty(value = "员工照片")
     private String staffPhoto;
-
-    @ApiModelProperty(value = "创建时间")
-    @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
-
-    @ApiModelProperty(value = "更新时间")
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Date updateTime;
 }

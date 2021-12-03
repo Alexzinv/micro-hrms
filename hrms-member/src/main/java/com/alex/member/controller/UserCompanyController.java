@@ -3,6 +3,8 @@ package com.alex.member.controller;
 
 import com.alex.common.util.R;
 import com.alex.member.dto.UserCompanyQuery;
+import com.alex.member.dto.UserCompanySaveUpdateTo;
+import com.alex.member.dto.struct.UserCompanyUpdateStruct;
 import com.alex.member.entity.UserCompany;
 import com.alex.member.service.UserCompanyService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -44,13 +46,15 @@ public class UserCompanyController {
     }
 
     @PostMapping("/save")
-    public R saveUserCompany(@RequestBody UserCompany userCompany){
+    public R saveUserCompany(@RequestBody UserCompanySaveUpdateTo to){
+        UserCompany userCompany = UserCompanyUpdateStruct.INSTANCE.toUserCompany(to);
         userCompanyService.save(userCompany);
         return R.ok();
     }
 
     @PostMapping("/update")
-    public R updateUserCompany(@RequestBody UserCompany userCompany){
+    public R updateUserCompany(@RequestBody UserCompanySaveUpdateTo to){
+        UserCompany userCompany = UserCompanyUpdateStruct.INSTANCE.toUserCompany(to);
         userCompanyService.updateById(userCompany);
         return R.ok();
     }

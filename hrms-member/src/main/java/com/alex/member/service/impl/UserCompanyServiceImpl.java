@@ -1,5 +1,7 @@
 package com.alex.member.service.impl;
 
+import com.alex.common.consant.MemUserCompanyConstant;
+import com.alex.common.util.DateUtils;
 import com.alex.member.dto.UserCompanyQuery;
 import com.alex.member.entity.UserCompany;
 import com.alex.member.mapper.UserCompanyMapper;
@@ -8,9 +10,10 @@ import com.alex.member.util.SerialGenerator;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import java.util.Calendar;
 
 /**
  * <p>
@@ -51,13 +54,14 @@ public class UserCompanyServiceImpl extends ServiceImpl<UserCompanyMapper, UserC
         return baseMapper.selectPage(pageEntity, wrapper);
     }
 
-
-
     @Override
     public boolean save(UserCompany entity) {
         // 生成工号
         Long workerNumber = getCurrentWorkNumber();
         entity.setWorkNumber(workerNumber);
+        entity.setJobStatus(MemUserCompanyConstant.JobStatus.IN_ACTIVE_SERVICE);
+        entity.setJoinTime(Calendar.getInstance().getTime());
+        entity.setCorrectionTime(DateUtils.addDateMonths(Calendar.getInstance().getTime(), 3));
         return super.save(entity);
     }
 
