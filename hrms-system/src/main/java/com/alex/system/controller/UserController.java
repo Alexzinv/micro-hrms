@@ -1,13 +1,15 @@
 package com.alex.system.controller;
 
+import com.alex.common.util.R;
 import com.alex.system.dto.ForgetPasswordVO;
 import com.alex.system.dto.RegisterVO;
 import com.alex.system.dto.UserQueryVO;
+import com.alex.system.dto.UserStateTo;
+import com.alex.system.dto.stuct.UserStruct;
 import com.alex.system.entity.User;
 import com.alex.system.service.RoleService;
 import com.alex.system.service.UserRoleService;
 import com.alex.system.service.UserService;
-import com.alex.common.util.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +27,17 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin/acl/user")
 public class UserController {
-    @Autowired
-    private UserService userService;
+
+    private final UserService userService;
+    private final RoleService roleService;
+    private final UserRoleService userRoleService;
 
     @Autowired
-    private RoleService roleService;
-
-    @Autowired
-    private UserRoleService userRoleService;
+    UserController(UserService userService, RoleService roleService, UserRoleService userRoleService){
+        this.userService = userService;
+        this.roleService = roleService;
+        this.userRoleService = userRoleService;
+    }
 
     @ApiOperation(value = "获取用户分页列表")
     @GetMapping("{page}/{limit}")
@@ -42,6 +47,7 @@ public class UserController {
         return R.ok().data("records", result.getRecords()).data("total", result.getTotal());
     }
 
+    @ApiOperation(value = "忘记密码")
     @PostMapping("forgetPassword")
     public R forgetPassword(@RequestBody ForgetPasswordVO vo){
         boolean isSuccess = userService.restorePassword(vo);
@@ -76,7 +82,7 @@ public class UserController {
         return R.ok();
     }
 
-    @ApiOperation(value = "删除用户")
+    @ApiOperation(value = "关联删除用户，包括扩展表")
     @DeleteMapping("remove/{id}")
     public R remove(@PathVariable Long id) {
         userService.removeUser(id);
@@ -90,19 +96,26 @@ public class UserController {
         return R.ok();
     }
 
-    @ApiOperation(value = "根据用户获取角色数据")
+    @ApiOperation(value = "根据用户ID获取角色数据")
     @GetMapping("toAssign/{userId}")
     public R toAssign(@PathVariable Long userId) {
         Map<String, Object> roleMap = roleService.mapRoleByUserId(userId);
         return R.ok().data(roleMap);
     }
 
-    @ApiOperation(value = "根据用户分配角色")
+    @ApiOperation(value = "根据用户ID分配角色")
     @PostMapping("doAssign")
     public R doAssign(@RequestParam Long userId,@RequestParam List<Long> roleId) {
         userRoleService.saveUserRoleRelation(userId,roleId);
         return R.ok();
     }
 
+    @ApiOperation(value = "修改账号状态")
+    @PostMapping("state")
+    public R updateState(@RequestBody UserStateTo to){
+        User user = UserStruct.INSTANCE.userStateToEntity(to);
+        userService.removeById(user);
+        return R.ok();
+    }
 
 }

@@ -1,17 +1,21 @@
 package com.alex.system.service.impl;
 
 
+import com.alex.common.bean.UserCompanyTo;
+import com.alex.common.bean.UserPersonalInfoTo;
 import com.alex.common.consant.UserConstant;
 import com.alex.common.exception.HRMSException;
 import com.alex.system.client.MemberClient;
 import com.alex.system.dto.ForgetPasswordVO;
 import com.alex.system.dto.RegisterVO;
 import com.alex.system.dto.UserQueryVO;
+import com.alex.system.dto.stuct.UserExtensionStruct;
 import com.alex.system.entity.User;
 import com.alex.system.entity.UserRole;
 import com.alex.system.mapper.UserMapper;
 import com.alex.system.service.UserRoleService;
 import com.alex.system.service.UserService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -20,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Objects;
@@ -34,26 +37,33 @@ import java.util.Objects;
 @Service("userService")
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserRoleService userRoleService;
+    private final MemberClient memberClient;
+
+    /**
+     * 默认头像
+     */
+    private static final String DEFAULT_AVATAR = "https://dev-alex.oss-cn-chengdu.aliyuncs.com/2021-11-24/e4178477-0581-49ef-866b-3b4f758d892c_-666b9fd64787c58a.jpg";
 
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @Autowired
-    private UserRoleService userRoleService;
-
-    @Autowired
-    private MemberClient memberClient;
+    public UserServiceImpl(RedisTemplate<String, Object> redisTemplate,
+                           BCryptPasswordEncoder bCryptPasswordEncoder,
+                           UserRoleService userRoleService, MemberClient memberClient) {
+        this.redisTemplate = redisTemplate;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.userRoleService = userRoleService;
+        this.memberClient = memberClient;
+    }
 
     @Override
     public User getUserByUsername(String username) {
-        return baseMapper.selectOne(new QueryWrapper<User>().eq("username", username));
+        return baseMapper.selectOne(lambdaQuery().eq(User::getUsername, username));
     }
 
     @Override
     public void register(RegisterVO register) {
-
         String code = register.getValidCode();
         String username = register.getUsername();
         String nickname = register.getNickname();
@@ -83,6 +93,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setPassword(bCryptPasswordEncoder.encode(password));
         user.setEnableState(UserConstant.EnableState.ENABLE);
         user.setLevel(UserConstant.Level.CO_USER);
+        user.setAvatar(DEFAULT_AVATAR);
         save(user);
     }
 
@@ -92,33 +103,50 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         QueryWrapper<User> wrapper = new QueryWrapper<>();
 
         if(userQuery != null){
-            String username = userQuery.getUsername();
-            String nickname = userQuery.getNickname();
+            String name = userQuery.getName();
             Integer enableState = userQuery.getEnableState();
-
-            // FIXME 后续改进
-            Long departmentId = userQuery.getDepartmentId();
             Long companyId = userQuery.getCompanyId();
+            Integer level = userQuery.getLevel();
 
-            wrapper.ge(StringUtils.hasText(nickname), "nickname", nickname)
-                    .ge(StringUtils.hasText(username), "username", username)
-                    .ge(enableState != null, "enable_status", enableState)
+            // TODO 前端
+            if(StringUtils.hasText(name)){
+                wrapper.and(item -> item.eq("username", name).or()
+                        .like("nickname", name)
+                );
+            }
+            wrapper.ge(enableState != null, "enable_status", enableState)
                     .ge(companyId != null, "company_id", companyId)
-                    .ge(departmentId != null, "department_id", departmentId);
+                    .ge(level != null, "level", level);
         }
-
         return baseMapper.selectPage(page, wrapper);
     }
 
+    @GlobalTransactional(rollbackFor = Exception.class)
     @Override
     public void saveUser(User user) {
+        /*
+         - 分别保存，用同一id
+          1.本地用户表
+          2.用户信息扩展表
+          3.公司用户信息表
+         */
         String username = user.getUsername();
         if(isExist(username)){
             throw new HRMSException(20001, "账号已存在");
         }
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setEnableState(UserConstant.EnableState.ENABLE);
-        baseMapper.insert(user);
+        super.save(user);
+
+        // 查询获取用户id及其他信息
+        user = getUserByUsername(username);
+
+        UserCompanyTo userCompanyTo = UserExtensionStruct.INSTANCE.toUserCompany(user);
+        memberClient.saveUserCompany(userCompanyTo);
+
+        UserPersonalInfoTo infoTo = new UserPersonalInfoTo();
+        infoTo.setId(user.getId());
+        memberClient.savePersonalInfo(infoTo);
     }
 
     @Override
@@ -139,11 +167,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @param id 用户id
      */
     @GlobalTransactional(rollbackFor = Exception.class)
-    @Transactional(rollbackFor = Exception.class)
     @Override
     public void removeUser(Long id) {
         /*
-          - 分别删除
+         - 分别删除
           1.用户信息扩展表
           2.公司用户信息表
           3.用户角色关联表
@@ -151,7 +178,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
          */
         memberClient.deleteUserCompany(id);
         memberClient.deletePersonalInfo(id);
-        userRoleService.remove(new QueryWrapper<UserRole>().eq("user_id", id));
+        userRoleService.remove(new LambdaQueryWrapper<UserRole>().eq(UserRole::getUserId, id));
         super.removeById(id);
     }
 
@@ -182,6 +209,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     private boolean isExist(String username){
-        return baseMapper.selectCount(new QueryWrapper<User>().eq("username", username)) > 0;
+        return baseMapper.selectCount(lambdaQuery().eq(User::getUsername, username)) > 0;
     }
 }

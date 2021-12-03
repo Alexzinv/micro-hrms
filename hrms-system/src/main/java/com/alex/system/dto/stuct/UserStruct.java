@@ -1,7 +1,8 @@
 package com.alex.system.dto.stuct;
 
-import com.alex.system.entity.User;
 import com.alex.security.entity.LoginUser;
+import com.alex.system.dto.UserStateTo;
+import com.alex.system.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -21,4 +22,11 @@ public interface UserStruct {
      * @return 登录用户类
      */
     LoginUser toLoginUser(User user);
+
+    /**
+     * 用户状态数据对象转实体
+     * @param to 数据对象
+     * @return 实体类
+     */
+    User userStateToEntity(UserStateTo to);
 }
