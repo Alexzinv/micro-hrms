@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -27,6 +28,7 @@ public class Department implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "企业ID")
+    @NotNull
     private Long companyId;
 
     @ApiModelProperty(value = "父级部门ID")
