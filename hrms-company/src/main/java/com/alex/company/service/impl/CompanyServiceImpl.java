@@ -10,6 +10,8 @@ import com.alex.company.service.CompanyService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -20,6 +22,7 @@ import java.util.Date;
  * @author _Alexzinv_
  * @since 2021-11-06
  */
+@CacheConfig(cacheNames = "co-company")
 @Service
 public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> implements CompanyService {
 
@@ -52,6 +55,7 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
         return super.updateById(company);
     }
 
+    @Cacheable
     @Override
     public Page<Company> listPage(Integer page, Integer limit, CompanyQuery companyQuery) {
         Page<Company> pageEntity = new Page<>(page, limit);
