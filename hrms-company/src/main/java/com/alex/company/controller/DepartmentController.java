@@ -88,6 +88,5 @@ public class DepartmentController {
         departmentService.removeById(id);
         return R.ok();
     }
-
 }
 
