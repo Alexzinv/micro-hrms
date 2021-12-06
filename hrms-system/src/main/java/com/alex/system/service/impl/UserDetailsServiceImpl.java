@@ -3,12 +3,12 @@ package com.alex.system.service.impl;
 
 import com.alex.common.consant.UserConstant;
 import com.alex.common.exception.HRMSException;
-import com.alex.serurity.entity.LoginUser;
-import com.alex.serurity.entity.SecurityUser;
+import com.alex.security.entity.LoginUser;
+import com.alex.security.entity.SecurityUser;
 import com.alex.system.entity.User;
 import com.alex.system.service.PermissionService;
 import com.alex.system.service.UserService;
-import com.alex.system.stuct.UserStruct;
+import com.alex.system.dto.stuct.UserStruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
