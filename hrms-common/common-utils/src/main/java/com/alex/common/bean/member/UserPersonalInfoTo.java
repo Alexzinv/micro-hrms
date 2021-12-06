@@ -1,4 +1,4 @@
-package com.alex.common.bean;
+package com.alex.common.bean.member;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

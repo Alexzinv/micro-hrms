@@ -1,4 +1,4 @@
-package com.alex.common.bean;
+package com.alex.common.bean.member;
 
 import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
