@@ -66,9 +66,9 @@ public class UserCompanyServiceImpl extends ServiceImpl<UserCompanyMapper, UserC
     }
 
     private Long getCurrentWorkNumber() {
-        // 查询出工号最大值
+        // 查询出工号列最大值
         Long maxWorkNumber = baseMapper.getMaxWorkNumber();
-        // 为空则是第一次添加，初始化，否则按最大值自增
+        // 为空则是第一次添加，初始化为10000，否则按最大值自增
         return maxWorkNumber == null
                 ? SerialGenerator.initSerial()
                 : ++maxWorkNumber;
