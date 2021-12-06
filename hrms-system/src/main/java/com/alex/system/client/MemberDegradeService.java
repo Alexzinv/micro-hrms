@@ -1,7 +1,7 @@
 package com.alex.system.client;
 
-import com.alex.common.bean.UserCompanyTo;
-import com.alex.common.bean.UserPersonalInfoTo;
+import com.alex.common.bean.member.UserCompanyTo;
+import com.alex.common.bean.member.UserPersonalInfoTo;
 import com.alex.common.consant.ResultCodeEnum;
 import com.alex.common.util.R;
 import org.springframework.stereotype.Component;
