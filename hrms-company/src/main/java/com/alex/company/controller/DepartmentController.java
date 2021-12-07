@@ -61,7 +61,7 @@ public class DepartmentController {
         Company company = companyService.getById(companyId);
         Page<Department> result = departmentService.listPage(page, limit, companyId, departmentQuery);
         DepartmentVO departmentVO = DepartmentStruct.INSTANCE.entity2VO(company, result.getRecords());
-        return R.ok().data("data", departmentVO).data("total", result.getTotal());
+        return R.ok().data("records", departmentVO).data("total", result.getTotal());
     }
 
     @PostMapping("/save")
