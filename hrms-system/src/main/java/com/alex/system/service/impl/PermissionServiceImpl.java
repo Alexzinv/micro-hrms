@@ -1,7 +1,6 @@
 package com.alex.system.service.impl;
 
 import cn.hutool.json.JSONObject;
-;
 import com.alex.common.consant.UserConstant;
 import com.alex.system.entity.Permission;
 import com.alex.system.entity.RolePermission;
@@ -19,7 +18,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
 
 @Service("permissionService")
 public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permission> implements PermissionService {
