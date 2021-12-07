@@ -10,13 +10,20 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class SerialGenerator {
 
-    /**
-     * 初始数值
-     */
     private static final AtomicLong AL = new AtomicLong(10000);
+    private static final AtomicLong CODE = new AtomicLong(1);
 
+    /**
+     * 工号初始数值
+     */
     public static Long initSerial() {
-        /// 自定义开始和步长
         return AL.get();
+    }
+
+    /**
+     * 编码专用
+     */
+    public static Long initCode() {
+        return CODE.get();
     }
 }
