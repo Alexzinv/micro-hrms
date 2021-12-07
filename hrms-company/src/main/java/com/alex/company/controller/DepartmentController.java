@@ -54,7 +54,7 @@ public class DepartmentController {
     }
 
     @PostMapping("/list/{page}/{limit}/{companyId}")
-    public R listDepartmentPageByCompanyId(@PathVariable("page") Integer page,
+    public R listDepartmentPageByCompanyIdCondition(@PathVariable("page") Integer page,
                                            @PathVariable("limit") Integer limit,
                                            @PathVariable("companyId") Long companyId,
                                            @RequestBody(required = false) DepartmentQuery departmentQuery){

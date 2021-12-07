@@ -27,7 +27,6 @@ public interface DepartmentStruct {
      * @return vo
      */
     @Mappings({
-            @Mapping(source = "company.id", target = "companyId"),
             @Mapping(source = "company.name", target = "companyName"),
             @Mapping(source = "company.managerId", target = "companyManager"),
     })

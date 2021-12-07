@@ -13,8 +13,6 @@ import java.util.List;
 @Data
 public class DepartmentVO {
 
-    private Long companyId;
-
     private String companyName;
 
     private String companyManager;
