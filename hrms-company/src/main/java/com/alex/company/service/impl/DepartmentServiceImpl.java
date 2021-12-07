@@ -19,20 +19,13 @@ import org.springframework.util.StringUtils;
 public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Department> implements DepartmentService {
 
     @Override
-    public Page<Department> listPage(Integer page, Integer limit, Long companyId) {
-        Page<Department> pageEntity = new Page<>(page, limit);
-
-        return baseMapper.selectPage(pageEntity,
-                new QueryWrapper<Department>().eq("company_id", companyId));
-    }
-
-    @Override
-    public Page<Department> listPage(Integer page, Integer limit, DepartmentQuery departmentQuery) {
+    public Page<Department> listPage(Integer page, Integer limit,Long companyId, DepartmentQuery departmentQuery) {
         Page<Department> pageEntity = new Page<>(page, limit);
 
         QueryWrapper<Department> wrapper = new QueryWrapper<>();
         String keyWord = departmentQuery.getKey();
         String manager = departmentQuery.getManager();
+        wrapper.eq("company_id", companyId);
         if(StringUtils.hasText(keyWord)){
             wrapper.like("code", keyWord).or()
                     .like("name", keyWord);

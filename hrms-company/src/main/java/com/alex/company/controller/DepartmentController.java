@@ -55,20 +55,13 @@ public class DepartmentController {
 
     @PostMapping("/list/{page}/{limit}/{companyId}")
     public R listDepartmentPageByCompanyId(@PathVariable("page") Integer page,
-                             @PathVariable("limit") Integer limit,
-                             @PathVariable("companyId") Long companyId){
+                                           @PathVariable("limit") Integer limit,
+                                           @PathVariable("companyId") Long companyId,
+                                           @RequestBody(required = false) DepartmentQuery departmentQuery){
         Company company = companyService.getById(companyId);
-        Page<Department> result = departmentService.listPage(page, limit, companyId);
+        Page<Department> result = departmentService.listPage(page, limit, companyId, departmentQuery);
         DepartmentVO departmentVO = DepartmentStruct.INSTANCE.entity2VO(company, result.getRecords());
         return R.ok().data("data", departmentVO).data("total", result.getTotal());
-    }
-
-    @PostMapping("/list/{page}/{limit}")
-    public R listDepartmentCondition(@PathVariable Integer page,
-                           @PathVariable Integer limit,
-                           @RequestBody(required = false) DepartmentQuery departmentQuery){
-        Page<Department> result = departmentService.listPage(page, limit, departmentQuery);
-        return R.ok().data("records", result.getRecords()).data("total", result.getTotal());
     }
 
     @PostMapping("/save")
