@@ -9,3 +9,5 @@ spring:
         extension-configs:
           - data-id: nacos.yml
             refresh: true
+          - data-id: gateway.yml
+            refresh: true

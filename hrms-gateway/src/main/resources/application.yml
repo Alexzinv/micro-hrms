@@ -4,34 +4,3 @@ server:
 spring:
   application:
     name: hrms-gateway
-
-  cloud:
-    gateway:
-      # 精确匹配放前面，模糊匹配放后面
-      routes:
-        - id: hrms-system
-          uri: lb://hrms-system
-          predicates:
-            - Path=/admin/**
-          filters:
-            - RewritePath=/(?<segment>.*), /$\{segment}
-
-        - id: third-part
-          uri: lb://third-part
-          predicates:
-            - Path=/third-part/**
-
-        - id: hrms-company
-          uri: lb://hrms-company
-          predicates:
-            - Path=/company/**
-          filters:
-            - RewritePath=/(?<segment>.*), /$\{segment}
-
-
-#        - id: admin_route
-#          uri: lb://renren-fast
-#          predicates:
-#            - Path=/api/**
-#          filters:
-#            - RewritePath=/api/(?<segment>.*), /renren-fast/$\{segment}
