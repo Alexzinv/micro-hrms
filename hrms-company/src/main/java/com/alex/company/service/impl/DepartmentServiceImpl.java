@@ -31,11 +31,13 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
         Page<Department> pageEntity = new Page<>(page, limit);
 
         QueryWrapper<Department> wrapper = new QueryWrapper<>();
-        String keyWord = (String) departmentQuery.getKeyWord();
+        String keyWord = departmentQuery.getKey();
+        String manager = departmentQuery.getManager();
         if(StringUtils.hasText(keyWord)){
-            wrapper.eq("manager", keyWord).or()
+            wrapper.like("code", keyWord).or()
                     .like("name", keyWord);
         }
+        wrapper.eq(StringUtils.hasText(manager), "manager", manager);
 
         return baseMapper.selectPage(pageEntity, wrapper);
     }
