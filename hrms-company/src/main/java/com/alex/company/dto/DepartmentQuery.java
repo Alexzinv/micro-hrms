@@ -11,6 +11,10 @@ import lombok.Data;
 public class DepartmentQuery {
 
     /**
+     * 公司id
+     */
+    private Long companyId;
+    /**
      * 查询关键字[name, code]
      */
     private String key;

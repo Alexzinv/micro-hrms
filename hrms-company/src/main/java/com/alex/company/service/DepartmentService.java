@@ -16,9 +16,8 @@ public interface DepartmentService extends IService<Department> {
      * 分页 根据公司id查询部门
      * @param page 当前页
      * @param limit 每页限制条数
-     * @param companyId 公司id
      * @param departmentQuery 查询条件
      * @return 分页数据
      */
-    Page<Department> listPage(Integer page, Integer limit, Long companyId, DepartmentQuery departmentQuery);
+    Page<Department> listPage(Integer page, Integer limit, DepartmentQuery departmentQuery);
 }
