@@ -16,11 +16,18 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface UserCompanyService extends IService<UserCompany> {
 
     /**
-     * 分页多条件查询
+     * 分页多条件查询公司内的所有员工
      * @param page 当前页
      * @param limit 每页限制条数
      * @param query 查询条件
      * @return 分页数据
      */
     Page<UserCompany> listPage(Integer page, Integer limit, UserCompanyQuery query);
+
+    /**
+     * 更新公司员工信息
+     * @param userCompany 公司员工
+     * @return isUpdate
+     */
+    boolean update(UserCompany userCompany);
 }

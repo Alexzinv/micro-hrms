@@ -26,9 +26,6 @@ public class UserCompanyQuery implements Serializable {
     @ApiModelProperty(value = "岗位名称")
     private String position;
 
-    @ApiModelProperty(value = "聘用形式")
-    private Integer employForm;
-
     @ApiModelProperty(value = "工作城市")
     private String workingCity;
 
