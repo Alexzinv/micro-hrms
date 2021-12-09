@@ -40,7 +40,6 @@ public class UserCompanyController {
     public R listUserCompanyCondition(@PathVariable Integer page,
                                       @PathVariable Integer limit,
                                       @RequestBody(required = false) UserCompanyQuery query){
-
         Page<UserCompany> result = userCompanyService.listPage(page, limit, query);
         return R.ok().data("records", result.getRecords()).data("total", result.getTotal());
     }
@@ -55,7 +54,7 @@ public class UserCompanyController {
     @PostMapping("/update")
     public R updateUserCompany(@RequestBody UserCompanySaveUpdateTo to){
         UserCompany userCompany = UserCompanyUpdateStruct.INSTANCE.toUserCompany(to);
-        userCompanyService.updateById(userCompany);
+        userCompanyService.update(userCompany);
         return R.ok();
     }
 
