@@ -1,9 +1,9 @@
 package com.alex.system.controller;
 
 import cn.hutool.json.JSONObject;
+import com.alex.common.util.R;
 import com.alex.system.entity.User;
 import com.alex.system.service.UserInfoService;
-import com.alex.common.util.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +34,6 @@ public class UserInfoController {
      */
     @GetMapping("user")
     public R user(){
-        //获取当前登录用户账号
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User userInfo = userInfoService.userInfo(username);
         return R.ok().data("user", userInfo);
@@ -45,7 +44,6 @@ public class UserInfoController {
      */
     @GetMapping("info")
     public R info(){
-        //获取当前登录用户账号
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Map<String, Object> userInfo = userInfoService.mapInfo(username);
         return R.ok().data(userInfo);
@@ -56,7 +54,6 @@ public class UserInfoController {
      */
     @GetMapping("menu")
     public R getMenu(){
-        //获取当前登录用户用户名
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         /// map封装
         // Map<String, Object> permissionList = userInfoService.mapPermission(username);
