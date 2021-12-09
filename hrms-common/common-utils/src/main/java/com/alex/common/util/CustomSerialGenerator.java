@@ -1,4 +1,4 @@
-package com.alex.member.util;
+package com.alex.common.util;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * @description 自增序列生成
  */
 
-public class SerialGenerator {
+public class CustomSerialGenerator {
 
     private static final AtomicLong AL = new AtomicLong(10000);
     private static final AtomicLong CODE = new AtomicLong(1);
