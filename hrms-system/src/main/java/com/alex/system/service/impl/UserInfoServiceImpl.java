@@ -67,6 +67,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         List<String> permissionValueList = permissionService.listPermissionValueByUserId(user.getId());
         redisTemplate.opsForValue().set(username, permissionValueList);
 
+        result.put("companyId", user.getCompanyId());
         result.put("name", user.getUsername());
         result.put("avatar", user.getAvatar());
         result.put("roles", roleNameList);

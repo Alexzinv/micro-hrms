@@ -20,8 +20,6 @@ import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
-;
-
 
 /**
  * @author Alex
@@ -61,29 +59,29 @@ public class RolePermissionServiceImpl extends ServiceImpl<RolePermissionMapper,
 
         // 1.查询关联角色的用户
         // 2.刷新所有redis权限缓存
-        List<UserRole> userRoleList = userRoleService.list(new QueryWrapper<UserRole>().eq("role_id", roleId));
-        List<Long> userIdList = userRoleList.stream().map(UserRole::getUserId).collect(Collectors.toList());
-        if(CollectionUtils.isEmpty(userIdList)){
-            return;
-        }
-        for (Long userId : userIdList) {
-            User user = userService.getById(userId);
-            if(user == null){
-                continue;
-            }
-            // 检查redis是否存在缓存数据
-            String username = user.getUsername();
-            List<String> permissionValueList = (List<String>) redisTemplate.opsForValue().get(username);
-            if(CollectionUtils.isEmpty(permissionValueList)){
-                continue;
-            }
-            // 查询更新后的权限，如果已经过期，则不设置
-            List<String> permissions = permissionService.listPermissionValueByUserId(user.getId());
-            Long expire = redisTemplate.getExpire(username);
-            if(expire != null && expire > 0){
-                redisTemplate.opsForValue().set(user.getUsername(), permissions, Duration.ofMillis(expire));
-            }
-        }
+        // List<UserRole> userRoleList = userRoleService.list(new QueryWrapper<UserRole>().eq("role_id", roleId));
+        // List<Long> userIdList = userRoleList.stream().map(UserRole::getUserId).collect(Collectors.toList());
+        // if(CollectionUtils.isEmpty(userIdList)){
+        //     return;
+        // }
+        // for (Long userId : userIdList) {
+        //     User user = userService.getById(userId);
+        //     if(user == null){
+        //         continue;
+        //     }
+        //     // 检查redis是否存在缓存数据
+        //     String username = user.getUsername();
+        //     List<String> permissionValueList = (List<String>) redisTemplate.opsForValue().get(username);
+        //     if(CollectionUtils.isEmpty(permissionValueList)){
+        //         continue;
+        //     }
+        //     // 查询更新后的权限，如果已经过期，则不设置
+        //     List<String> permissions = permissionService.listPermissionValueByUserId(user.getId());
+        //     Long expire = redisTemplate.getExpire(username);
+        //     if(expire != null && expire > 0){
+        //         redisTemplate.opsForValue().set(user.getUsername(), permissions, Duration.ofMillis(expire));
+        //     }
+        // }
     }
 
 }

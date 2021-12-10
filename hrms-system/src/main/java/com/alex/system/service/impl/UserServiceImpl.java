@@ -1,8 +1,8 @@
 package com.alex.system.service.impl;
 
 
-import com.alex.common.bean.UserCompanyTo;
-import com.alex.common.bean.UserPersonalInfoTo;
+import com.alex.common.bean.member.UserCompanyTo;
+import com.alex.common.bean.member.UserPersonalInfoTo;
 import com.alex.common.consant.UserConstant;
 import com.alex.common.exception.HRMSException;
 import com.alex.system.client.MemberClient;
@@ -17,6 +17,7 @@ import com.alex.system.service.UserRoleService;
 import com.alex.system.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.seata.spring.annotation.GlobalTransactional;
@@ -37,9 +38,9 @@ import java.util.Objects;
 @Service("userService")
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
+    private final UserRoleService userRoleService;
     private final RedisTemplate<String, Object> redisTemplate;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final UserRoleService userRoleService;
     private final MemberClient memberClient;
 
     /**
@@ -49,17 +50,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     public UserServiceImpl(RedisTemplate<String, Object> redisTemplate,
+                           UserRoleService userRoleService,
                            BCryptPasswordEncoder bCryptPasswordEncoder,
-                           UserRoleService userRoleService, MemberClient memberClient) {
+                           MemberClient memberClient) {
         this.redisTemplate = redisTemplate;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userRoleService = userRoleService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.memberClient = memberClient;
     }
 
     @Override
     public User getUserByUsername(String username) {
-        return baseMapper.selectOne(lambdaQuery().eq(User::getUsername, username));
+        return baseMapper.selectOne(new QueryWrapper<User>().eq("username", username));
     }
 
     @Override
@@ -151,11 +153,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void updateUser(User user) {
-        User localUser = super.getById(user.getId());
-        // 用户账号不允许更改
-        if(localUser != null){
-            user.setUsername(localUser.getUsername());
+        if(user.getUsername() != null){
+            User localUser = getById(user.getId());
+            // 用户账号不允许更改
+            if(localUser != null){
+                user.setUsername(localUser.getUsername());
+            }
         }
+
         if(StringUtils.hasText(user.getPassword())){
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         }
@@ -209,6 +214,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     private boolean isExist(String username){
-        return baseMapper.selectCount(lambdaQuery().eq(User::getUsername, username)) > 0;
+        return baseMapper.selectCount(
+                Wrappers.lambdaQuery(User.class).eq(User::getUsername, username)
+        ) > 0;
     }
 }
