@@ -2,4 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.alex.company.mapper.DepartmentMapper">
 
+    <select id="getLatestCode" resultType="java.lang.String">
+        select code from co_department where company_id = #{companyId} order by create_time desc limit 1
+    </select>
 </mapper>

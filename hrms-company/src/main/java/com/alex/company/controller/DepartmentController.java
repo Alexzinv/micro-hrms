@@ -9,7 +9,7 @@ import com.alex.company.entity.Company;
 import com.alex.company.entity.Department;
 import com.alex.company.service.CompanyService;
 import com.alex.company.service.DepartmentService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -41,22 +41,18 @@ public class DepartmentController {
         return R.ok().data("data", department);
     }
 
-    @GetMapping("/list")
-    public R listDepartments(){
-        List<Department> departmentList = departmentService.list();
-        return R.ok().data("data", departmentList);
-    }
-
     @GetMapping("/list/{companyId}")
     public R listDepartmentByCompanyId(@PathVariable("companyId") Long companyId){
-        List<Department> departments = departmentService.list(new QueryWrapper<Department>().eq("company_id", companyId));
+        List<Department> departments = departmentService.list(
+                Wrappers.lambdaQuery(Department.class).eq(Department::getCompanyId, companyId)
+        );
         return R.ok().data("departments", departments);
     }
 
     @PostMapping("/list/{page}/{limit}")
     public R listDepartmentPageByCompanyIdCondition(@PathVariable("page") Integer page,
                                            @PathVariable("limit") Integer limit,
-                                           @RequestBody DepartmentQuery departmentQuery){
+                                           @RequestBody(required = true) DepartmentQuery departmentQuery){
         Long companyId = departmentQuery.getCompanyId();
         Company company = companyService.getById(companyId);
         Page<Department> result = departmentService.listPage(page, limit, departmentQuery);
@@ -66,14 +62,14 @@ public class DepartmentController {
 
     @PostMapping("/save")
     public R saveDepartment(@RequestBody Department department){
-        boolean isSave = departmentService.save(department);
-        return isSave ? R.ok() : R.err();
+        departmentService.save(department);
+        return R.ok();
     }
 
     @PostMapping("/update")
     public R updateDepartment(@RequestBody Department department){
-        boolean isUpdate = departmentService.updateById(department);
-        return isUpdate ? R.ok() : R.err();
+        departmentService.updateById(department);
+        return R.ok();
     }
 
     @DeleteMapping("/delete/{id}")
