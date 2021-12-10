@@ -1,5 +1,6 @@
 package com.alex.security.security;
 
+import com.alex.common.consant.GlobalCompanyId;
 import com.alex.common.util.R;
 import com.alex.common.util.ResponseUtil;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -33,6 +34,7 @@ public class TokenLogoutHandler implements LogoutHandler {
             String username = tokenManager.getUserFromToken(token);
             redisTemplate.delete(username);
         }
+        GlobalCompanyId.remove();
         ResponseUtil.out(response, R.ok());
     }
 
