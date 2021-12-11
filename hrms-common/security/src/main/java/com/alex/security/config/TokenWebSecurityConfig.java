@@ -6,8 +6,10 @@ import com.alex.security.security.TokenLogoutHandler;
 import com.alex.security.security.TokenManager;
 import com.alex.security.security.UnauthorizedEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,7 +24,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
     // @Override
     // protected void configure(HttpSecurity http) throws Exception {
@@ -41,6 +43,15 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.tokenManager = tokenManager;
         this.redisTemplate = redisTemplate;
+    }
+
+    /**
+     * 开启注解方式认证 配合全局注解
+     */
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
     /**
