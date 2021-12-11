@@ -74,7 +74,7 @@ public class CompanyController {
     }
 
     /**
-     * 修改审核状态
+     * 修改启用状态
      */
     @PostMapping("/state")
     public R stateCompany(@RequestBody CompanyStateVO vo){
