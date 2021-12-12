@@ -12,6 +12,9 @@
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
     </resultMap>
+    <select id="getLatestCode" resultType="java.lang.String">
+        select role_code from sys_role order by create_time desc limit 1
+    </select>
 
 
 </mapper>
