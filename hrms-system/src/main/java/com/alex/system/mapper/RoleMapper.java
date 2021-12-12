@@ -10,5 +10,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @Description 角色
  */
 public interface RoleMapper extends BaseMapper<Role> {
-	
+
+    /**
+     * 获取最新角色code
+     * @return code
+     */
+    String getLatestCode();
 }
