@@ -1,6 +1,6 @@
 package com.alex.system.dto.stuct;
 
-import com.alex.common.bean.UserCompanyTo;
+import com.alex.common.bean.member.UserCompanyTo;
 import com.alex.system.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
