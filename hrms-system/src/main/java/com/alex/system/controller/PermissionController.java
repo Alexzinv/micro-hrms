@@ -1,5 +1,7 @@
 package com.alex.system.controller;
 
+import com.alex.system.dto.PermissionStatusVo;
+import com.alex.system.dto.stuct.PermissionStruct;
 import com.alex.system.entity.Permission;
 import com.alex.system.service.PermissionService;
 import com.alex.system.service.RolePermissionService;
@@ -70,6 +72,16 @@ public class PermissionController {
     @ApiOperation(value = "修改")
     @PutMapping("update")
     public R updateById(@RequestBody Permission permission) {
+        permissionService.updateById(permission);
+        return R.ok();
+    }
+
+    /**
+     * 修改启用状态
+     */
+    @PostMapping("status")
+    public R stateCompany(@RequestBody PermissionStatusVo vo){
+        Permission permission = PermissionStruct.INSTANCE.toPermission(vo);
         permissionService.updateById(permission);
         return R.ok();
     }
