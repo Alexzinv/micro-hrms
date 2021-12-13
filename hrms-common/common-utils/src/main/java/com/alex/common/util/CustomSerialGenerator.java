@@ -1,6 +1,6 @@
 package com.alex.common.util;
 
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.LongAccumulator;
 
 /**
  * @author _Alexzinv_
@@ -10,14 +10,14 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class CustomSerialGenerator {
 
-    private static final AtomicLong AL = new AtomicLong(10000);
-    private static final AtomicLong CODE = new AtomicLong(1);
+    private static final LongAccumulator CODE = new LongAccumulator(Long::sum, 1);
+    private static final LongAccumulator WORK_NUM = new LongAccumulator(Long::sum, 10000);
 
     /**
      * 工号初始数值
      */
     public static Long initSerial() {
-        return AL.get();
+        return WORK_NUM.get();
     }
 
     /**
