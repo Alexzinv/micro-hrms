@@ -41,16 +41,4 @@ public interface UserConstant {
          */
         int ENABLE = 1;
     }
-
-    interface JobStatus {
-        /**
-         * 在职
-         */
-        int IN_ACTIVE_SERVICE = 0;
-
-        /**
-         * 离职
-         */
-        int LEAVE = 1;
-    }
 }

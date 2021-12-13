@@ -8,11 +8,6 @@ package com.alex.common.consant;
 public interface CompanyConstant {
 
     /**
-     * 部门编码前缀
-     */
-    String DEPARTMENT_CODE_PREFIX = "AX000";
-
-    /**
      * 审核状态
      */
     interface AuditState {
