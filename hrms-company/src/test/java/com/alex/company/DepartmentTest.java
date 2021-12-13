@@ -26,7 +26,7 @@ public class DepartmentTest {
     public void saveTest(){
         Department department = new Department();
         department.setCompanyId(225977538736133L);
-        department.setName("CDM");
+        department.setName("AIS");
         departmentService.save(department);
     }
 
