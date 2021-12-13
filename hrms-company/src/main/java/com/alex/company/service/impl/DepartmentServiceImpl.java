@@ -1,7 +1,9 @@
 package com.alex.company.service.impl;
 
-import com.alex.common.consant.CompanyConstant;
-import com.alex.common.util.CustomSerialGenerator;
+import com.alex.common.consant.CodePrefixEnum;
+import com.alex.common.consant.ResultCodeEnum;
+import com.alex.common.exception.HRMSException;
+import com.alex.common.util.CodePrefixUtils;
 import com.alex.company.dto.DepartmentQuery;
 import com.alex.company.entity.Department;
 import com.alex.company.mapper.DepartmentMapper;
@@ -44,9 +46,13 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
 
     @Override
     public boolean save(Department entity) {
-        Long companyId = entity.getCompanyId();
-        entity.setCode(getCode(companyId));
-        return super.save(entity);
+        String name = entity.getName();
+        if(StringUtils.hasText(name) && !isExist(name)){
+            Long companyId = entity.getCompanyId();
+            entity.setCode(getCode(companyId));
+            return super.save(entity);
+        }
+        throw new HRMSException(ResultCodeEnum.EXISTS_EXCEPTION);
     }
 
     /**
@@ -55,15 +61,17 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
      * @return code
      */
     private String getCode(Long companyId) {
-        // 查询出当前公司部门编码列最新值
-        String code = baseMapper.getLatestCode(companyId);
-        // 为空则是第一次添加，初始化，否则按最大值自增
-        if(code == null){
-            return CompanyConstant.DEPARTMENT_CODE_PREFIX + CustomSerialGenerator.initCode();
-        }
-        String newCode = code.replace(CompanyConstant.DEPARTMENT_CODE_PREFIX, "");
-        long value = Long.parseLong(newCode);
-        ++value;
-        return CompanyConstant.DEPARTMENT_CODE_PREFIX + value;
+        CodePrefixUtils utils = () -> baseMapper.getLatestCode(companyId);
+        return utils.getCode(CodePrefixEnum.DEPARTMENT_CODE_PREFIX);
+    }
+
+    /**
+     * 部门是否已经存在
+     * @param name 部门名
+     * @return 是否存在
+     */
+    private boolean isExist(String name){
+        int count = super.count(new QueryWrapper<Department>().eq("name", name));
+        return count > 0;
     }
 }

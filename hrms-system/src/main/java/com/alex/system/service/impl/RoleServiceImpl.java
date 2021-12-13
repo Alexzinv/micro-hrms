@@ -1,7 +1,7 @@
 package com.alex.system.service.impl;
 
-import com.alex.common.consant.UserConstant;
-import com.alex.common.util.CustomSerialGenerator;
+import com.alex.common.consant.CodePrefixEnum;
+import com.alex.common.util.CodePrefixUtils;
 import com.alex.system.entity.Role;
 import com.alex.system.entity.RolePermission;
 import com.alex.system.entity.UserRole;
@@ -98,15 +98,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     private String getCode() {
-        // 查询出当前角色编码列最新值
-        String code = baseMapper.getLatestCode();
-        // 为空则是第一次添加，初始化，否则按最大值自增
-        if(code == null){
-            return UserConstant.ROLE_CODE_PREFIX + CustomSerialGenerator.initCode();
-        }
-        String newCode = code.replace(UserConstant.ROLE_CODE_PREFIX, "");
-        long value = Long.parseLong(newCode);
-        ++value;
-        return UserConstant.ROLE_CODE_PREFIX + value;
+        CodePrefixUtils utils = () -> baseMapper.getLatestCode();
+        return utils.getCode(CodePrefixEnum.ROLE_CODE_PREFIX);
     }
 }
