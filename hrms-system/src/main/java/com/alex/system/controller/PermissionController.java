@@ -65,6 +65,7 @@ public class PermissionController {
     @ApiOperation(value = "新增")
     @PostMapping("save")
     public R save(@RequestBody Permission permission) {
+        permission.setStatus(1);
         permissionService.save(permission);
         return R.ok();
     }
