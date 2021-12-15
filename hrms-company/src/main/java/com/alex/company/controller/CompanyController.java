@@ -9,6 +9,7 @@ import com.alex.company.dto.struct.CompanyStruct;
 import com.alex.company.entity.Company;
 import com.alex.company.service.CompanyService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2021-11-06
  * @description 公司控制器
  */
+@Slf4j
 @RestController
 @RequestMapping("/company/company")
 public class CompanyController {

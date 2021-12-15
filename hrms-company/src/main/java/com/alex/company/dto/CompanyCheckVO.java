@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -16,9 +17,11 @@ public class CompanyCheckVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @NotNull
     private Long id;
 
     @Min(0)
     @Max(2)
+    @NotNull
     private Integer auditState;
 }
