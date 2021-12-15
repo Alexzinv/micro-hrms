@@ -1,5 +1,6 @@
 package com.alex.system.controller;
 
+import com.alex.common.consant.PermissionConstant;
 import com.alex.system.dto.PermissionStatusVo;
 import com.alex.system.dto.stuct.PermissionStruct;
 import com.alex.system.entity.Permission;
@@ -65,7 +66,7 @@ public class PermissionController {
     @ApiOperation(value = "新增")
     @PostMapping("save")
     public R save(@RequestBody Permission permission) {
-        permission.setStatus(1);
+        permission.setStatus(PermissionConstant.Status.ENABLE);
         permissionService.save(permission);
         return R.ok();
     }
