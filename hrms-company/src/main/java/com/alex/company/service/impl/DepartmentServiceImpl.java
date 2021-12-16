@@ -28,11 +28,7 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
         QueryWrapper<Department> wrapper = new QueryWrapper<>();
 
         Long companyId = departmentQuery.getCompanyId();
-        if(companyId == null){
-            return baseMapper.selectPage(pageEntity, null);
-        }
         wrapper.eq("company_id", companyId);
-
         String keyWord = departmentQuery.getKey();
         String manager = departmentQuery.getManager();
         if(StringUtils.hasText(keyWord)){

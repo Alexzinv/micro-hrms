@@ -54,9 +54,13 @@ public class DepartmentController {
                                            @PathVariable("limit") Integer limit,
                                            @RequestBody(required = true) DepartmentQuery departmentQuery){
         Long companyId = departmentQuery.getCompanyId();
-        Company company = companyService.getById(companyId);
-        Page<Department> result = departmentService.listPage(page, limit, departmentQuery);
-        DepartmentVO departmentVO = DepartmentStruct.INSTANCE.entity2VO(company, result.getRecords());
+        Page<Department> result = new Page<>();
+        DepartmentVO departmentVO = null;
+        if(companyId != null){
+            Company company = companyService.getById(companyId);
+            result = departmentService.listPage(page, limit, departmentQuery);
+            departmentVO = DepartmentStruct.INSTANCE.entity2VO(company, result.getRecords());
+        }
         return R.ok().data("records", departmentVO).data("total", result.getTotal());
     }
 
