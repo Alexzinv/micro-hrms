@@ -23,3 +23,5 @@ spring:
             refresh: true
           - data-id: seata.yml
             refresh: true
+          - data-id: kaptcha.yml
+            refresh: true
