@@ -38,7 +38,11 @@ public class PositionController {
     public R listPositionCondition(@PathVariable Integer page,
                                   @PathVariable Integer limit,
                                   @RequestBody(required = true) PositionQuery positionQuery){
-        Page<Position> result = positionService.listPage(page, limit, positionQuery);
+        System.out.println(positionQuery.toString());
+        Page<Position> result = new Page<>();
+        if(positionQuery.getCompanyId() != null){
+            result = positionService.listPage(page, limit, positionQuery);
+        }
         return R.ok().data("records", result.getRecords()).data("total", result.getTotal());
     }
 
