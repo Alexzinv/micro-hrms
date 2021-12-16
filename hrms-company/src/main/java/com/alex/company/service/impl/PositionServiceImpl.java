@@ -1,5 +1,8 @@
 package com.alex.company.service.impl;
 
+import com.alex.common.consant.CompanyConstant;
+import com.alex.common.consant.ResultCodeEnum;
+import com.alex.common.exception.HRMSException;
 import com.alex.company.dto.PositionQuery;
 import com.alex.company.entity.Position;
 import com.alex.company.mapper.PositionMapper;
@@ -32,5 +35,18 @@ public class PositionServiceImpl extends ServiceImpl<PositionMapper, Position> i
                 .like(StringUtils.hasText(name), "name", name)
                 .eq(status != null, "status", status);
         return baseMapper.selectPage(pageEntity, wrapper);
+    }
+
+    @Override
+    public boolean save(Position entity) {
+        Long companyId = entity.getCompanyId();
+        Integer status = entity.getStatus();
+        if(companyId == null){
+            throw new HRMSException(ResultCodeEnum.NO_COMPANY_ID);
+        }
+        if(status == null){
+            entity.setStatus(CompanyConstant.State.ACTIVATED);
+        }
+        return super.save(entity);
     }
 }

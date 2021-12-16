@@ -39,9 +39,11 @@ public enum ResultCodeEnum {
      */
     EXISTS_EXCEPTION(20007, "名字已存在"),
     /**
-     * 系统繁忙
-     */
-    SYSTEM_BUSY(20008, "系统繁忙");
+     系统繁忙 */
+    SYSTEM_BUSY(20008, "系统繁忙"),
+    /**
+     公司Id */
+    NO_COMPANY_ID(20009, "没有公司Id");
 
     /**
      * 状态码
