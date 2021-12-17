@@ -7,7 +7,6 @@ import com.alex.common.consant.CodePrefixEnum;
  * @date 2021/12/13
  * @description 编码生成工具
  */
-@FunctionalInterface
 public interface CodePrefixUtils {
 
     /**
