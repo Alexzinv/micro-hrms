@@ -1,6 +1,8 @@
 package com.alex.common.util;
 
 import com.alex.common.consant.ResultCodeEnum;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +12,8 @@ import java.util.Map;
  * @Date 2021/9/8
  * @Description 统一返回类
  */
+@Getter
+@Setter
 public class R {
 
 	/**
