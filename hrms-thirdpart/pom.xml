@@ -15,6 +15,10 @@
     <artifactId>hrms-thirdpart</artifactId>
     <name>hrms-thirdpart</name>
 
+    <properties>
+        <log4j2.version>2.16.0</log4j2.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.alex</groupId>
