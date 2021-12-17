@@ -1,7 +1,6 @@
 package com.alex.common.util;
 
 import com.alex.common.consant.ResultCodeEnum;
-import lombok.Data;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,13 +10,30 @@ import java.util.Map;
  * @Date 2021/9/8
  * @Description 统一返回类
  */
-@Data
 public class R {
+
+	/**
+	 * 成功
+	 */
+	private static final int SUCCESS = 20000;
+	/**
+	 * 成功消息
+	 */
+	private static final String SUCCESS_MESSAGE = "操作成功";
+
+	/**
+	 * 失败
+	 */
+	private static final int ERROR = 20001;
+	/**
+	 * 失败消息
+	 */
+	private static final String ERROR_MESSAGE = "操作成功";
 
 	/**
 	 * 是否成功
 	 */
-	private Boolean success;
+	private boolean success;
 
 	/**
 	 * 返回码
@@ -34,30 +50,17 @@ public class R {
 	 */
 	private Map<String, Object> data;
 
-	/// 懒汉
-	private static R r = new R();
-
-
 	private R(){}
-
-	/**
-	 * 单例
-	 * @return r
-	 */
-	private static R getR(){
-		return r;
-	}
 
 	/**
 	 * 成功静态方法
 	 * @return R
 	 */
 	public static R ok(){
-		R r = getR();
-		r.setSuccess(true);
-		r.setCode(ResultCodeEnum.SUCCESS.getCode());
-		r.setMessage(ResultCodeEnum.SUCCESS.getMessage());
-		r.setData(new HashMap<>(16));
+		R r = new R();
+		r.success = true;
+		r.code(SUCCESS);
+		r.message(SUCCESS_MESSAGE);
 		return r;
 	}
 
@@ -66,38 +69,37 @@ public class R {
 	 * @return R
 	 */
 	public static R err(){
-		R r = getR();
-		r.setSuccess(false);
-		r.setCode(ResultCodeEnum.ERROR.getCode());
-		r.setMessage(ResultCodeEnum.ERROR.getMessage());
-		r.setData(new HashMap<>(16));
+		R r = new R();
+		r.success = false;
+		r.code(ERROR);
+		r.message(ERROR_MESSAGE);
 		return r;
 	}
 
 	public R result(ResultCodeEnum codeEnum){
-		this.setCode(codeEnum.getCode());
-		this.setMessage(codeEnum.getMessage());
+		code(codeEnum.getCode());
+		message(codeEnum.getMessage());
 		return this;
 	}
 
 	public R message(String message){
-		this.setMessage(message);
+		this.message = message;
 		return this;
 	}
 
 	public R code(Integer code){
-		this.setCode(code);
+		this.code = code;
 		return this;
 	}
 
 	public R data(String key, Object value){
+		this.data = new HashMap<>(16);
 		this.data.put(key, value);
 		return this;
 	}
 
 	public R data(Map<String, Object> map) {
-		this.setData(map);
+		this.data = map;
 		return this;
 	}
-
 }
