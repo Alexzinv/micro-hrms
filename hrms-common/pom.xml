@@ -36,7 +36,7 @@
         <aliyun-java-sdk-core.version>4.5.20</aliyun-java-sdk-core.version>
         <aliyun-sdk-oss.version>3.10.2</aliyun-sdk-oss.version>
         <fastjson.version>1.2.76</fastjson.version>
-        <spring-cloud.version>2020.0.1</spring-cloud.version>
+        <spring-cloud.version>2020.0.4</spring-cloud.version>
         <alibaba-cloud.version>2021.1</alibaba-cloud.version>
         <http-component.version>4.4.14</http-component.version>
         <mysql-connector.version>8.0.23</mysql-connector.version>
