@@ -1,6 +1,7 @@
 package com.alex.company.service.impl;
 
 import com.alex.common.consant.CompanyConstant;
+import com.alex.common.consant.PositionConstant;
 import com.alex.common.consant.ResultCodeEnum;
 import com.alex.common.exception.HRMSException;
 import com.alex.company.dto.PositionQuery;
@@ -30,10 +31,19 @@ public class PositionServiceImpl extends ServiceImpl<PositionMapper, Position> i
         Long companyId = positionQuery.getCompanyId();
         String name = positionQuery.getName();
         Integer status = positionQuery.getStatus();
+        Integer sort = positionQuery.getSort();
         QueryWrapper<Position> wrapper = new QueryWrapper<>();
         wrapper.eq(companyId != null, "company_id", companyId)
                 .like(StringUtils.hasText(name), "name", name)
                 .eq(status != null, "status", status);
+
+        if(sort != null){
+            if(PositionConstant.IsSort.ASC.equals(sort)){
+                wrapper.orderByAsc("sort");
+            }else {
+                wrapper.orderByDesc("sort");
+            }
+        }
         return baseMapper.selectPage(pageEntity, wrapper);
     }
 
