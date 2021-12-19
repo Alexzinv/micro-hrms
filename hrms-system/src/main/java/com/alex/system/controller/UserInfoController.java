@@ -1,7 +1,6 @@
 package com.alex.system.controller;
 
 import cn.hutool.json.JSONObject;
-import com.alex.common.consant.GlobalCompanyId;
 import com.alex.common.util.R;
 import com.alex.system.entity.User;
 import com.alex.system.service.UserInfoService;
@@ -25,7 +24,6 @@ import java.util.Map;
 public class UserInfoController {
 
     private final UserInfoService userInfoService;
-
     private static final Logger logger = LoggerFactory.getLogger(UserInfoController.class);
 
     @Autowired
@@ -51,8 +49,6 @@ public class UserInfoController {
     public R info(){
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Map<String, Object> userInfo = userInfoService.mapInfo(username);
-        GlobalCompanyId.setCompanyId((Long)userInfo.get("companyId"));
-        logger.info("Global company id -----------> " + GlobalCompanyId.getCompanyId());
         return R.ok().data(userInfo);
     }
 

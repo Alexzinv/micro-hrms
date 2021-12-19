@@ -7,8 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -55,6 +54,9 @@ public class User implements Serializable {
 	/**
 	 * 启用状态 0是禁用，1是启用
 	 */
+	@Min(0)
+	@Max(1)
+	@NotNull
 	private Integer enableState;
 	/**
 	 * 企业ID
@@ -63,6 +65,9 @@ public class User implements Serializable {
 	/**
 	 * 账号级别
 	 */
+	@Min(1)
+	@Max(3)
+	@NotNull
 	private Integer level;
 	/**
 	 * 创建时间
