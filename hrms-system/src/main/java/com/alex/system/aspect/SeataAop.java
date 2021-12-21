@@ -1,4 +1,4 @@
-package com.alex.system.aop;
+package com.alex.system.aspect;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;

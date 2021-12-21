@@ -1,4 +1,4 @@
-package com.alex.company.aop;
+package com.alex.company.aspect;
 
 import io.seata.core.exception.TransactionException;
 import io.seata.tm.api.GlobalTransaction;

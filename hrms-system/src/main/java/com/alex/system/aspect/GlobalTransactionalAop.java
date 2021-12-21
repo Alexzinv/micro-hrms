@@ -1,4 +1,4 @@
-package com.alex.system.aop;
+package com.alex.system.aspect;
 
 import io.seata.core.exception.TransactionException;
 import io.seata.tm.api.GlobalTransaction;
@@ -39,7 +39,7 @@ public class GlobalTransactionalAop {
             return;
         }
 
-        log.info("AOP------- 全局事务回滚-- ---xid:{}------》", globalTransaction.getXid());
+        log.warn("AOP------- 全局事务回滚 -----xid:{}------》", globalTransaction.getXid());
         try {
             globalTransaction.rollback();
         } catch (TransactionException e) {
