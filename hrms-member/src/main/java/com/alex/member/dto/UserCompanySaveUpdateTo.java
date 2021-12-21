@@ -1,6 +1,5 @@
 package com.alex.member.dto;
 
-import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -34,6 +33,12 @@ public class UserCompanySaveUpdateTo implements Serializable {
 
     @ApiModelProperty(value = "部门ID")
     private Long departmentId;
+
+    @ApiModelProperty(value = "部门名称")
+    private String departmentName;
+
+    @ApiModelProperty(value = "岗位ID")
+    private Long positionId;
 
     @ApiModelProperty(value = "岗位名称")
     private String position;

@@ -33,6 +33,10 @@ public class UserCompanyServiceImpl extends ServiceImpl<UserCompanyMapper, UserC
     public Page<UserCompany> listPage(Integer page, Integer limit, UserCompanyQuery query) {
         Page<UserCompany> pageEntity = new Page<>(page, limit);
 
+        Long companyId = query.getCompanyId();
+        if(companyId == null){
+            return new Page<>();
+        }
         String nickname = query.getNickname();
         Long departmentId = query.getDepartmentId();
         String workingCity = query.getWorkingCity();
@@ -45,6 +49,7 @@ public class UserCompanyServiceImpl extends ServiceImpl<UserCompanyMapper, UserC
         }
 
         LambdaQueryChainWrapper<UserCompany> wrapper = lambdaQuery()
+                .eq(UserCompany::getCompanyId, companyId)
                 .eq(UserCompany::getJobStatus, jobStatus)
                 .like(isNotBlank(nickname), UserCompany::getNickname, nickname)
                 .eq(departmentId != null, UserCompany::getDepartmentId, departmentId)
