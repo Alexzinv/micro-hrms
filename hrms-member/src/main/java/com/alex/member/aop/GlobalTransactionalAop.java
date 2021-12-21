@@ -6,6 +6,7 @@ import io.seata.tm.api.GlobalTransactionContext;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +22,15 @@ public class GlobalTransactionalAop {
 
     @Pointcut("@annotation(io.seata.spring.annotation.GlobalTransactional)")
     public void txAnnotation(){ }
+
+    @Before("txAnnotation()")
+    public void doBefore(){
+        GlobalTransaction globalTransaction = GlobalTransactionContext.getCurrentOrCreate();
+        if (globalTransaction == null) {
+            return;
+        }
+        log.info("AOP------- 全局事务调用 -----xid:{} ------》", globalTransaction.getXid());
+    }
 
     @AfterThrowing(throwing = "throwable", pointcut = "txAnnotation()")
     public void doAfterReturning(Throwable throwable) {
