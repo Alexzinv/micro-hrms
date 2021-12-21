@@ -1,6 +1,7 @@
 package com.alex.member.controller;
 
 
+import com.alex.common.bean.member.UserCompanyDepartmentPositionTo;
 import com.alex.common.util.R;
 import com.alex.member.dto.UserCompanyQuery;
 import com.alex.member.dto.UserCompanySaveUpdateTo;
@@ -55,6 +56,12 @@ public class UserCompanyController {
     public R updateUserCompany(@RequestBody UserCompanySaveUpdateTo to){
         UserCompany userCompany = UserCompanyUpdateStruct.INSTANCE.toUserCompany(to);
         userCompanyService.update(userCompany);
+        return R.ok();
+    }
+
+    @PostMapping("/updateDepartmentPosition")
+    public R updateUserCompanyDepartmentPosition(@RequestBody UserCompanyDepartmentPositionTo to){
+        userCompanyService.updateUserCompanyDepartmentPosition(to);
         return R.ok();
     }
 

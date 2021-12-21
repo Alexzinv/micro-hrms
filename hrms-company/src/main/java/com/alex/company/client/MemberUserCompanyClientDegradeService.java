@@ -1,6 +1,6 @@
 package com.alex.company.client;
 
-import com.alex.common.bean.member.UserCompanyTo;
+import com.alex.common.bean.member.UserCompanyDepartmentPositionTo;
 import com.alex.common.consant.ResultCodeEnum;
 import com.alex.common.util.R;
 
@@ -10,8 +10,9 @@ import com.alex.common.util.R;
  * @description
  */
 public class MemberUserCompanyClientDegradeService implements MemberUserCompanyClient {
+
     @Override
-    public R updateUserCompany(UserCompanyTo to) {
+    public R updateUserCompanyDepartmentPosition(UserCompanyDepartmentPositionTo to) {
         return R.ok().result(ResultCodeEnum.SYSTEM_BUSY);
     }
 }
