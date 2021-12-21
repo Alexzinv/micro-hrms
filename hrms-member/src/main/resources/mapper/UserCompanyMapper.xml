@@ -9,6 +9,8 @@
         <result property="nickname" column="nickname"/>
         <result property="companyId" column="company_id"/>
         <result property="departmentId" column="department_id"/>
+        <result property="departmentName" column="department_name"/>
+        <result property="positionId" column="position_id"/>
         <result property="position" column="position"/>
         <result property="joinTime" column="join_time"/>
         <result property="resignTime" column="resign_time"/>
@@ -20,6 +22,16 @@
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
     </resultMap>
+    <update id="updateDepartmentName">
+        update mem_user_company set department_name= #{departmentName}
+        where department_id = #{departmentId}
+    </update>
+
+    <update id="updatePositionName">
+        update mem_user_company set position= #{position}
+        where position_id = #{positionId}
+    </update>
+
     <select id="getMaxWorkNumber" resultType="java.lang.Long">
         select max(work_number) from mem_user_company where company_id = #{companyId};
     </select>

@@ -1,6 +1,9 @@
 package com.alex.member.service.impl;
 
+import com.alex.common.bean.member.UserCompanyDepartmentPositionTo;
 import com.alex.common.consant.MemUserCompanyConstant;
+import com.alex.common.consant.ResultCodeEnum;
+import com.alex.common.exception.HRMSException;
 import com.alex.common.util.CustomSerialGenerator;
 import com.alex.common.util.DateUtils;
 import com.alex.member.dto.UserCompanyQuery;
@@ -68,6 +71,27 @@ public class UserCompanyServiceImpl extends ServiceImpl<UserCompanyMapper, UserC
     }
 
     @Override
+    public void updateUserCompanyDepartmentPosition(UserCompanyDepartmentPositionTo to) {
+        Long departmentId = to.getDepartmentId();
+        boolean b;
+        if(departmentId != null){
+            String departmentName = to.getDepartmentName();
+            b = baseMapper.updateDepartmentName(departmentId, departmentName);
+            if(!b){
+                throw new HRMSException(ResultCodeEnum.GLOBAL_TRANSACTIONAL_EXCEPTION);
+            }
+        }
+        Long positionId = to.getPositionId();
+        if(positionId != null){
+            String position = to.getPosition();
+            b = baseMapper.updatePositionName(positionId, position);
+            if(!b){
+                throw new HRMSException(ResultCodeEnum.GLOBAL_TRANSACTIONAL_EXCEPTION);
+            }
+        }
+    }
+
+    @Override
     public boolean save(UserCompany entity) {
         Long companyId = entity.getCompanyId();
         if(companyId != null){
@@ -76,7 +100,7 @@ public class UserCompanyServiceImpl extends ServiceImpl<UserCompanyMapper, UserC
             entity.setWorkNumber(workerNumber);
             entity.setJobStatus(MemUserCompanyConstant.JobStatus.IN_ACTIVE_SERVICE);
             entity.setJoinTime(Calendar.getInstance().getTime());
-            entity.setCorrectionTime(DateUtils.addDateMonths(Calendar.getInstance().getTime(), 3));
+            entity.setCorrectionTime(DateUtils.addDateMonths(Calendar.getInstance().getTime(), 1));
         }
         return super.save(entity);
     }

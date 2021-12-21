@@ -1,5 +1,6 @@
 package com.alex.member.service;
 
+import com.alex.common.bean.member.UserCompanyDepartmentPositionTo;
 import com.alex.member.dto.UserCompanyQuery;
 import com.alex.member.entity.UserCompany;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -30,4 +31,10 @@ public interface UserCompanyService extends IService<UserCompany> {
      * @return isUpdate
      */
     boolean update(UserCompany userCompany);
+
+    /**
+     * 更新部门岗位信息
+     * @param to 数据对象
+     */
+    void updateUserCompanyDepartmentPosition(UserCompanyDepartmentPositionTo to);
 }
