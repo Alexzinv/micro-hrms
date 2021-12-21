@@ -451,7 +451,7 @@
   	private boolean success;
   	private Integer code;
   	private String message;
-  	private Map<String, Object> data;
+  	private Map<String, Object> data = new HashMap<>(32);
   
   	private R(){}
   	/**
@@ -492,15 +492,18 @@
   	}
   
   	public R data(String key, Object value){
-  		this.data = new HashMap<>(16);
   		this.data.put(key, value);
   		return this;
   	}
   
   	public R data(Map<String, Object> map) {
-  		this.data = map;
-  		return this;
-  	}
+        if(this.data.isEmpty()){
+            this.data = map;
+        }else {
+            this.data.putAll(map);
+        }
+        return this;
+    }
   }
   ```
   
