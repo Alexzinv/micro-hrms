@@ -33,7 +33,31 @@
 + 关键技术: `Spring Boot` + `Spring Cloud` + `Spring Security` + `Nacos` + `Vue`+ `Mybatis-Plus` + `Mysql`  + `redis`
 + <img src="https://markdown-alex.oss-cn-chengdu.aliyuncs.com/HRMS/HRMS系统架构.png" alt="hrms架构" style="zoom: 80%;" />
 
-
++ ```shell
+  micro-hrms
+  ├─db  项目SQL语句
+  │
+  ├─common 公共模块
+  │  ├─aspect 系统日志
+  │  ├─exception 异常处理
+  │  ├─validator 后台校验
+  │  └─xss XSS过滤
+  │ 
+  ├─config 配置信息
+  │ 
+  ├─modules 功能模块
+  │  ├─app API接口模块(APP调用)
+  │  ├─job 定时任务模块
+  │  ├─oss 文件服务模块
+  │  └─sys 权限模块
+  │ 
+  ├─RenrenApplication 项目启动类
+  │  
+  ├──resources 
+  │  ├─mapper SQL对应的XML文件
+  │  └─static 静态资源
+  
+  ```
 
 
 
@@ -55,62 +79,66 @@
 
   ```mysql
   -- 系统权限菜单
-  CREATE TABLE `sys_permission` (
-      `id` bigint unsigned NOT NULL primary key COMMENT 'ID',
-      `pid`  bigint unsigned NOT NULL DEFAULT '' COMMENT '所属上级',
-      `name` varchar(20) NOT NULL DEFAULT '' COMMENT '名称',
-      `type` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '类型(1:菜单,2:按钮,3:Api)',
-      `permission_value` varchar(50) COMMENT '权限值',
-      `path` varchar(100) COMMENT '访问路径',
-      `component` varchar(100) COMMENT '组件路径',
-      `icon` varchar(255) COMMENT '图标',
-      `status` tinyint unsigned COMMENT '状态(0:禁止,1:正常)',
-      `create_time` datetime COMMENT '创建时间',
-      `update_time` datetime COMMENT '更新时间',
+  CREATE TABLE `sys_permission`
+  (
+      `id`               bigint                 not null comment 'ID' primary key,
+      `pid`              bigint      default 0  not null comment '所属上级',
+      `name`             varchar(20) default '' not null comment '名称',
+      `type`             tinyint     default 0  not null comment '类型 [1:菜单,2:按钮,3:Api]',
+      `permission_value` varchar(50)            null comment '权限值',
+      `path`             varchar(100)           null comment '访问路径',
+      `component`        varchar(100)           null comment '组件路径',
+      `icon`             varchar(255)           null comment '图标',
+      `status`           tinyint                null comment '状态 [0:禁止,1:正常]',
+      `create_time`      datetime               null comment '创建时间',
+      `update_time`      datetime               null comment '更新时间',
       KEY `idx_pid` (`pid`)
   ) ENGINE = InnoDB CHARSET=utf8mb4 COMMENT='权限菜单';
   
   -- 角色
   CREATE TABLE `sys_role` (
-      `id` bigint unsigned NOT NULL primary key COMMENT 'ID',
-      `name` varchar(20) NOT NULL DEFAULT '' COMMENT '角色名称',
-      `code` varchar(20) COMMENT '角色编码',
-      `notes` varchar(255) DEFAULT NULL COMMENT '备注',
-      `create_time` datetime  COMMENT '创建时间',
-      `update_time` datetime COMMENT '更新时间'
+      `id`               bigint                 not null comment 'ID' primary key,
+      `role_name`        varchar(20) default '' not null comment '角色名称',
+      `role_code`   	   varchar(20)            null comment '角色编码',
+      `notes`            varchar(255)           null comment '备注',
+      `create_time`      datetime               null comment '创建时间',
+      `update_time`      datetime               null comment '更新时间'
   ) ENGINE = InnoDB DEFAULT CHARSET=utf8 COMMENT='角色';
   
   -- 角色权限关联表
   CREATE TABLE `sys_role_permission` (
-      `id` bigint unsigned NOT NULL primary key COMMENT 'ID',
-      `role_id` bigint unsigned NOT NULL DEFAULT '',
-      `permission_id` bigint unsigned NOT NULL DEFAULT '',
-      `create_time` datetime  COMMENT '创建时间',
-      `update_time` datetime COMMENT '更新时间',
+      `id`               bigint                 not null comment 'ID' primary key,
+      `role_id`          bigint default 0       not null,
+      `permission_id`    bigint default 0       not null,
+      `create_time`      datetime               null comment '创建时间',
+      `update_time`      datetime               null comment '更新时间',
       KEY `idx_role_id` (`role_id`),
       KEY `idx_permission_id` (`permission_id`)
   ) ENGINE = InnoDB DEFAULT CHARSET=utf8 COMMENT='角色权限关联表';
   
   -- 系统用户
   CREATE TABLE `sys_user` (
-      `id` bigint unsigned NOT NULL primary key COMMENT 'ID',
-      `username` varchar(32) NOT NULL DEFAULT '' COMMENT '账号',
-      `password` varchar(32) NOT NULL DEFAULT '' COMMENT '密码',
-      `nickname` varchar(50) DEFAULT NULL COMMENT '昵称',
-      `avatar` varchar(255) DEFAULT NULL COMMENT '用户头像',
-      `token` varchar(100) DEFAULT NULL COMMENT '用户签名',
-      `enable_state` tinyint unsigned DEFAULT 1 COMMENT '启用状态 0是禁用，1是启用',
-      `create_time` datetime  COMMENT '创建时间',
-      `update_time` datetime COMMENT '更新时间'
+      `id`               bigint                  not null comment 'ID' primary key,
+      `username`         varchar(32)  default '' not null comment '账号',
+      `password`         varchar(255) default '' not null comment '密码',
+      `nickname`         varchar(50)             null comment '昵称',
+      `avatar`           varchar(255)            null comment '用户头像',
+      `enable_state`     tinyint      default 1  null comment '启用状态 0是禁用，1是启用',
+      `company_id`       bigint                  null comment '企业ID',
+      `create_time`      datetime                null comment '创建时间',
+      `update_time`      datetime                null comment '更新时间',
+      `level`            tinyint                 null comment '账户级别',
+      `token`            varchar(255)            null comment '账号token',
+      KEY `idx_company_id` (`company_id`)
   ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户';
   
   -- 用户角色关联表
   CREATE TABLE `sys_user_role` (
-      `id` bigint unsigned NOT NULL primary key COMMENT 'ID',
-      `role_id` bigint unsigned NOT NULL DEFAULT 0 COMMENT '角色id',
-      `user_id` bigint unsigned NOT NULL DEFAULT 0 COMMENT '用户id',
-      `create_time` datetime  COMMENT '创建时间',
-      `update_time` datetime COMMENT '更新时间',
+      `id`               bigint                  not null comment 'ID' primary key,
+      `role_id`          bigint default 0        not null comment '角色id',
+      `user_id`          bigint default 0        not null comment '用户id',
+      `create_time`      datetime                null comment '创建时间',
+      `update_time`      datetime                null comment '更新时间',
       KEY `idx_role_id` (`role_id`),
       KEY `idx_user_id` (`user_id`)
   ) ENGINE = InnoDB DEFAULT CHARSET=utf8 COMMENT='用户角色关联表';
@@ -118,97 +146,115 @@
   
   <br>
   
-+ 企业管理（en）
++ 公司管理（co）
 
   ```mysql
-  -- 企业
-  CREATE TABLE `en_enterprise`  (
-      `id` bigint unsigned NOT NULL primary key COMMENT 'ID',
-      `name` varchar(255) COMMENT '企业名称',
-      `user_id` bigint unsigned COMMENT '企业登录账号ID',
-      `renewal_date` datetime COMMENT '续期时间',
-      `expiration_date` datetime COMMENT '到期时间',
-      `address` text COMMENT '公司地址',
-      `business_license_id` bigint unsigned COMMENT '营业执照-图片ID',
-      `legal_person` varchar(255) COMMENT '法人代表',
-      `phone` varchar(24) COMMENT '公司电话',
-      `mail` varchar(255) COMMENT '邮箱',
-      `industry` varchar(255) COMMENT '所属行业',
-      `notes` text  COMMENT '备注',
-      `audit_state` tinyint DEFAULT 0 COMMENT '审核状态',
-      `enable_state` tinyint DEFAULT 1 COMMENT '启用状态',
-      `balance` decimal(14, 6) DEFAULT 0 COMMENT '当前余额',
-      `create_time` datetime COMMENT '创建时间',
-      `update_time` datetime COMMENT '修改时间',
-      KEY `idx_user_id` (`user_id`)
-  ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT='企业';
+  -- 公司信息表
+  CREATE TABLE `co_company`
+  (
+      `id`                   bigint unsigned       not null comment 'ID' primary key,
+      `name`                 varchar(255)          null comment '公司名称',
+      `manager_id`           bigint unsigned       null comment '企业登录账号ID',
+      `version`              varchar(255)          null comment '当前版本',
+      `renewal_date`         datetime              null comment '续期时间',
+      `expiration_date`      datetime              null comment '到期时间',
+      `company_address`      text                  null comment '公司地址',
+      `business_license_url` varchar(255)          null comment '营业执照-图片ID',
+      `legal_representative` varchar(255)          null comment '法人代表',
+      `company_phone`        varchar(255)          null comment '公司电话',
+      `mailbox`              varchar(255)          null comment '邮箱',
+      `company_size`         varchar(255)          null comment '公司规模',
+      `industry`             varchar(255)          null comment '所属行业',
+      `remarks`              text                  null comment '备注',
+      `audit_state`          tinyint unsigned      null comment '审核状态 0:未审核 1:已审核',
+      `state`                tinyint unsigned      null comment '状态 0:未激活 1:已激活',
+      `balance`              decimal(18, 4)        null comment '当前余额',
+      `create_time`          datetime              null comment '创建时间',
+      `update_time`          datetime              null comment '更新时间',
+      KEY `idx_manager_id` (`manager_id`)
+  )  ENGINE = InnoDB DEFAULT CHARSET=utf8 COMMENT='公司信息表'
   
-  -- 部门
-  CREATE TABLE `en_department`  (
-      `id` bigint unsigned NOT NULL primary key COMMENT 'ID',
-      `enterprise_id` bigint unsigned COMMENT '企业ID',
-      `pid` bigint unsigned COMMENT '父级部门ID',
-      `name` varchar(255)  COMMENT '部门名称',
-      `code` varchar(255) COMMENT '部门编码',
-      `manager` varchar(32)  COMMENT '部门负责人',
-      `manager_id` bigint unsigned COMMENT '负责人ID',
-      `introduce` text  COMMENT '介绍',
-      `create_time` datetime  COMMENT '创建时间',
-      `update_time` datetime COMMENT '更新时间',
-      KEY `idx_enterprise_id` (`enterprise_id`)
+  -- 部门表
+  CREATE TABLE `co_department`  (
+      `id`          bigint       not null primary key,
+      `company_id`  bigint       null comment '企业ID',
+      `pid`         bigint       null comment '父级部门ID',
+      `name`        varchar(255) null comment '部门名称',
+      `code`        varchar(255) null comment '部门编码',
+      `manager`     varchar(32)  null comment '部门负责人',
+      `manager_id`  bigint       null comment '负责人ID',
+      `introduce`   text         null comment '介绍',
+      `create_time` datetime     null comment '创建时间',
+      `update_time` datetime     null comment '更新时间',
+      KEY `idx_company_id` (`company_id`),
+      KEY `idx_pid` (`pid`),
+      KEY `idx_manager_id` (`manager_id`)
   ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT='部门';
   
-  -- 成员
-  CREATE TABLE `en_member` (
-      `id` bigint unsigned NOT NULL primary key COMMENT 'ID',
-      `enterprise_id` bigint unsigned COMMENT '企业ID',
-      `department_id` bigint unsigned COMMENT '部门ID',
-      `username` varchar(32) NOT NULL DEFAULT '' COMMENT '账号',
-      `password` varchar(32) NOT NULL DEFAULT '' COMMENT '密码',
-      `nickname` varchar(50) DEFAULT NULL COMMENT '昵称',
-      `avatar` varchar(255) DEFAULT NULL COMMENT '用户头像',
-      `token` varchar(100) DEFAULT NULL COMMENT '用户签名',
-      `enable_state` tinyint unsigned DEFAULT 1 COMMENT '启用状态 0是禁用，1是启用',
-      `join_time` datetime COMMENT '入职时间',
-      `resign_time` datetime COMMENT '离职时间',
-      `employ_form` tinyint unsigned COMMENT '聘用形式',
-      `work_number` varchar(20) COMMENT '工号',
-      `manage_form` varchar(8) COMMENT '管理形式',
-      `working_city` varchar(16) COMMENT '工作城市',
-      `correction_time` datetime COMMENT '转正时间',
-      `job_status` tinyint unsigned COMMENT '在职状态 1.在职  2.离职',
-      `staff_photo` varchar(255) COMMENT '员工照片', 
-      `create_time` datetime  COMMENT '创建时间',
-      `update_time` datetime COMMENT '更新时间',
-      KEY `idx_enterprise_id` (`enterprise_id`),
-      KEY `idx_department_id` (`department_id`)
-      KEY `idx_member_info_id` (`member_info_id`)
-  ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='成员';
+  -- 岗位表
+  CREATE TABLE `co_position`  (
+      `id`          bigint           not null primary key,
+      `company_id`  bigint           null comment '企业ID',
+      `name`        varchar(32)      null comment '岗位名称',
+      `status`      tinyint unsigned null comment '启用状态 0:禁用 1:启用',
+      `sort`        int              null comment '显示顺序',
+      `create_time` datetime         null comment '创建时间',
+      `update_time` datetime         null comment '更新时间',
+      KEY `idx_company_id` (`company_id`)
+  ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT='岗位';
+  ```
+
+  <br>
+
++ 用户管理（mem)
+
+  ```mysql
+  -- sys_user扩展表 => 用户入职信息表
+  CREATE TABLE `mem_user_company`
+  (
+      `id`              bigint                 not null comment 'ID'primary key,
+      `username`        varchar(32) default '' not null comment '账号',
+      `work_number`     bigint                 null comment '工号',
+      `nickname`        varchar(50)            null comment '昵称',
+      `company_id`      bigint                 null comment '企业ID',
+      `department_id`   bigint                 null comment '部门ID',
+      `positionId`      bigint                 null comment '岗位id',
+      `position`        varchar(32)            null comment '岗位名称',
+      `join_time`       datetime               null comment '入职时间',
+      `resign_time`     datetime               null comment '离职时间',
+      `employ_form`     tinyint                null comment '聘用形式',
+      `working_city`    varchar(16)            null comment '工作城市',
+      `correction_time` datetime               null comment '转正时间',
+      `job_status`      tinyint                null comment '在职状态 1.在职  2.离职',
+      `staff_photo`     varchar(255)           null comment '员工照片',
+      `create_time`     datetime               null comment '创建时间',
+      `update_time`     datetime               null comment '更新时间',
+      KEY `idx_work_number` (`work_number`),
+      KEY `idx_company_id` (`company_id`),
+      KEY `idx_department_id` (`department_id`),
+      KEY `idx_position_id` (`position_id`)
+  ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='user公司扩展表';
   
-  -- 成员履历
-  CREATE TABLE `en_member` (
-      `id` bigint unsigned NOT NULL primary key COMMENT 'ID',
-      `member_id` bigint unsigned DEFAULT NULL COMMENT '员工编号',
-      `name` varchar(32) NOT NULL DEFAULT '' COMMENT '姓名',
-      `gender` tinyint unsigned COMMENT '性别 0.女 1.男',
-      `birthday` date  COMMENT '出生日期',
-      `id_card` char(18) COMMENT '身份证号',
-      `wedlock` tinyint unsigned COMMENT '婚姻状况 1：已婚，2：未婚 ，3：离异',
-      `nation` varchar(8) COMMENT '民族',
-      `native_place` varchar(64) COMMENT '籍贯',
-      `politics_status` varchar(16) COMMENT '政治面貌',
-      `email` varchar(32) COMMENT '邮箱',
-      `phone` varchar(11) COMMENT '电话',
-      `address` varchar(64) COMMENT '联系地址',
-      `position` varchar(16) COMMENT '职位',
-      `education` varchar(16) COMMENT '学历',
-      `school` varchar(32) COMMENT '毕业院校',
-      `create_time` datetime  COMMENT '创建时间',
-      `update_time` datetime COMMENT '更新时间',
-      KEY `idx_member_id` (`member_id`),
-      KEY `idx_enterprise_id` (`enterprise_id`),
-      KEY `idx_department_id` (`department_id`)，
-  ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='成员履历';
+  -- sys_user扩展表 => 个人履历
+  CREATE TABLE `mem_user_personal_info`
+  (
+      `id`              bigint unsigned        not null comment 'ID' primary key,
+      `name`            varchar(32)            null comment '姓名',
+      `gender`          tinyint unsigned       null comment '性别  0：女，1：男',
+      `birthday`        date                   null comment '出生日期',
+      `id_card`         char(18)               null comment '身份证号',
+      `wedlock`         tinyint unsigned       null comment '婚姻状况  1：已婚，2：未婚 ，3：离异',
+      `nation`          varchar(8)             null comment '民族',
+      `native_place`    varchar(64)            null comment '籍贯',
+      `politics_status` tinyint unsigned       null comment '政治面貌',
+      `email`           varchar(32)            null comment '邮箱',
+      `phone`           varchar(11)            null comment '电话',
+      `address`         varchar(64)            null comment '联系地址',
+      `education`       tinyint unsigned       null comment '学历',
+      `school`          varchar(32)            null comment '毕业院校',
+      `create_time`     datetime               null comment '创建时间',
+      `update_time`     datetime               null comment '更新时间'
+  )  ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户个人信息';
   ```
 
   <br>
@@ -389,70 +435,76 @@
 + 统一数据返回
 
   ```ruby
-  @Data
+  @Getter
+  @Setter
   public class R {
-  	private Boolean success;
+  	/**
+  	 * 成功 */
+  	private static final int SUCCESS = 20000;
+  	private static final String SUCCESS_MESSAGE = "操作成功";
+  	/**
+  	 * 失败 */
+  	private static final int ERROR = 20001;
+  	private static final String ERROR_MESSAGE = "操作成功";
+      
+  	private boolean success;
   	private Integer code;
   	private String message;
   	private Map<String, Object> data;
-  	private static volatile R r = null;
-      
+  
   	private R(){}
-  	private static R getR(){
-  		if(null == r){
-  			synchronized (R.class){
-  				if(null == r){
-  					r = new R();
-  				}
-  			}
-  		}
-  		return r;
-  	}
   	/**
   	 * 成功静态方法
-  	 * @return R
-  	 */
+  	 * @return R */
   	public static R ok(){
-  		R r = getR();
-  		r.setSuccess(true);
-  		r.setCode(ResultCodeEnum.SUCCESS.getCode());
-  		r.setMessage(ResultCodeEnum.SUCCESS.getMessage());
-  		r.setData(new HashMap<>(16));
+  		R r = new R();
+  		r.success = true;
+  		r.code(SUCCESS);
+  		r.message(SUCCESS_MESSAGE);
   		return r;
   	}
   	/**
   	 * 失败静态方法
-  	 * @return R
-  	 */
+  	 * @return R */
   	public static R err(){
-  		R r = getR();
-  		r.setSuccess(false);
-  		r.setCode(ResultCodeEnum.ERROR.getCode());
-  		r.setMessage(ResultCodeEnum.ERROR.getMessage());
-  		r.setData(new HashMap<>(16));
+  		R r = new R();
+  		r.success = false;
+  		r.code(ERROR);
+  		r.message(ERROR_MESSAGE);
   		return r;
   	}
+  
+  	public R result(ResultCodeEnum codeEnum){
+  		code(codeEnum.getCode());
+  		message(codeEnum.getMessage());
+  		return this;
+  	}
+  
   	public R message(String message){
-  		this.setMessage(message);
+  		this.message = message;
   		return this;
   	}
+  
   	public R code(Integer code){
-  		this.setCode(code);
+  		this.code = code;
   		return this;
   	}
+  
   	public R data(String key, Object value){
+  		this.data = new HashMap<>(16);
   		this.data.put(key, value);
   		return this;
   	}
+  
   	public R data(Map<String, Object> map) {
-  		this.setData(map);
+  		this.data = map;
   		return this;
   	}
   }
   ```
-
   
-
+  
+  
 + 全局异常处理
 
   ```ruby
