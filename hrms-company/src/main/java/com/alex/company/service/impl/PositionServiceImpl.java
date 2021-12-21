@@ -1,9 +1,12 @@
 package com.alex.company.service.impl;
 
+import com.alex.common.bean.member.UserCompanyDepartmentPositionTo;
+import com.alex.common.bean.member.UserCompanyTo;
 import com.alex.common.consant.CompanyConstant;
 import com.alex.common.consant.PositionConstant;
 import com.alex.common.consant.ResultCodeEnum;
 import com.alex.common.exception.HRMSException;
+import com.alex.company.client.MemberUserCompanyClient;
 import com.alex.company.dto.PositionQuery;
 import com.alex.company.entity.Position;
 import com.alex.company.mapper.PositionMapper;
@@ -11,6 +14,8 @@ import com.alex.company.service.PositionService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.seata.spring.annotation.GlobalTransactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -24,6 +29,13 @@ import org.springframework.util.StringUtils;
  */
 @Service
 public class PositionServiceImpl extends ServiceImpl<PositionMapper, Position> implements PositionService {
+
+    private MemberUserCompanyClient memberUserCompanyClient;
+
+    @Autowired
+    public void setMemberUserCompanyClient(MemberUserCompanyClient memberUserCompanyClient) {
+        this.memberUserCompanyClient = memberUserCompanyClient;
+    }
 
     @Override
     public Page<Position> listPage(Integer page, Integer limit, PositionQuery positionQuery) {
@@ -58,5 +70,15 @@ public class PositionServiceImpl extends ServiceImpl<PositionMapper, Position> i
             entity.setStatus(CompanyConstant.State.ACTIVATED);
         }
         return super.save(entity);
+    }
+
+    @GlobalTransactional(rollbackFor = Exception.class)
+    @Override
+    public boolean updateById(Position entity) {
+        UserCompanyDepartmentPositionTo to = new UserCompanyDepartmentPositionTo();
+        to.setPositionId(entity.getId());
+        to.setPosition(entity.getName());
+        memberUserCompanyClient.updateUserCompany(to);
+        return super.updateById(entity);
     }
 }

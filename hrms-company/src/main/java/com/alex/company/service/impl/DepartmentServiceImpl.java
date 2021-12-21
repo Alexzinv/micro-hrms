@@ -1,9 +1,11 @@
 package com.alex.company.service.impl;
 
+import com.alex.common.bean.member.UserCompanyDepartmentPositionTo;
 import com.alex.common.consant.CodePrefixEnum;
 import com.alex.common.consant.ResultCodeEnum;
 import com.alex.common.exception.HRMSException;
 import com.alex.common.util.CodePrefixUtils;
+import com.alex.company.client.MemberUserCompanyClient;
 import com.alex.company.dto.DepartmentQuery;
 import com.alex.company.entity.Department;
 import com.alex.company.mapper.DepartmentMapper;
@@ -11,6 +13,8 @@ import com.alex.company.service.DepartmentService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.seata.spring.annotation.GlobalTransactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -21,6 +25,13 @@ import org.springframework.util.StringUtils;
  */
 @Service
 public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Department> implements DepartmentService {
+
+    private MemberUserCompanyClient memberUserCompanyClient;
+
+    @Autowired
+    public void setMemberUserCompanyClient(MemberUserCompanyClient memberUserCompanyClient) {
+        this.memberUserCompanyClient = memberUserCompanyClient;
+    }
 
     @Override
     public Page<Department> listPage(Integer page, Integer limit, DepartmentQuery departmentQuery) {
@@ -49,6 +60,17 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
             return super.save(entity);
         }
         throw new HRMSException(ResultCodeEnum.EXISTS_EXCEPTION);
+    }
+
+    @GlobalTransactional(rollbackFor = Exception.class)
+    @Override
+    public boolean updateById(Department entity) {
+        UserCompanyDepartmentPositionTo to = new UserCompanyDepartmentPositionTo();
+        to.setDepartmentId(entity.getId());
+        to.setDepartmentName(entity.getName());
+        memberUserCompanyClient.updateUserCompany(to);
+        entity.setCode(null);
+        return super.updateById(entity);
     }
 
     /**
