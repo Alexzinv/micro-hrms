@@ -52,7 +52,7 @@ public class R {
 	/**
 	 * 返回数据
 	 */
-	private Map<String, Object> data;
+	private Map<String, Object> data = new HashMap<>(64);
 
 	private R(){}
 
@@ -97,13 +97,12 @@ public class R {
 	}
 
 	public R data(String key, Object value){
-		this.data = new HashMap<>(16);
 		this.data.put(key, value);
 		return this;
 	}
 
 	public R data(Map<String, Object> map) {
-		this.data = map;
+		this.data.putAll(map);
 		return this;
 	}
 }

@@ -43,7 +43,10 @@ public enum ResultCodeEnum {
     SYSTEM_BUSY(20008, "系统繁忙"),
     /**
      公司Id */
-    NO_COMPANY_ID(20009, "没有公司Id");
+    NO_COMPANY_ID(20009, "没有公司Id"),
+    /**
+     远程事务异常 */
+    GLOBAL_TRANSACTIONAL_EXCEPTION(20010, "远程事务保存失败");
 
     /**
      * 状态码
