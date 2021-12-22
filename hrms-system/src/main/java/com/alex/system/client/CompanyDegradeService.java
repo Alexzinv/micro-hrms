@@ -1,6 +1,5 @@
 package com.alex.system.client;
 
-import com.alex.common.consant.ResultCodeEnum;
 import com.alex.common.util.R;
 import org.springframework.stereotype.Component;
 
@@ -10,14 +9,14 @@ import org.springframework.stereotype.Component;
  * @Description 公司远程调用降级服务
  */
 @Component
-public class CompanyDegradeService implements CompanyClient {
+public class CompanyDegradeService extends BaseClient implements CompanyClient {
     @Override
     public R getCompany(Long id) {
-        return R.err().result(ResultCodeEnum.SYSTEM_BUSY);
+        return RESULT;
     }
 
     @Override
     public R getDepartment(Long id) {
-        return R.err().result(ResultCodeEnum.SYSTEM_BUSY);
+        return RESULT;
     }
 }

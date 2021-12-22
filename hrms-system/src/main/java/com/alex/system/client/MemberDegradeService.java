@@ -2,7 +2,6 @@ package com.alex.system.client;
 
 import com.alex.common.bean.member.UserCompanyTo;
 import com.alex.common.bean.member.UserPersonalInfoTo;
-import com.alex.common.consant.ResultCodeEnum;
 import com.alex.common.util.R;
 import org.springframework.stereotype.Component;
 
@@ -12,24 +11,24 @@ import org.springframework.stereotype.Component;
  * @description 用户RPC降级服务
  */
 @Component
-public class MemberDegradeService implements MemberClient {
+public class MemberDegradeService extends BaseClient implements MemberClient {
     @Override
     public R deleteUserCompany(Long id) {
-        return R.err().result(ResultCodeEnum.SYSTEM_BUSY);
+        return RESULT;
     }
 
     @Override
     public R deletePersonalInfo(Long id) {
-        return R.err().result(ResultCodeEnum.SYSTEM_BUSY);
+        return RESULT;
     }
 
     @Override
     public R saveUserCompany(UserCompanyTo to) {
-        return R.err().result(ResultCodeEnum.SYSTEM_BUSY);
+        return RESULT;
     }
 
     @Override
     public R savePersonalInfo(UserPersonalInfoTo to) {
-        return R.err().result(ResultCodeEnum.SYSTEM_BUSY);
+        return RESULT;
     }
 }
