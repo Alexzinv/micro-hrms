@@ -1,6 +1,5 @@
 package com.alex.common.bean.member;
 
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -15,6 +14,7 @@ public class UserPersonalInfoTo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "ID")
     private Long id;
+
+    private String name;
 }

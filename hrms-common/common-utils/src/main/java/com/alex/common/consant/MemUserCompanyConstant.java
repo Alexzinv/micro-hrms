@@ -39,26 +39,4 @@ public interface MemUserCompanyConstant {
          */
         int OUTSOURCING = 2;
     }
-
-    /**
-     * 岗位
-     */
-    enum Position{
-        /**
-         * java开发
-         */
-        JAVA_ENGINEER_1(1, "初级Java工程师"),
-        JAVA_ENGINEER_2(2, "中级Java工程师"),
-        JAVA_ENGINEER_3(3, "高级Java工程师"),
-        C_ENGINEER_1(11, "初级C工程师"),
-        C_ENGINEER_2(12, "中级C工程师");
-
-        private final int val;
-        private final String name;
-
-        Position(int val, String name) {
-            this.val = val;
-            this.name = name;
-        }
-    }
 }

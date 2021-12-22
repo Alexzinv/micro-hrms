@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 /**
  * @Author _Alexzinv_
  * @Date 2021/9/25
- * @Description 自定义id生成 雪花漂移算法
+ * @Description 使用雪花漂移算法id生成 ，默认雪花算法
  */
 @Component
 public class CustomIdGenerator implements IdentifierGenerator {
@@ -19,8 +19,8 @@ public class CustomIdGenerator implements IdentifierGenerator {
 
     @Override
     public Long nextId(Object entity) {
-        // ID_GENERATOR_OPTIONS.SeqBitLength = 6;
-        // ID_GENERATOR_OPTIONS.MinSeqNumber = 5;
+        ID_GENERATOR_OPTIONS.SeqBitLength = 6;
+        ID_GENERATOR_OPTIONS.MinSeqNumber = 5;
         YitIdHelper.setIdGenerator(ID_GENERATOR_OPTIONS);
         return YitIdHelper.nextId();
     }
