@@ -6,7 +6,10 @@ import com.alex.common.consant.ResultCodeEnum;
 import com.alex.common.exception.HRMSException;
 import com.alex.common.util.CustomSerialGenerator;
 import com.alex.common.util.DateUtils;
+import com.alex.member.client.UserClient;
 import com.alex.member.dto.UserCompanyQuery;
+import com.alex.member.dto.UserCompanyRelationDO;
+import com.alex.member.dto.struct.UserCompanyRelationStruct;
 import com.alex.member.entity.UserCompany;
 import com.alex.member.mapper.UserCompanyMapper;
 import com.alex.member.service.UserCompanyService;
@@ -15,8 +18,9 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.seata.spring.annotation.GlobalTransactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Calendar;
@@ -31,6 +35,13 @@ import java.util.Calendar;
  */
 @Service
 public class UserCompanyServiceImpl extends ServiceImpl<UserCompanyMapper, UserCompany> implements UserCompanyService {
+
+    private UserClient userClient;
+
+    @Autowired
+    public void setUserClient(UserClient userClient) {
+        this.userClient = userClient;
+    }
 
     @Override
     public Page<UserCompany> listPage(Integer page, Integer limit, UserCompanyQuery query) {
@@ -63,7 +74,7 @@ public class UserCompanyServiceImpl extends ServiceImpl<UserCompanyMapper, UserC
         return baseMapper.selectPage(pageEntity, wrapper);
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    @GlobalTransactional(rollbackFor = Exception.class)
     @Override
     public boolean update(UserCompany entity) {
         Long companyIdForUpdate = entity.getCompanyId();
@@ -74,6 +85,10 @@ public class UserCompanyServiceImpl extends ServiceImpl<UserCompanyMapper, UserC
 
         UserCompany userCompany = getById(entity.getId());
         Long companyId = userCompany.getCompanyId();
+
+        // 保存关联到用户表
+        UserCompanyRelationDO relationDO = UserCompanyRelationStruct.INSTANCE.toRelationDO(entity);
+        userClient.updateById(relationDO);
         // 之前未关联公司，现在第一次关联，需要初始化数据
         if(companyId == null){
             // 生成工号和保存其他默认值
