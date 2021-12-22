@@ -1,5 +1,6 @@
 package com.alex.company.dto;
 
+import com.alex.common.valid.group.QueryGroup;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -15,7 +16,7 @@ public class DepartmentQuery {
     /**
      * 公司id
      */
-    @NotNull
+    @NotNull(groups = {QueryGroup.class})
     private Long companyId;
     /**
      * 查询关键字[name, code]

@@ -1,5 +1,9 @@
 package com.alex.company.entity;
 
+import com.alex.common.valid.ListValue;
+import com.alex.common.valid.group.AddGroup;
+import com.alex.common.valid.group.UpdateGroup;
+import com.alex.common.valid.group.UpdateStatusGroup;
 import com.baomidou.mybatisplus.annotation.*;
 
 import java.util.Date;
@@ -9,10 +13,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 /**
  *
@@ -29,20 +30,22 @@ public class Position implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.ASSIGN_ID)
+    @Null(groups = {AddGroup.class})
+    @NotNull(groups = {UpdateGroup.class, UpdateStatusGroup.class})
     private Long id;
 
     @ApiModelProperty(value = "企业ID")
-    @NotNull
+    @NotNull(groups = {AddGroup.class})
+    @Null(groups = {UpdateGroup.class})
     private Long companyId;
 
     @ApiModelProperty(value = "岗位名称")
-    @NotBlank
+    @NotBlank(groups = {AddGroup.class})
     private String name;
 
     @ApiModelProperty(value = "启用状态 0:禁用 1:启用")
-    @Min(0)
-    @Max(1)
-    @NotNull
+    @ListValue(values = {0, 1}, message = "请按规范填写", groups = {AddGroup.class,
+            UpdateGroup.class, UpdateStatusGroup.class})
     private Integer status;
 
     @ApiModelProperty(value = "显示顺序")

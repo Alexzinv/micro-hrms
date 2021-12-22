@@ -1,10 +1,10 @@
 package com.alex.company.dto;
 
+import com.alex.common.valid.ListValue;
+import com.alex.common.valid.group.QueryGroup;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -16,18 +16,16 @@ import javax.validation.constraints.NotNull;
 public class PositionQuery {
 
     @ApiModelProperty(value = "企业ID")
-    @NotNull
+    @NotNull(groups = {QueryGroup.class})
     private Long companyId;
 
     @ApiModelProperty(value = "岗位名称")
     private String name;
 
     @ApiModelProperty(value = "启用状态 0:禁用 1:启用")
+    @ListValue(values = {0, 1}, groups = {QueryGroup.class})
     private Integer status;
 
     @ApiModelProperty(value = "排序方向")
-    @Min(0)
-    @Max(1)
-    @NotNull
     private Integer sort;
 }

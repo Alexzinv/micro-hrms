@@ -1,6 +1,7 @@
 package com.alex.company.dto;
 
-import io.swagger.annotations.ApiModelProperty;
+import com.alex.common.valid.ListValue;
+import com.alex.common.valid.group.QueryGroup;
 import lombok.Data;
 
 import java.util.Date;
@@ -21,11 +22,13 @@ public class CompanyQuery {
     /**
      * 激活状态
      */
+    @ListValue(values = {0, 1}, groups = {QueryGroup.class})
     private Integer state;
 
     /**
      * 审核状态 0:未审核 1:审核通过 2:审核未通过
      */
+    @ListValue(values = {0, 1, 2}, groups = {QueryGroup.class})
     private Integer auditState;
 
     /**
