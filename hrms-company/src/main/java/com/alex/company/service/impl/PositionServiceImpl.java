@@ -72,13 +72,20 @@ public class PositionServiceImpl extends ServiceImpl<PositionMapper, Position> i
         return super.save(entity);
     }
 
+    /**
+     * 更新本地岗位名字需要同步更新关联表冗余字段
+     * @param entity position
+     * @return save-status */
     @GlobalTransactional(rollbackFor = Exception.class)
     @Override
     public boolean updateById(Position entity) {
-        UserCompanyDepartmentPositionTo to = new UserCompanyDepartmentPositionTo();
-        to.setPositionId(entity.getId());
-        to.setPosition(entity.getName());
-        memberUserCompanyClient.updateUserCompany(to);
+        String name = entity.getName();
+        if(StringUtils.hasText(name)){
+            UserCompanyDepartmentPositionTo to = new UserCompanyDepartmentPositionTo();
+            to.setPositionId(entity.getId());
+            to.setPosition(entity.getName());
+            memberUserCompanyClient.updateUserCompanyDepartmentPosition(to);
+        }
         return super.updateById(entity);
     }
 }

@@ -62,13 +62,21 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
         throw new HRMSException(ResultCodeEnum.EXISTS_EXCEPTION);
     }
 
+    /**
+     * 更新本地部门名字需要同步更新关联表冗余字段
+     * 部门编码不可更改
+     * @param entity department
+     * @return save-status */
     @GlobalTransactional(rollbackFor = Exception.class)
     @Override
     public boolean updateById(Department entity) {
-        UserCompanyDepartmentPositionTo to = new UserCompanyDepartmentPositionTo();
-        to.setDepartmentId(entity.getId());
-        to.setDepartmentName(entity.getName());
-        memberUserCompanyClient.updateUserCompany(to);
+        String name = entity.getName();
+        if(StringUtils.hasText(name)){
+            UserCompanyDepartmentPositionTo to = new UserCompanyDepartmentPositionTo();
+            to.setDepartmentId(entity.getId());
+            to.setDepartmentName(name);
+            memberUserCompanyClient.updateUserCompanyDepartmentPosition(to);
+        }
         entity.setCode(null);
         return super.updateById(entity);
     }

@@ -7,7 +7,9 @@ import com.alex.company.dto.CompanyQuery;
 import com.alex.company.entity.Company;
 import com.alex.company.mapper.CompanyMapper;
 import com.alex.company.service.CompanyService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
@@ -65,18 +67,18 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
         Integer auditState = companyQuery.getAuditState();
         Date begin = companyQuery.getExpirationDateBegin();
         Date end = companyQuery.getExpirationDateEnd();
-        QueryWrapper<Company> wrapper = new QueryWrapper<>();
+        LambdaQueryWrapper<Company> wrapper = Wrappers.lambdaQuery(Company.class);
 
         if(StringUtils.hasText(name)){
-            wrapper.and(item -> item.eq("name", name).or()
-                    .like("legal_representative", name)
+            wrapper.and(item -> item.eq(Company::getName, name).or()
+                    .like(Company::getLegalRepresentative, name)
             );
         }
 
-        wrapper.eq(state != null, "state", state)
-                .eq(auditState != null, "audit_state", auditState)
-                .gt(null != begin, "expiration_date", begin)
-                .le(null != end, "expiration_date", end);
+        wrapper.eq(state != null, Company::getState, state)
+                .eq(auditState != null, Company::getAuditState, auditState)
+                .gt(null != begin, Company::getExpirationDate, begin)
+                .le(null != end, Company::getExpirationDate, end);
 
         return baseMapper.selectPage(pageEntity, wrapper);
     }
