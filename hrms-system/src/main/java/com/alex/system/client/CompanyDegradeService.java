@@ -1,5 +1,6 @@
 package com.alex.system.client;
 
+import com.alex.common.util.BaseClient;
 import com.alex.common.util.R;
 import org.springframework.stereotype.Component;
 
