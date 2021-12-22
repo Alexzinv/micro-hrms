@@ -1,6 +1,10 @@
 package com.alex.company.controller;
 
 import com.alex.common.util.R;
+import com.alex.common.valid.group.AddGroup;
+import com.alex.common.valid.group.QueryGroup;
+import com.alex.common.valid.group.UpdateGroup;
+import com.alex.common.valid.group.UpdateStatusGroup;
 import com.alex.company.dto.CompanyCheckVO;
 import com.alex.company.dto.CompanyQuery;
 import com.alex.company.dto.CompanySaveOrUpdateVO;
@@ -11,6 +15,7 @@ import com.alex.company.service.CompanyService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -39,6 +44,7 @@ public class CompanyController {
     @PostMapping("/listPage/{page}/{limit}")
     public R listCompanyCondition(@PathVariable Integer page,
                            @PathVariable Integer limit,
+                           @Validated({QueryGroup.class})
                            @RequestBody(required = false) CompanyQuery companyQuery){
 
         Page<Company> result = companyService.listPage(page, limit, companyQuery);
@@ -46,14 +52,14 @@ public class CompanyController {
     }
 
     @PostMapping("/save")
-    public R saveCompany(@RequestBody CompanySaveOrUpdateVO vo){
+    public R saveCompany(@Validated({AddGroup.class}) @RequestBody CompanySaveOrUpdateVO vo){
         Company company = CompanyStruct.INSTANCE.saveOrUpdateVoToEntity(vo);
         companyService.save(company);
         return R.ok();
     }
 
     @PostMapping("/update")
-    public R updateCompany(@RequestBody CompanySaveOrUpdateVO vo){
+    public R updateCompany(@Validated({UpdateGroup.class}) @RequestBody CompanySaveOrUpdateVO vo){
         Company company = CompanyStruct.INSTANCE.saveOrUpdateVoToEntity(vo);
         companyService.updateById(company);
         return R.ok();
@@ -69,7 +75,7 @@ public class CompanyController {
      * 修改审核状态
      */
     @PostMapping("/check")
-    public R checkCompany(@RequestBody CompanyCheckVO vo){
+    public R checkCompany(@Validated({UpdateStatusGroup.class}) @RequestBody CompanyCheckVO vo){
         Company company = CompanyStruct.INSTANCE.checkVoToEntity(vo);
         companyService.updateById(company);
         return R.ok();
@@ -79,7 +85,7 @@ public class CompanyController {
      * 修改启用状态
      */
     @PostMapping("/state")
-    public R stateCompany(@RequestBody CompanyStateVO vo){
+    public R stateCompany(@Validated({UpdateStatusGroup.class}) @RequestBody CompanyStateVO vo){
         Company company = CompanyStruct.INSTANCE.stateVoToEntity(vo);
         companyService.updateById(company);
         return R.ok();

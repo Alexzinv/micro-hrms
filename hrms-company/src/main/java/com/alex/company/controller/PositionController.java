@@ -2,6 +2,10 @@ package com.alex.company.controller;
 
 
 import com.alex.common.util.R;
+import com.alex.common.valid.group.AddGroup;
+import com.alex.common.valid.group.QueryGroup;
+import com.alex.common.valid.group.UpdateGroup;
+import com.alex.common.valid.group.UpdateStatusGroup;
 import com.alex.company.dto.PositionQuery;
 import com.alex.company.dto.PositionStatusVO;
 import com.alex.company.dto.struct.PositionStruct;
@@ -9,6 +13,7 @@ import com.alex.company.entity.Position;
 import com.alex.company.service.PositionService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -36,8 +41,9 @@ public class PositionController {
 
     @PostMapping("/listPage/{page}/{limit}")
     public R listPositionCondition(@PathVariable Integer page,
-                                  @PathVariable Integer limit,
-                                  @RequestBody(required = true) PositionQuery positionQuery){
+                                   @PathVariable Integer limit,
+                                   @Validated({QueryGroup.class})
+                                   @RequestBody(required = true) PositionQuery positionQuery){
         System.out.println(positionQuery.toString());
         Page<Position> result = new Page<>();
         if(positionQuery.getCompanyId() != null){
@@ -47,13 +53,13 @@ public class PositionController {
     }
 
     @PostMapping("/save")
-    public R savePosition(@RequestBody Position position){
+    public R savePosition(@Validated({AddGroup.class}) @RequestBody Position position){
         positionService.save(position);
         return R.ok();
     }
 
     @PostMapping("/update")
-    public R updatePosition(@RequestBody Position position){
+    public R updatePosition(@Validated({UpdateGroup.class}) @RequestBody Position position){
         positionService.updateById(position);
         return R.ok();
     }
@@ -65,7 +71,7 @@ public class PositionController {
     }
 
     @PostMapping("/status")
-    public R statusPosition(@RequestBody PositionStatusVO vo){
+    public R statusPosition(@Validated({UpdateStatusGroup.class}) @RequestBody PositionStatusVO vo){
         Position position = PositionStruct.INSTANCE.statusVoToEntity(vo);
         positionService.updateById(position);
         return R.ok();

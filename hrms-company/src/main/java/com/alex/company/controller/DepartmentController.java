@@ -2,6 +2,9 @@ package com.alex.company.controller;
 
 
 import com.alex.common.util.R;
+import com.alex.common.valid.group.AddGroup;
+import com.alex.common.valid.group.QueryGroup;
+import com.alex.common.valid.group.UpdateGroup;
 import com.alex.company.dto.DepartmentQuery;
 import com.alex.company.dto.DepartmentVO;
 import com.alex.company.dto.struct.DepartmentStruct;
@@ -12,6 +15,7 @@ import com.alex.company.service.DepartmentService;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,6 +56,7 @@ public class DepartmentController {
     @PostMapping("/list/{page}/{limit}")
     public R listDepartmentPageByCompanyIdCondition(@PathVariable("page") Integer page,
                                            @PathVariable("limit") Integer limit,
+                                           @Validated({QueryGroup.class})
                                            @RequestBody(required = true) DepartmentQuery departmentQuery){
         Long companyId = departmentQuery.getCompanyId();
         Page<Department> result = new Page<>();
@@ -65,13 +70,13 @@ public class DepartmentController {
     }
 
     @PostMapping("/save")
-    public R saveDepartment(@RequestBody Department department){
+    public R saveDepartment(@Validated({AddGroup.class}) @RequestBody Department department){
         departmentService.save(department);
         return R.ok();
     }
 
     @PostMapping("/update")
-    public R updateDepartment(@RequestBody Department department){
+    public R updateDepartment(@Validated({UpdateGroup.class}) @RequestBody Department department){
         departmentService.updateById(department);
         return R.ok();
     }
