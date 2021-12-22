@@ -10,10 +10,13 @@ import com.alex.member.dto.UserCompanyQuery;
 import com.alex.member.entity.UserCompany;
 import com.alex.member.mapper.UserCompanyMapper;
 import com.alex.member.service.UserCompanyService;
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Calendar;
@@ -48,7 +51,7 @@ public class UserCompanyServiceImpl extends ServiceImpl<UserCompanyMapper, UserC
             jobStatus = 0;
         }
 
-        LambdaQueryChainWrapper<UserCompany> wrapper = lambdaQuery()
+        LambdaQueryWrapper<UserCompany> wrapper = Wrappers.lambdaQuery(UserCompany.class)
                 .eq(UserCompany::getCompanyId, companyId)
                 .eq(UserCompany::getJobStatus, jobStatus)
                 .like(isNotBlank(nickname), UserCompany::getNickname, nickname)
@@ -60,17 +63,39 @@ public class UserCompanyServiceImpl extends ServiceImpl<UserCompanyMapper, UserC
         return baseMapper.selectPage(pageEntity, wrapper);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean update(UserCompany entity) {
         Long companyIdForUpdate = entity.getCompanyId();
+        // 更新员工信息。需要更新的公司id为空
         if(companyIdForUpdate == null){
             return super.updateById(entity);
         }
-        UserCompany company = getById(entity.getId());
-        Long companyId = company.getCompanyId();
-        // 之前未关联公司 || 已关联公司需要更换公司
-        if(companyId == null || !companyId.equals(companyIdForUpdate)){
-            return this.save(entity);
+
+        UserCompany userCompany = getById(entity.getId());
+        Long companyId = userCompany.getCompanyId();
+        // 之前未关联公司，现在第一次关联，需要初始化数据
+        if(companyId == null){
+            // 生成工号和保存其他默认值
+            init(companyIdForUpdate, entity);
+            return super.updateById(entity);
+        }
+
+        // 已关联公司需要更换公司, 需初始化和清空值
+        if(!companyId.equals(companyIdForUpdate)){
+            // 清空无关值
+            LambdaUpdateWrapper<UserCompany> wrapper = Wrappers.lambdaUpdate(UserCompany.class)
+                    .eq(UserCompany::getId, userCompany.getCompanyId())
+                    .set(UserCompany::getDepartmentId, null)
+                    .set(UserCompany::getDepartmentName, null)
+                    .set(UserCompany::getEmployForm, null)
+                    .set(UserCompany::getJobStatus, null)
+                    .set(UserCompany::getPosition, null)
+                    .set(UserCompany::getPositionId, null)
+                    .set(UserCompany::getWorkingCity, null);
+            super.update(wrapper);
+            // 生成工号和保存其他默认值
+            init(companyIdForUpdate, entity);
         }
         return super.updateById(entity);
     }
@@ -96,18 +121,12 @@ public class UserCompanyServiceImpl extends ServiceImpl<UserCompanyMapper, UserC
         }
     }
 
-    @Override
-    public boolean save(UserCompany entity) {
-        Long companyId = entity.getCompanyId();
-        if(companyId != null){
-            // 生成工号和保存其他默认值
-            Long workerNumber = getCurrentWorkNumber(companyId);
-            entity.setWorkNumber(workerNumber);
-            entity.setJobStatus(MemUserCompanyConstant.JobStatus.IN_ACTIVE_SERVICE);
-            entity.setJoinTime(Calendar.getInstance().getTime());
-            entity.setCorrectionTime(DateUtils.addDateMonths(Calendar.getInstance().getTime(), 1));
-        }
-        return super.save(entity);
+    private void init(Long companyId, UserCompany entity){
+        Long workerNumber = getCurrentWorkNumber(companyId);
+        entity.setWorkNumber(workerNumber);
+        entity.setJobStatus(MemUserCompanyConstant.JobStatus.IN_ACTIVE_SERVICE);
+        entity.setJoinTime(Calendar.getInstance().getTime());
+        entity.setCorrectionTime(DateUtils.addDateMonths(Calendar.getInstance().getTime(), 1));
     }
 
     private Long getCurrentWorkNumber(Long companyId) {

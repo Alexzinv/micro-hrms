@@ -3,6 +3,7 @@ package com.alex.member.controller;
 
 import com.alex.common.bean.member.UserCompanyDepartmentPositionTo;
 import com.alex.common.util.R;
+import com.alex.common.valid.group.AddGroup;
 import com.alex.member.dto.UserCompanyQuery;
 import com.alex.member.dto.UserCompanySaveUpdateTo;
 import com.alex.member.dto.struct.UserCompanyUpdateStruct;
@@ -10,6 +11,7 @@ import com.alex.member.entity.UserCompany;
 import com.alex.member.service.UserCompanyService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -46,7 +48,7 @@ public class UserCompanyController {
     }
 
     @PostMapping("/save")
-    public R saveUserCompany(@RequestBody UserCompanySaveUpdateTo to){
+    public R saveUserCompany(@Validated({AddGroup.class}) @RequestBody UserCompanySaveUpdateTo to){
         UserCompany userCompany = UserCompanyUpdateStruct.INSTANCE.toUserCompany(to);
         userCompanyService.save(userCompany);
         return R.ok();
@@ -54,9 +56,10 @@ public class UserCompanyController {
 
     @PostMapping("/update")
     public R updateUserCompany(@RequestBody UserCompanySaveUpdateTo to){
+        // TODO 用户与公司建立关联，公司管理员操作
         UserCompany userCompany = UserCompanyUpdateStruct.INSTANCE.toUserCompany(to);
-        userCompanyService.update(userCompany);
-        return R.ok();
+        boolean update = userCompanyService.update(userCompany);
+        return update ? R.ok() : R.err().message("更新失败");
     }
 
     @PostMapping("/updateDepartmentPosition")

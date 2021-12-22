@@ -28,7 +28,7 @@ public interface UserCompanyService extends IService<UserCompany> {
     /**
      * 更新公司员工信息
      * @param userCompany 公司员工
-     * @return isUpdate
+     * @return 操作结果
      */
     boolean update(UserCompany userCompany);
 
