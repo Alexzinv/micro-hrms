@@ -49,6 +49,7 @@ public class Position implements Serializable {
     private Integer status;
 
     @ApiModelProperty(value = "显示顺序")
+    @Min(value = 0, message = "排序不能小于0", groups = {AddGroup.class, UpdateGroup.class})
     private Integer sort;
 
     @ApiModelProperty(value = "创建时间")
