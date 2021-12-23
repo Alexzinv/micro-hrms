@@ -18,6 +18,7 @@
         <module>hrms-company</module>
         <module>hrms-member</module>
         <module>hrms-statistic</module>
+        <module>hrms-performance</module>
     </modules>
 
 
