@@ -1,5 +1,9 @@
 package com.alex.system.entity;
 
+import com.alex.common.valid.ListValue;
+import com.alex.common.valid.group.AddGroup;
+import com.alex.common.valid.group.UpdateGroup;
+import com.alex.common.valid.group.UpdateStatusGroup;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -8,6 +12,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +31,7 @@ public class Permission implements Serializable {
 	 * ID
 	 */
 	@TableId
+	@NotNull(groups = {UpdateGroup.class, UpdateStatusGroup.class})
 	private Long id;
 	/**
 	 * 所属上级
@@ -34,21 +40,21 @@ public class Permission implements Serializable {
 	/**
 	 * 名称
 	 */
-	@NotBlank
+	@NotBlank(groups = {AddGroup.class})
 	private String name;
 	/**
 	 * 类型(1:菜单,2:按钮,3:Api)
 	 */
+	@ListValue(values = {1, 2, 3}, groups = {AddGroup.class, UpdateGroup.class})
 	private Integer type;
 	/**
 	 * 权限值
 	 */
-	@NotBlank
+	@NotBlank(groups = {AddGroup.class})
 	private String permissionValue;
 	/**
 	 * 访问路径
 	 */
-	@NotBlank
 	private String path;
 	/**
 	 * 组件路径
@@ -61,6 +67,8 @@ public class Permission implements Serializable {
 	/**
 	 * 状态(0:禁止,1:正常)
 	 */
+	@NotNull(groups = {UpdateStatusGroup.class})
+	@ListValue(values = {0, 1}, groups = {AddGroup.class, UpdateGroup.class, UpdateStatusGroup.class})
 	private Integer status;
 	/**
 	 * 创建时间

@@ -1,12 +1,15 @@
 package com.alex.system.controller;
 
 
+import com.alex.common.valid.group.AddGroup;
+import com.alex.common.valid.group.UpdateGroup;
 import com.alex.system.entity.Role;
 import com.alex.system.service.RoleService;
 import com.alex.common.util.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,14 +42,14 @@ public class RoleController {
 
     @ApiOperation(value = "新增角色")
     @PostMapping("save")
-    public R save(@RequestBody Role role) {
+    public R save(@Validated({AddGroup.class}) @RequestBody Role role) {
         roleService.save(role);
         return R.ok();
     }
 
     @ApiOperation(value = "修改角色")
     @PutMapping("update")
-    public R updateById(@RequestBody Role role) {
+    public R updateById(@Validated({UpdateGroup.class}) @RequestBody Role role) {
         roleService.updateById(role);
         return R.ok();
     }

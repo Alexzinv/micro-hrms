@@ -1,5 +1,7 @@
 package com.alex.system.entity;
 
+import com.alex.common.valid.group.AddGroup;
+import com.alex.common.valid.group.UpdateGroup;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -7,6 +9,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -24,16 +27,17 @@ public class RolePermission implements Serializable {
 	 * ID
 	 */
 	@TableId
+	@NotNull(groups = {UpdateGroup.class})
 	private Long id;
 	/**
 	 * 
 	 */
-	@NotEmpty
+	@NotNull(groups = {AddGroup.class, UpdateGroup.class})
 	private Long roleId;
 	/**
 	 * 
 	 */
-	@NotEmpty
+	@NotNull(groups = {AddGroup.class, UpdateGroup.class})
 	private Long permissionId;
 	/**
 	 * 创建时间

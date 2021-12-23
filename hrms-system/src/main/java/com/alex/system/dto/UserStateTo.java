@@ -1,9 +1,9 @@
 package com.alex.system.dto;
 
+import com.alex.common.valid.ListValue;
+import com.alex.common.valid.group.UpdateStatusGroup;
 import lombok.Data;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -17,14 +17,13 @@ public class UserStateTo {
     /**
      * id
      */
-    @NotNull
+    @NotNull(groups = {UpdateStatusGroup.class})
     private Long id;
 
     /**
      * 启用状态 0是禁用，1是启用
      */
-    @Min(0)
-    @Max(1)
-    @NotNull
+    @ListValue(values = {0, 1}, groups = {UpdateStatusGroup.class})
+    @NotNull(groups = {UpdateStatusGroup.class})
     private Integer enableState;
 }

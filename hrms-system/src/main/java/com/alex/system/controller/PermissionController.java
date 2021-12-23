@@ -1,6 +1,9 @@
 package com.alex.system.controller;
 
 import com.alex.common.consant.PermissionConstant;
+import com.alex.common.valid.group.AddGroup;
+import com.alex.common.valid.group.UpdateGroup;
+import com.alex.common.valid.group.UpdateStatusGroup;
 import com.alex.system.dto.PermissionStatusVo;
 import com.alex.system.dto.stuct.PermissionStruct;
 import com.alex.system.entity.Permission;
@@ -10,6 +13,7 @@ import com.alex.system.service.RolePermissionService;
 import com.alex.common.util.R;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -65,7 +69,7 @@ public class PermissionController {
 
     @ApiOperation(value = "新增")
     @PostMapping("save")
-    public R save(@RequestBody Permission permission) {
+    public R save(@Validated({AddGroup.class}) @RequestBody Permission permission) {
         permission.setStatus(PermissionConstant.Status.ENABLE);
         permissionService.save(permission);
         return R.ok();
@@ -73,7 +77,7 @@ public class PermissionController {
 
     @ApiOperation(value = "修改")
     @PutMapping("update")
-    public R updateById(@RequestBody Permission permission) {
+    public R updateById(@Validated({UpdateGroup.class}) @RequestBody Permission permission) {
         permissionService.updateById(permission);
         return R.ok();
     }
@@ -82,7 +86,7 @@ public class PermissionController {
      * 修改启用状态
      */
     @PostMapping("status")
-    public R stateCompany(@RequestBody PermissionStatusVo vo){
+    public R stateCompany(@Validated({UpdateStatusGroup.class}) @RequestBody PermissionStatusVo vo){
         Permission permission = PermissionStruct.INSTANCE.toPermission(vo);
         permissionService.updateById(permission);
         return R.ok();

@@ -148,6 +148,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         UserPersonalInfoTo infoTo = new UserPersonalInfoTo();
         infoTo.setId(user.getId());
+        infoTo.setName(user.getNickname());
         memberClient.savePersonalInfo(infoTo);
     }
 

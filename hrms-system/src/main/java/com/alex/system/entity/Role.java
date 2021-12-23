@@ -1,5 +1,8 @@
 package com.alex.system.entity;
 
+import com.alex.common.valid.group.AddGroup;
+import com.alex.common.valid.group.UpdateGroup;
+import com.alex.common.valid.group.UpdateStatusGroup;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -7,6 +10,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -25,15 +30,17 @@ public class Role implements Serializable {
 	 * ID
 	 */
 	@TableId
+	@NotNull(groups = {UpdateGroup.class})
 	private Long id;
 	/**
 	 * 角色名称
 	 */
-	@NotBlank
+	@NotBlank(groups = {AddGroup.class, UpdateGroup.class})
 	private String roleName;
 	/**
 	 * 角色编码
 	 */
+	@Null(groups = {AddGroup.class, UpdateGroup.class})
 	private String roleCode;
 	/**
 	 * 备注

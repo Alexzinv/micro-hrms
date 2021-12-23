@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -29,12 +30,12 @@ public class UserRole implements Serializable {
 	/**
 	 * 角色id
 	 */
-	@NotEmpty
+	@NotNull
 	private Long roleId;
 	/**
 	 * 用户id
 	 */
-	@NotEmpty
+	@NotNull
 	private Long userId;
 	/**
 	 * 创建时间

@@ -4,8 +4,6 @@ import cn.hutool.json.JSONObject;
 import com.alex.common.util.R;
 import com.alex.system.entity.User;
 import com.alex.system.service.UserInfoService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +22,6 @@ import java.util.Map;
 public class UserInfoController {
 
     private final UserInfoService userInfoService;
-    private static final Logger logger = LoggerFactory.getLogger(UserInfoController.class);
 
     @Autowired
     UserInfoController(UserInfoService userInfoService){
@@ -33,8 +30,7 @@ public class UserInfoController {
 
     /**
      * 根据token获取用户信息
-     * 不包含权限
-     */
+     * 不包含权限 */
     @GetMapping("user")
     public R user(){
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -43,8 +39,7 @@ public class UserInfoController {
     }
 
     /**
-     * 根据token获取用户信息包含权限
-     */
+     * 根据token获取用户信息包含权限 */
     @GetMapping("info")
     public R info(){
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -53,14 +48,10 @@ public class UserInfoController {
     }
 
     /**
-     * 获取权限列表
-     */
+     * 获取权限列表 */
     @GetMapping("menu")
     public R getMenu(){
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        /// map封装
-        // Map<String, Object> permissionList = userInfoService.mapPermission(username);
-        // return R.ok().data(permissionList);
         List<JSONObject> permissions = userInfoService.getMenu(username);
         return R.ok().data("permissionList", permissions);
     }

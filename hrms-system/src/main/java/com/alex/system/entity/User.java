@@ -1,5 +1,9 @@
 package com.alex.system.entity;
 
+import com.alex.common.valid.ListValue;
+import com.alex.common.valid.group.AddGroup;
+import com.alex.common.valid.group.UpdateGroup;
+import com.alex.common.valid.group.UpdateStatusGroup;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -26,26 +30,28 @@ public class User implements Serializable {
 	 * ID
 	 */
 	@TableId
+	@NotNull(groups = {UpdateGroup.class, UpdateStatusGroup.class})
 	private Long id;
 	/**
 	 * 账号
 	 */
-	@NotBlank
+	@NotBlank(groups = {AddGroup.class})
 	private String username;
 	/**
 	 * 密码
 	 */
-	@NotEmpty
-	@Length(min = 6)
+	@NotEmpty(groups = {AddGroup.class})
+	@Length(min = 6, groups = {AddGroup.class, UpdateGroup.class})
 	private String password;
 	/**
 	 * 昵称
 	 */
-	@NotBlank
+	@NotBlank(groups = {AddGroup.class})
 	private String nickname;
 	/**
 	 * 用户头像
 	 */
+	@Null(groups = {AddGroup.class})
 	private String avatar;
 	/**
 	 * 用户签名
@@ -54,9 +60,8 @@ public class User implements Serializable {
 	/**
 	 * 启用状态 0是禁用，1是启用
 	 */
-	@Min(0)
-	@Max(1)
-	@NotNull
+	@NotNull(groups = {UpdateStatusGroup.class})
+	@ListValue(values = {0, 1}, groups = {AddGroup.class, UpdateStatusGroup.class})
 	private Integer enableState;
 	/**
 	 * 企业ID
@@ -65,9 +70,7 @@ public class User implements Serializable {
 	/**
 	 * 账号级别
 	 */
-	@Min(1)
-	@Max(3)
-	@NotNull
+	@ListValue(values = {1, 2, 3}, groups = {AddGroup.class, UpdateGroup.class})
 	private Integer level;
 	/**
 	 * 创建时间

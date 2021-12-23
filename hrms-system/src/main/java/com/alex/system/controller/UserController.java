@@ -1,6 +1,9 @@
 package com.alex.system.controller;
 
 import com.alex.common.util.R;
+import com.alex.common.valid.group.AddGroup;
+import com.alex.common.valid.group.UpdateGroup;
+import com.alex.common.valid.group.UpdateStatusGroup;
 import com.alex.system.dto.ForgetPasswordVO;
 import com.alex.system.dto.RegisterVO;
 import com.alex.system.dto.UserQueryVO;
@@ -12,7 +15,9 @@ import com.alex.system.service.UserRoleService;
 import com.alex.system.service.UserService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,14 +61,14 @@ public class UserController {
 
     @ApiOperation(value = "用户注册")
     @PostMapping("register")
-    public R register(@RequestBody RegisterVO register) {
+    public R register(@Validated({AddGroup.class}) @RequestBody RegisterVO register) {
         userService.register(register);
         return R.ok();
     }
 
     @ApiOperation(value = "管理员新增用户")
     @PostMapping("save")
-    public R save(@RequestBody User user) {
+    public R save(@Validated({AddGroup.class}) @RequestBody User user) {
         userService.saveUser(user);
         return R.ok();
     }
@@ -77,7 +82,7 @@ public class UserController {
 
     @ApiOperation(value = "修改用户")
     @PutMapping("update")
-    public R updateById(@RequestBody User user) {
+    public R updateById(@Validated({UpdateGroup.class}) @RequestBody User user) {
         userService.updateUser(user);
         return R.ok();
     }
@@ -112,7 +117,7 @@ public class UserController {
 
     @ApiOperation(value = "修改账号状态")
     @PostMapping("state")
-    public R updateState(@RequestBody UserStateTo to){
+    public R updateState(@Validated({UpdateStatusGroup.class}) @RequestBody UserStateTo to){
         User user = UserStruct.INSTANCE.userStateToEntity(to);
         userService.removeById(user);
         return R.ok();
