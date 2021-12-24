@@ -28,31 +28,30 @@ public class RandNumUtil {
 	}
 
 	/**
-	 * 给定数组，抽取n个数据
+	 * 给定列表，抽取n个数据
 	 * @param list 数据
 	 * @param n 个数
 	 * @return 生成的随机数
 	 */
-	public static ArrayList getRandom(List list, int n) {
+	public static ArrayList<Integer> getRandom(List<Integer> list, int n) {
 
 		Random random = new Random();
-		HashMap<Object, Object> hashMap = new HashMap<Object, Object>();
+		HashMap<Object, Object> hashMap = new HashMap<>(16);
 
 		// 生成随机数字并存入HashMap
-		for (int i = 0; i < list.size(); i++) {
+		for (int i = 0; i < list.size(); ) {
 			int number = random.nextInt(100) + 1;
-			hashMap.put(number, i);
+			hashMap.put(number, i++);
 		}
 
 		// 从HashMap导入数组
-		Object[] robjs = hashMap.values().toArray();
-
-		ArrayList r = new ArrayList<Integer>();
+		Object[] objs = hashMap.values().toArray();
+		ArrayList<Integer> r = new ArrayList<>();
 
 		// 遍历数组并打印数据
 		for (int i = 0; i < n; i++) {
-			r.add(list.get((int) robjs[i]));
-			System.out.print(list.get((int) robjs[i]) + "\t");
+			r.add(list.get((int) objs[i]));
+			System.out.print(list.get((int) objs[i]) + "\t");
 		}
 		System.out.print("\n");
 		return r;
