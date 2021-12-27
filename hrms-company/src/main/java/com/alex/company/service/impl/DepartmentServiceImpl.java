@@ -87,7 +87,12 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
      * @return code
      */
     private String getCode(Long companyId) {
-        CodePrefixUtils utils = () -> baseMapper.getLatestCode(companyId);
+        CodePrefixUtils utils = new CodePrefixUtils() {
+            @Override
+            protected String getLatestCode() {
+                return baseMapper.getLatestCode(companyId);
+            }
+        };
         return utils.getCode(CodePrefixEnum.DEPARTMENT_CODE_PREFIX);
     }
 

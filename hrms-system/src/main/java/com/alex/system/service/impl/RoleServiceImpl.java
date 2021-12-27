@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-;
-
-
+/**
+ * @author _Alexzinv_
+ */
 @Service("roleService")
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
 
@@ -98,7 +98,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     private String getCode() {
-        CodePrefixUtils utils = () -> baseMapper.getLatestCode();
+        CodePrefixUtils utils = new CodePrefixUtils() {
+            @Override
+            protected String getLatestCode() {
+                return baseMapper.getLatestCode();
+            }
+        };
         return utils.getCode(CodePrefixEnum.ROLE_CODE_PREFIX);
     }
 }
