@@ -17,6 +17,7 @@ public class DruidStatController {
         // DruidStatManagerFacade#getDataSourceStatDataList
         // 该方法可以获取所有数据源的监控数据
         // 此外 DruidStatManagerFacade 还提供了一些其他方法可按需选择。
+        // http://localhost:8080/druid/login.html
         return DruidStatManagerFacade.getInstance().getDataSourceStatDataList();
     }
 }
