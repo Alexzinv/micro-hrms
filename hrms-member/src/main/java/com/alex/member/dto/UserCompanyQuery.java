@@ -1,5 +1,7 @@
 package com.alex.member.dto;
 
+import com.alex.common.valid.ListValue;
+import com.alex.common.valid.group.QueryGroup;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -16,7 +18,7 @@ public class UserCompanyQuery implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "企业ID")
-    @NotNull
+    @NotNull(groups = {QueryGroup.class})
     private Long companyId;
 
     @ApiModelProperty(value = "姓名")
@@ -35,5 +37,6 @@ public class UserCompanyQuery implements Serializable {
     private String workingCity;
 
     @ApiModelProperty(value = "在职状态 1.在职  2.离职")
+    @ListValue(values = {1, 2}, groups = {QueryGroup.class})
     private Integer jobStatus;
 }

@@ -1,10 +1,15 @@
 package com.alex.member.dto;
 
+import com.alex.common.valid.ListValue;
+import com.alex.common.valid.group.AddGroup;
+import com.alex.common.valid.group.UpdateGroup;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -20,9 +25,12 @@ public class UserCompanySaveUpdateTo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "ID")
+    @NotNull(groups = {UpdateGroup.class})
     private Long id;
 
     @ApiModelProperty(value = "账号")
+    @Null(groups = {UpdateGroup.class})
+    @NotNull(groups = {AddGroup.class})
     private String username;
 
     @ApiModelProperty(value = "昵称")
@@ -56,6 +64,7 @@ public class UserCompanySaveUpdateTo implements Serializable {
     private Date correctionTime;
 
     @ApiModelProperty(value = "在职状态 1.在职  2.离职")
+    @ListValue(values = {1, 2}, groups = {UpdateGroup.class})
     private Integer jobStatus;
 
     @ApiModelProperty(value = "员工照片")

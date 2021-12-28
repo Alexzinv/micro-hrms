@@ -4,6 +4,9 @@ package com.alex.member.controller;
 import com.alex.common.bean.member.UserCompanyDepartmentPositionTo;
 import com.alex.common.util.R;
 import com.alex.common.valid.group.AddGroup;
+import com.alex.common.valid.group.QueryGroup;
+import com.alex.common.valid.group.UpdateGroup;
+import com.alex.common.valid.group.UpdateStatusGroup;
 import com.alex.member.dto.UserCompanyQuery;
 import com.alex.member.dto.UserCompanySaveUpdateTo;
 import com.alex.member.dto.struct.UserCompanyUpdateStruct;
@@ -42,6 +45,7 @@ public class UserCompanyController {
     @PostMapping("/listPage/{page}/{limit}")
     public R listUserCompanyCondition(@PathVariable Integer page,
                                       @PathVariable Integer limit,
+                                      @Validated({QueryGroup.class})
                                       @RequestBody(required = false) UserCompanyQuery query){
         Page<UserCompany> result = userCompanyService.listPage(page, limit, query);
         return R.ok().data("records", result.getRecords()).data("total", result.getTotal());
@@ -55,13 +59,15 @@ public class UserCompanyController {
     }
 
     @PostMapping("/update")
-    public R updateUserCompany(@RequestBody UserCompanySaveUpdateTo to){
-        // TODO 用户与公司建立关联，公司管理员操作
+    public R updateUserCompany(@Validated({UpdateGroup.class}) @RequestBody UserCompanySaveUpdateTo to){
         UserCompany userCompany = UserCompanyUpdateStruct.INSTANCE.toUserCompany(to);
         boolean update = userCompanyService.update(userCompany);
         return update ? R.ok() : R.err().message("更新失败");
     }
 
+    /**
+     * 该接口只提供RPC调用
+      */
     @PostMapping("/updateDepartmentPosition")
     public R updateUserCompanyDepartmentPosition(@RequestBody UserCompanyDepartmentPositionTo to){
         userCompanyService.updateUserCompanyDepartmentPosition(to);
