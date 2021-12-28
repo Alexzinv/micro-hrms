@@ -1,6 +1,7 @@
 package com.alex.company.dto.struct;
 
 import com.alex.company.dto.DepartmentVO;
+import com.alex.company.dto.ParentDepartmentVO;
 import com.alex.company.entity.Company;
 import com.alex.company.entity.Department;
 import org.mapstruct.Mapper;
@@ -31,4 +32,18 @@ public interface DepartmentStruct {
             @Mapping(source = "company.managerId", target = "companyManager"),
     })
     DepartmentVO entity2VO(Company company, List<Department> departmentList);
+
+    /**
+     * 实体类转vo
+     * @param department 实体类
+     * @return vo
+     */
+    ParentDepartmentVO toParentDepartmentVO(Department department);
+
+    /**
+     * 实体列表转vo列表
+     * @param departmentList 实体类列表
+     * @return vo列表
+     */
+    List<ParentDepartmentVO> toParentDepartmentVOList(List<Department> departmentList);
 }

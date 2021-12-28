@@ -7,6 +7,7 @@ import com.alex.common.valid.group.QueryGroup;
 import com.alex.common.valid.group.UpdateGroup;
 import com.alex.company.dto.DepartmentQuery;
 import com.alex.company.dto.DepartmentVO;
+import com.alex.company.dto.ParentDepartmentVO;
 import com.alex.company.dto.struct.DepartmentStruct;
 import com.alex.company.entity.Company;
 import com.alex.company.entity.Department;
@@ -85,6 +86,12 @@ public class DepartmentController {
     public R deleteDepartment(@PathVariable("id") Long id){
         departmentService.removeById(id);
         return R.ok();
+    }
+
+    @GetMapping("/parentDepartment/{companyId}")
+    public R listParentDepartment(@PathVariable("companyId") Long companyId){
+        List<ParentDepartmentVO> parentDepartmentVOList = departmentService.listParentDepartment(companyId);
+        return R.ok().data("departments", parentDepartmentVOList);
     }
 }
 

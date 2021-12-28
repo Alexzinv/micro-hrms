@@ -7,16 +7,22 @@ import com.alex.common.exception.HRMSException;
 import com.alex.common.util.CodePrefixUtils;
 import com.alex.company.client.MemberUserCompanyClient;
 import com.alex.company.dto.DepartmentQuery;
+import com.alex.company.dto.ParentDepartmentVO;
+import com.alex.company.dto.struct.DepartmentStruct;
 import com.alex.company.entity.Department;
 import com.alex.company.mapper.DepartmentMapper;
 import com.alex.company.service.DepartmentService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import java.util.List;
 
 /**
  *
@@ -49,6 +55,16 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
         wrapper.eq(StringUtils.hasText(manager), "manager", manager);
 
         return baseMapper.selectPage(pageEntity, wrapper);
+    }
+
+    @Override
+    public List<ParentDepartmentVO> listParentDepartment(Long companyId) {
+        if(companyId == null){
+            return null;
+        }
+        List<Department> departments = baseMapper.selectList(Wrappers.lambdaQuery(Department.class)
+                .eq(Department::getCompanyId, companyId));
+        return DepartmentStruct.INSTANCE.toParentDepartmentVOList(departments);
     }
 
     @Override
