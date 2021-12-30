@@ -64,7 +64,7 @@ public class UserCompanyServiceImpl extends ServiceImpl<UserCompanyMapper, UserC
         if(jobStatus == null){
             jobStatus = 0;
         }
-
+        // 构造条件
         LambdaQueryWrapper<UserCompany> wrapper = Wrappers.lambdaQuery(UserCompany.class)
                 .eq(UserCompany::getCompanyId, companyId)
                 .eq(UserCompany::getJobStatus, jobStatus)
@@ -88,7 +88,6 @@ public class UserCompanyServiceImpl extends ServiceImpl<UserCompanyMapper, UserC
 
         UserCompany userCompany = getById(entity.getId());
         Long companyId = userCompany.getCompanyId();
-
         // 保存关联到用户表
         UserCompanyRelationDO relationDO = UserCompanyRelationStruct.INSTANCE.toRelationDO(entity);
         userClient.updateById(relationDO);
@@ -120,21 +119,19 @@ public class UserCompanyServiceImpl extends ServiceImpl<UserCompanyMapper, UserC
     @Override
     public void updateUserCompanyDepartmentPosition(UserCompanyDepartmentPositionTo to) {
         Long departmentId = to.getDepartmentId();
-        boolean b;
+        boolean b = false;
+        String name;
         if(departmentId != null){
-            String departmentName = to.getDepartmentName();
-            b = baseMapper.updateDepartmentName(departmentId, departmentName);
-            if(!b){
-                throw new HRMSException(ResultCodeEnum.GLOBAL_TRANSACTIONAL_EXCEPTION);
-            }
+            name = to.getDepartmentName();
+            b = baseMapper.updateDepartmentName(departmentId, name);
         }
         Long positionId = to.getPositionId();
         if(positionId != null){
-            String position = to.getPosition();
-            b = baseMapper.updatePositionName(positionId, position);
-            if(!b){
-                throw new HRMSException(ResultCodeEnum.GLOBAL_TRANSACTIONAL_EXCEPTION);
-            }
+            name = to.getPosition();
+            b = baseMapper.updatePositionName(positionId, name);
+        }
+        if(!b){
+            throw new HRMSException(ResultCodeEnum.GLOBAL_TRANSACTIONAL_EXCEPTION);
         }
     }
 
