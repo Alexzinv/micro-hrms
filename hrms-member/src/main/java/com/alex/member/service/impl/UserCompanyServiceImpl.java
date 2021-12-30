@@ -103,11 +103,10 @@ public class UserCompanyServiceImpl extends ServiceImpl<UserCompanyMapper, UserC
         if(!companyId.equals(companyIdForUpdate)){
             // 清空无关值
             LambdaUpdateWrapper<UserCompany> wrapper = Wrappers.lambdaUpdate(UserCompany.class)
-                    .eq(UserCompany::getId, userCompany.getCompanyId())
+                    .eq(UserCompany::getId, entity.getId())
                     .set(UserCompany::getDepartmentId, null)
                     .set(UserCompany::getDepartmentName, null)
                     .set(UserCompany::getEmployForm, null)
-                    .set(UserCompany::getJobStatus, null)
                     .set(UserCompany::getPosition, null)
                     .set(UserCompany::getPositionId, null)
                     .set(UserCompany::getWorkingCity, null);
@@ -147,6 +146,7 @@ public class UserCompanyServiceImpl extends ServiceImpl<UserCompanyMapper, UserC
     }
 
     private void init(Long companyId, UserCompany entity){
+        entity.setCompanyId(companyId);
         Long workerNumber = getCurrentWorkNumber(companyId);
         entity.setWorkNumber(workerNumber);
         entity.setJobStatus(MemUserCompanyConstant.JobStatus.IN_ACTIVE_SERVICE);
