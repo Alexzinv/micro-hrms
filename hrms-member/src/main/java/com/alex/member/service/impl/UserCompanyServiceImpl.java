@@ -9,7 +9,9 @@ import com.alex.common.util.DateUtils;
 import com.alex.member.client.UserClient;
 import com.alex.member.dto.UserCompanyQuery;
 import com.alex.member.dto.UserCompanyRelationDO;
+import com.alex.member.dto.UserCompanyVO;
 import com.alex.member.dto.struct.UserCompanyRelationStruct;
+import com.alex.member.dto.struct.UserCompanyStruct;
 import com.alex.member.entity.UserCompany;
 import com.alex.member.mapper.UserCompanyMapper;
 import com.alex.member.service.UserCompanyService;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * <p>
@@ -134,6 +137,13 @@ public class UserCompanyServiceImpl extends ServiceImpl<UserCompanyMapper, UserC
                 throw new HRMSException(ResultCodeEnum.GLOBAL_TRANSACTIONAL_EXCEPTION);
             }
         }
+    }
+
+    @Override
+    public List<UserCompanyVO> listMembers(Long companyId) {
+        List<UserCompany> userCompanies = baseMapper.selectList(Wrappers.lambdaQuery(UserCompany.class)
+                .eq(UserCompany::getCompanyId, companyId));
+        return UserCompanyStruct.INSTANCE.toVOList(userCompanies);
     }
 
     private void init(Long companyId, UserCompany entity){

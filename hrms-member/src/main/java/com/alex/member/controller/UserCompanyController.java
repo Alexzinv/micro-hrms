@@ -9,6 +9,7 @@ import com.alex.common.valid.group.UpdateGroup;
 import com.alex.common.valid.group.UpdateStatusGroup;
 import com.alex.member.dto.UserCompanyQuery;
 import com.alex.member.dto.UserCompanySaveUpdateTo;
+import com.alex.member.dto.UserCompanyVO;
 import com.alex.member.dto.struct.UserCompanyUpdateStruct;
 import com.alex.member.entity.UserCompany;
 import com.alex.member.service.UserCompanyService;
@@ -16,6 +17,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -78,6 +81,15 @@ public class UserCompanyController {
     public R deleteUserCompany(@PathVariable("id") Long id){
         userCompanyService.removeById(id);
         return R.ok();
+    }
+
+    /**
+     * 查询人员以供关联选择
+     */
+    @GetMapping("listMembers/{companyId}")
+    public R listMembers(@PathVariable("companyId") Long companyId){
+        List<UserCompanyVO> userCompanyVOList = userCompanyService.listMembers(companyId);
+        return R.ok().data("members", userCompanyVOList);
     }
 }
 

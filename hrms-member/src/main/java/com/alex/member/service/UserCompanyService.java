@@ -2,9 +2,12 @@ package com.alex.member.service;
 
 import com.alex.common.bean.member.UserCompanyDepartmentPositionTo;
 import com.alex.member.dto.UserCompanyQuery;
+import com.alex.member.dto.UserCompanyVO;
 import com.alex.member.entity.UserCompany;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -37,4 +40,11 @@ public interface UserCompanyService extends IService<UserCompany> {
      * @param to 数据对象
      */
     void updateUserCompanyDepartmentPosition(UserCompanyDepartmentPositionTo to);
+
+    /**
+     * 列出公司人员
+     * @param companyId 公司id
+     * @return 人员列表
+     */
+    List<UserCompanyVO> listMembers(Long companyId);
 }
