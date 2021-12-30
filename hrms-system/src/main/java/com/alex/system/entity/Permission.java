@@ -50,7 +50,6 @@ public class Permission implements Serializable {
 	/**
 	 * 权限值
 	 */
-	@NotBlank(groups = {AddGroup.class})
 	private String permissionValue;
 	/**
 	 * 访问路径
