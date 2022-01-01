@@ -84,7 +84,7 @@
       `id`               bigint                 not null comment 'ID' primary key,
       `pid`              bigint      default 0  not null comment '所属上级',
       `name`             varchar(20) default '' not null comment '名称',
-      `type`             tinyint     default 0  not null comment '类型 [1:菜单,2:按钮,3:Api]',
+      `type`             tinyint     default 1  not null comment '类型 [1:菜单,2:按钮,3:Api]',
       `permission_value` varchar(50)            null comment '权限值',
       `path`             varchar(100)           null comment '访问路径',
       `component`        varchar(100)           null comment '组件路径',
@@ -108,8 +108,8 @@
   -- 角色权限关联表
   CREATE TABLE `sys_role_permission` (
       `id`               bigint                 not null comment 'ID' primary key,
-      `role_id`          bigint default 0       not null,
-      `permission_id`    bigint default 0       not null,
+      `role_id`          bigint                 not null,
+      `permission_id`    bigint                 not null,
       `create_time`      datetime               null comment '创建时间',
       `update_time`      datetime               null comment '更新时间',
       KEY `idx_role_id` (`role_id`),
@@ -135,8 +135,8 @@
   -- 用户角色关联表
   CREATE TABLE `sys_user_role` (
       `id`               bigint                  not null comment 'ID' primary key,
-      `role_id`          bigint default 0        not null comment '角色id',
-      `user_id`          bigint default 0        not null comment '用户id',
+      `role_id`          bigint                  not null comment '角色id',
+      `user_id`          bigint                  not null comment '用户id',
       `create_time`      datetime                null comment '创建时间',
       `update_time`      datetime                null comment '更新时间',
       KEY `idx_role_id` (`role_id`),
@@ -264,54 +264,63 @@
 
   ```mysql
   -- 薪酬
-  CREATE TABLE `sa_salary` (
-      `id` bigint unsigned NOT NULL primary key COMMENT 'ID',
-      `basic_salary` decimal(11, 6) DEFAULT NULL COMMENT '基本工资',
-      `bonus` decimal(11, 6) DEFAULT NULL COMMENT '奖金',
-      `lunch_salary` decimal(11, 6) DEFAULT NULL COMMENT '午餐补助',
-      `traffic_salary` decimal(11, 6) DEFAULT NULL COMMENT '交通补助',
-      `all_salary` decimal(11, 6) DEFAULT NULL COMMENT '应发工资',
-      `pension_base` decimal(11, 6) DEFAULT NULL COMMENT '养老金基数',
-      `pension_rate` decimal(11, 6) DEFAULT NULL COMMENT '养老金比率',
-      `start_date` datetime COMMENT '启用时间',
-      `medical_base` decimal(11, 6) DEFAULT NULL COMMENT '医疗基数',
-      `medical_rate` decimal(11, 6) DEFAULT NULL COMMENT '医疗保险比率',
-      `accumulation_fund_base` decimal(11, 6) DEFAULT NULL COMMENT '公积金基数',
-      `accumulation_fund_rate` decimal(11, 6) DEFAULT NULL COMMENT '公积金比率',
-      `name` varchar(32) DEFAULT NULL,
-      `create_time` datetime  COMMENT '创建时间',
-      `update_time` datetime COMMENT '更新时间',
-  ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='薪酬';
+  CREATE TABLE `sa_salary_common` (
+      `id`              bigint unsigned        not null primary key comment '企业ID',
+      `lunch_salary`    decimal(11, 6)         null comment '午餐补助',
+      `traffic_salary`  decimal(11, 6)         null comment '交通补助',
+      `pension_base`    decimal(11, 6)         null comment '养老金基数',
+      `pension_rate`    decimal(11, 6)         null comment '养老金比率',
+      `medical_base`    decimal(11, 6)         null comment '医疗基数',
+      `medical_rate`    decimal(11, 6)         null comment '医疗保险比率',
+      `accumulation_fund_base` decimal(11, 6)  null comment '公积金基数',
+      `accumulation_fund_rate` decimal(11, 6)  null comment '公积金比率',
+      `start_date`      datetime               null comment '启用时间',
+      `create_time`     datetime               null comment '创建时间',
+      `update_time`     datetime               null comment '更新时间',
+      KEY `idx_company_id` (`company_id`)
+  ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='员工薪酬公共表';
+  
+  CREATE TABLE `sa_salary_personal` (
+      `id`               bigint unsigned       not null primary key comment '工号',
+      `salary_common_id` bigint unsigned       null comment '工资公共部分id',
+      `basic_salary`     decimal(11, 6)        null comment '基本工资',
+      `bonus`            decimal(11, 6)        null comment '奖金',
+      `total_salary`     decimal(11, 6)        null comment '应发工资',
+      `create_time`      datetime              null comment '创建时间',
+      `update_time`      datetime              null comment '更新时间',
+      KEY `idx_salary_common_id` (`salary_common_id`)
+  ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='员工薪酬个人表';
   
   -- 薪酬调整
-  CREATE TABLE `sa_adjust` (
-      `id` bigint unsigned NOT NULL primary key COMMENT 'ID',
-      `member_id` bigint unsigned DEFAULT NULL COMMENT '员工编号',
-      `adjust_date` date DEFAULT NULL COMMENT '调薪日期',
-      `before_salary` decimal(11, 6) DEFAULT NULL COMMENT '调前薪资',
-      `after_salary` decimal(11, 6) DEFAULT NULL COMMENT '调后薪资',
-      `reason` varchar(255) DEFAULT NULL COMMENT '调薪原因',
-      `notes` varchar(255) DEFAULT NULL COMMENT '备注',
-      `create_time` datetime  COMMENT '创建时间',
-      `update_time` datetime COMMENT '更新时间',
-      KEY `pid` (`mid`)
+  CREATE TABLE `sa_salary_adjust` (
+      `id`               bigint unsigned       not null primary key comment 'id',
+      `salary_personal_id`  bigint unsigned    null comment '工号',
+      `before_salary`    decimal(11, 6)        null comment '调前薪资',
+      `after_salary`     decimal(11, 6)        null comment '调后薪资',
+      `reason`           varchar(255)          null comment '调薪原因',
+      `notes`            varchar(255)          null comment '备注',
+      `create_time`      datetime              null comment '创建时间',
+      `update_time`      datetime              null comment '更新时间',
+      KEY `idx_salary_personal_id` (`salary_personal_id`)
   ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='薪酬调整';
   
   -- 奖惩
   CREATE TABLE `sa_rewards_punishment` (
-      `id` bigint unsigned NOT NULL primary key COMMENT 'ID',
-      `member_id` bigint unsigned DEFAULT NULL COMMENT '员工编号',
-      `rp_date` date DEFAULT NULL COMMENT '奖罚日期',
-      `rp_reason` varchar(255) DEFAULT NULL COMMENT '奖罚原因',
-      `rp_point` int(11) DEFAULT NULL COMMENT '奖罚分',
-      `rp_type` tinyint unsigned DEFAULT NULL COMMENT '奖罚类别，0：奖，1：罚',
-      `notes` varchar(255) DEFAULT NULL COMMENT '备注',
-      KEY `pid` (`mid`)
+      `id`               bigint unsigned       not null primary key comment 'id',
+      `salary_personal_id`  bigint unsigned    null comment '工号',
+      `rp_reason`        varchar(255)          null comment '奖罚原因',
+      `rp_point`         int(6)                null comment '奖罚分',
+      `rp_money`         decimal(11, 6)        null comment '奖罚金额',
+      `rp_type`          tinyint unsigned      null comment '奖罚类别，0：奖，1：罚',
+      `notes`            varchar(255)          null comment '备注',
+      `create_time`      datetime              null comment '创建时间',
+      `update_time`      datetime              null comment '更新时间',
+       KEY `idx_salary_personal_id` (`salary_personal_id`)
   ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='奖惩';
   ```
-
+  
   <br>
-
+  
 + 培训管理
 
   ```mysql
