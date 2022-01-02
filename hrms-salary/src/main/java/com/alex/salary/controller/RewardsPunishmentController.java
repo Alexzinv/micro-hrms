@@ -37,7 +37,7 @@ public class RewardsPunishmentController {
     }
 
     @PostMapping("/listPage/{page}/{limit}")
-    public R listCompanyCondition(@PathVariable Integer page,
+    public R listRewardsPunishmentCondition(@PathVariable Integer page,
                                   @PathVariable Integer limit,
                                   @Validated({QueryGroup.class})
                                   @RequestBody(required = false) RewardsPunishmentQuery query){
@@ -46,19 +46,19 @@ public class RewardsPunishmentController {
     }
 
     @PostMapping("/save")
-    public R saveCompany(@Validated({AddGroup.class}) @RequestBody RewardsPunishment rp){
+    public R saveRewardsPunishment(@Validated({AddGroup.class}) @RequestBody RewardsPunishment rp){
         rewardsPunishmentService.save(rp);
         return R.ok();
     }
 
     @PostMapping("/update")
-    public R updateCompany(@Validated({UpdateGroup.class}) @RequestBody RewardsPunishment rp){
+    public R updateRewardsPunishment(@Validated({UpdateGroup.class}) @RequestBody RewardsPunishment rp){
         rewardsPunishmentService.updateById(rp);
         return R.ok();
     }
 
     @DeleteMapping("/delete/{id}")
-    public R deleteCompany(@PathVariable("id") Long id){
+    public R deleteRewardsPunishment(@PathVariable("id") Long id){
         rewardsPunishmentService.removeById(id);
         return R.ok();
     }

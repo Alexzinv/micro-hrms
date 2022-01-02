@@ -7,16 +7,10 @@ import java.io.Serializable;
 /**
  * @author _Alexzinv_
  * @date 2022/1/2
- * @description 奖惩查询数据对象
+ * @description 工资调整查询
  */
 @Data
-public class RewardsPunishmentQuery implements Serializable {
+public class SalaryAdjustQuery implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    private Integer rpType;
-
-    private Data startTime;
-
-    private Data endTime;
 }
