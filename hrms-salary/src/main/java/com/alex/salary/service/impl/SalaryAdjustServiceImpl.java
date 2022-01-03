@@ -24,6 +24,7 @@ public class SalaryAdjustServiceImpl extends ServiceImpl<SalaryAdjustMapper, Sal
         Page<SalaryAdjust> pageEntity = new Page<>(page, limit);
         LambdaQueryWrapper<SalaryAdjust> wrapper = Wrappers.lambdaQuery(SalaryAdjust.class);
 
+        // TODO query
         return baseMapper.selectPage(pageEntity, wrapper);
     }
 }
