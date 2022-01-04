@@ -1,4 +1,4 @@
-package gateway.filter;
+package com.alex.gateway.filter;
 
 import com.alex.common.util.JwtUtils;
 import com.google.gson.JsonObject;

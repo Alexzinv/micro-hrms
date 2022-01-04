@@ -1,4 +1,4 @@
-package gateway;
+package com.alex.gateway;
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import org.springframework.boot.SpringApplication;

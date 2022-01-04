@@ -1,4 +1,4 @@
-package gateway.handle;
+package com.alex.gateway.handle;
 
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.web.ResourceProperties;
