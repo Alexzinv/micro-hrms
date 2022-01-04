@@ -1,6 +1,7 @@
 package com.alex.salary.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
@@ -9,8 +10,9 @@ import java.io.Serializable;
  * @date 2022/1/2
  * @description 奖惩查询数据对象
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class RewardsPunishmentQuery implements Serializable {
+public class RewardsPunishmentQuery extends BaseQuery implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
