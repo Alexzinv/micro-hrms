@@ -10,5 +10,11 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @Description 用户
  */
 public interface UserMapper extends BaseMapper<User> {
-	
+
+    /**
+     * 查询是否存在
+     * @param username 用户名
+     * @return 是否存在
+     */
+    Integer isExist(String username);
 }
