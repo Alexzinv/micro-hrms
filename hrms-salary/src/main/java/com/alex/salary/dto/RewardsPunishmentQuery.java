@@ -1,5 +1,6 @@
 package com.alex.salary.dto;
 
+import com.alex.common.base.BaseQuery;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
