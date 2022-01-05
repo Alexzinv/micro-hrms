@@ -17,3 +17,5 @@ spring:
             refresh: true
           - data-id: mail.yml
             refresh: true
+          - data-id: zipkin.yml
+            refresh: true

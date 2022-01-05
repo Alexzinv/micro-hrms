@@ -21,3 +21,5 @@ spring:
             refresh: true
           - data-id: log-level.yml
             refresh: true
+          - data-id: zipkin.yml
+            refresh: true

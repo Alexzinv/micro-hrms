@@ -25,3 +25,5 @@ spring:
             refresh: true
           - data-id: kaptcha.yml
             refresh: true
+          - data-id: zipkin.yml
+            refresh: true

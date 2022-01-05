@@ -25,3 +25,5 @@ spring:
             refresh: true
           - data-id: oss.yml
             refresh: true
+          - data-id: zipkin.yml
+            refresh: true
