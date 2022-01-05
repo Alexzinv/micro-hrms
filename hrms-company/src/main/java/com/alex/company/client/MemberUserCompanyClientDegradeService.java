@@ -1,7 +1,7 @@
 package com.alex.company.client;
 
 import com.alex.common.bean.member.UserCompanyDepartmentPositionTo;
-import com.alex.common.util.BaseClient;
+import com.alex.common.base.BaseClient;
 import com.alex.common.util.R;
 
 /**

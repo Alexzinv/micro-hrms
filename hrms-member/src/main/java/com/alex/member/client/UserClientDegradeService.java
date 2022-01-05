@@ -1,6 +1,6 @@
 package com.alex.member.client;
 
-import com.alex.common.util.BaseClient;
+import com.alex.common.base.BaseClient;
 import com.alex.common.util.R;
 import com.alex.member.dto.UserCompanyRelationDO;
 import org.springframework.stereotype.Component;
