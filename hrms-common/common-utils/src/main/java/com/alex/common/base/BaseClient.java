@@ -1,6 +1,7 @@
-package com.alex.common.util;
+package com.alex.common.base;
 
 import com.alex.common.consant.ResultCodeEnum;
+import com.alex.common.util.R;
 
 /**
  * @author _Alexzinv_
