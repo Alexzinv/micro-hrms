@@ -3,6 +3,7 @@ package com.alex.system.mapper;
 
 import com.alex.system.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @Author _Alexzinv_
@@ -16,5 +17,5 @@ public interface UserMapper extends BaseMapper<User> {
      * @param username 用户名
      * @return 是否存在
      */
-    Integer isExist(String username);
+    Integer isExist(@Param("username") String username);
 }
