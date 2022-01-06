@@ -2,4 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.alex.company.mapper.CompanyMapper">
 
+    <select id="isExist" resultType="java.lang.Boolean">
+        select 1 from co_company where name = #{name}
+    </select>
 </mapper>
