@@ -14,7 +14,7 @@ public class WorkerNumberGenerator extends CodeGeneratorAbstract implements Code
 
     @Override
     public Long initValue() {
-        return value == null ? DEFAULT_VALUE : value;
+        return value == null ? DEFAULT_VALUE : value.getAndIncrement();
     }
 
     @Override
