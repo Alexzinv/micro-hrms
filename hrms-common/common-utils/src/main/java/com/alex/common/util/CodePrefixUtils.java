@@ -20,7 +20,7 @@ public abstract class CodePrefixUtils {
      * @param codePrefixEnum 编码前缀枚举
      * @return 编码
      */
-    public String getCode(CodePrefixEnum codePrefixEnum) {
+    public synchronized String getCode(CodePrefixEnum codePrefixEnum) {
         String codePrefix = codePrefixEnum.getCode();
         String code = getLatestCode();
         // 为空则是第一次添加，初始化，否则按最大值自增
