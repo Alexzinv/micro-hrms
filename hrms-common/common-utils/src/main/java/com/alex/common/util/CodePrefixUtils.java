@@ -21,7 +21,7 @@ public abstract class CodePrefixUtils {
      * @return 编码
      */
     public synchronized String getCode(CodePrefixEnum codePrefixEnum) {
-        String codePrefix = codePrefixEnum.getCode();
+        String codePrefix = codePrefixEnum.getPrefix();
         String code = getLatestCode();
         // 为空则是第一次添加，初始化，否则按最大值自增
         if(code == null){

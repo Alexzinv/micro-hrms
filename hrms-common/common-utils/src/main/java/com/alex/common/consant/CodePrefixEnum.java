@@ -9,25 +9,29 @@ public enum CodePrefixEnum {
     /**
      * 部门编码前缀
      */
-    DEPARTMENT_CODE_PREFIX("AX000", "department_code"),
+    DEPARTMENT_CODE_PREFIX("AX000", 1L),
     /**
      * 角色编码前缀
      */
-    ROLE_CODE_PREFIX("SYS000", "role_code");
+    ROLE_CODE_PREFIX("SYS000", 10000L),
+    /**
+     * 工号
+     */
+    WORKER_NUMBER("NO.", 1000000L);
 
-    private final String code;
-    private final String info;
+    private final String prefix;
+    private final Long value;
 
-    CodePrefixEnum(String code, String info) {
-        this.code = code;
-        this.info = info;
+    CodePrefixEnum(String prefix, Long value) {
+        this.prefix = prefix;
+        this.value = value;
     }
 
-    public String getCode() {
-        return code;
+    public String getPrefix() {
+        return prefix;
     }
 
-    public String getInfo() {
-        return info;
+    public Long getValue() {
+        return value;
     }
 }
