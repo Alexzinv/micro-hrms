@@ -151,7 +151,7 @@ public class UserCompanyServiceImpl extends ServiceImpl<UserCompanyMapper, UserC
         entity.setCorrectionTime(DateUtils.addDateMonths(Calendar.getInstance().getTime(), 1));
     }
 
-    private Long getCurrentWorkNumber(Long companyId) {
+    private synchronized Long getCurrentWorkNumber(Long companyId) {
         // 查询出当前公司工号列最大值
         Long maxWorkNumber = baseMapper.getMaxWorkNumber(companyId);
         // 为空则是第一次添加，初始化为10000，否则按最大值自增
