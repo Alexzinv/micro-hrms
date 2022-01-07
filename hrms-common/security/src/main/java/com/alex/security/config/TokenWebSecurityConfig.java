@@ -26,10 +26,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
-    // @Override
-    // protected void configure(HttpSecurity http) throws Exception {
-    //     http.authorizeRequests().anyRequest().permitAll().and().logout().permitAll();
-    // }
 
     private final UserDetailsService userDetailsService;
     private final TokenManager tokenManager;
@@ -76,6 +72,11 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
         // http.sessionManagement().maximumSessions(1).expiredUrl("/login");
     }
 
+    // @Override
+    // protected void configure(HttpSecurity http) throws Exception {
+    //     http.authorizeRequests().anyRequest().permitAll().and().logout().permitAll();
+    // }
+
     /**
      * 密码处理
      * @param auth 认证
@@ -93,7 +94,8 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         web.ignoring().antMatchers("/api/**",
-                "/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**", "/admin/acl/kaptcha/**"
+                "/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**",
+                "/admin/acl/kaptcha/**", "/druid/stat"
         );
         // web.ignoring().antMatchers("/**");
     }
