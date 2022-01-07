@@ -1,19 +1,25 @@
 package com.alex.company.dto;
 
+import com.alex.common.base.BaseQuery;
 import com.alex.common.valid.ListValue;
 import com.alex.common.valid.group.QueryGroup;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * @author _Alexzinv_
  * @date 2021/12/15
  * @description position查询条件
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class PositionQuery {
+public class PositionQuery extends BaseQuery implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "企业ID")
     @NotNull(groups = {QueryGroup.class})

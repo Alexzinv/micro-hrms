@@ -1,9 +1,12 @@
 package com.alex.company.dto;
 
+import com.alex.common.base.BaseQuery;
 import com.alex.common.valid.ListValue;
 import com.alex.common.valid.group.QueryGroup;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,8 +14,11 @@ import java.util.Date;
  * @Date 2021/11/6
  * @Description
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class CompanyQuery {
+public class CompanyQuery extends BaseQuery implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * 公司名或法人名字

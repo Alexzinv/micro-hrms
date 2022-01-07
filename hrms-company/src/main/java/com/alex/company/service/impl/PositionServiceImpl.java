@@ -1,5 +1,6 @@
 package com.alex.company.service.impl;
 
+import com.alex.common.base.BaseQuery;
 import com.alex.common.bean.member.UserCompanyDepartmentPositionTo;
 import com.alex.common.bean.member.UserCompanyTo;
 import com.alex.common.consant.CompanyConstant;
@@ -11,6 +12,7 @@ import com.alex.company.dto.PositionQuery;
 import com.alex.company.entity.Position;
 import com.alex.company.mapper.PositionMapper;
 import com.alex.company.service.PositionService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -35,28 +37,6 @@ public class PositionServiceImpl extends ServiceImpl<PositionMapper, Position> i
     @Autowired
     public void setMemberUserCompanyClient(MemberUserCompanyClient memberUserCompanyClient) {
         this.memberUserCompanyClient = memberUserCompanyClient;
-    }
-
-    @Override
-    public Page<Position> listPage(Integer page, Integer limit, PositionQuery positionQuery) {
-        Page<Position> pageEntity = new Page<>(page, limit);
-        Long companyId = positionQuery.getCompanyId();
-        String name = positionQuery.getName();
-        Integer status = positionQuery.getStatus();
-        Integer sort = positionQuery.getSort();
-        QueryWrapper<Position> wrapper = new QueryWrapper<>();
-        wrapper.eq(companyId != null, "company_id", companyId)
-                .like(StringUtils.hasText(name), "name", name)
-                .eq(status != null, "status", status);
-
-        if(sort != null){
-            if(PositionConstant.IsSort.ASC.equals(sort)){
-                wrapper.orderByAsc("sort");
-            }else {
-                wrapper.orderByDesc("sort");
-            }
-        }
-        return baseMapper.selectPage(pageEntity, wrapper);
     }
 
     @Override
@@ -87,5 +67,29 @@ public class PositionServiceImpl extends ServiceImpl<PositionMapper, Position> i
             memberUserCompanyClient.updateUserCompanyDepartmentPosition(to);
         }
         return super.updateById(entity);
+    }
+
+    @Override
+    public void buildCondition(LambdaQueryWrapper<Position> wrapper, BaseQuery query) {
+        if(query instanceof PositionQuery){
+            PositionQuery positionQuery = (PositionQuery) query;
+            Long companyId = positionQuery.getCompanyId();
+            String name = positionQuery.getName();
+            Integer status = positionQuery.getStatus();
+            Integer sort = positionQuery.getSort();
+            wrapper.eq(Position::getCompanyId, companyId)
+                    .like(StringUtils.hasText(name), Position::getName, name)
+                    .eq(status != null, Position::getStatus, status);
+
+            if(sort == null){
+                return;
+            }
+
+            if(PositionConstant.IsSort.ASC.equals(sort)){
+                wrapper.orderByAsc(Position::getSort);
+            }else {
+                wrapper.orderByDesc(Position::getSort);
+            }
+        }
     }
 }

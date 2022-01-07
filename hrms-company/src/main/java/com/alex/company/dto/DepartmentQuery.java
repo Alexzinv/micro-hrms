@@ -1,17 +1,23 @@
 package com.alex.company.dto;
 
+import com.alex.common.base.BaseQuery;
 import com.alex.common.valid.group.QueryGroup;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * @Author _Alexzinv_
  * @Date 2021/11/8
  * @Description
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class DepartmentQuery {
+public class DepartmentQuery extends BaseQuery implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * 公司id

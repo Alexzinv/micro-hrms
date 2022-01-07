@@ -1,5 +1,6 @@
 package com.alex.company.service.impl;
 
+import com.alex.common.base.BaseQuery;
 import com.alex.common.bean.member.UserCompanyDepartmentPositionTo;
 import com.alex.common.consant.CodePrefixEnum;
 import com.alex.common.consant.ResultCodeEnum;
@@ -37,24 +38,6 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
     @Autowired
     public void setMemberUserCompanyClient(MemberUserCompanyClient memberUserCompanyClient) {
         this.memberUserCompanyClient = memberUserCompanyClient;
-    }
-
-    @Override
-    public Page<Department> listPage(Integer page, Integer limit, DepartmentQuery departmentQuery) {
-        Page<Department> pageEntity = new Page<>(page, limit);
-        QueryWrapper<Department> wrapper = new QueryWrapper<>();
-
-        Long companyId = departmentQuery.getCompanyId();
-        wrapper.eq("company_id", companyId);
-        String keyWord = departmentQuery.getKey();
-        String manager = departmentQuery.getManager();
-        if(StringUtils.hasText(keyWord)){
-            wrapper.like("code", keyWord).or()
-                    .like("name", keyWord);
-        }
-        wrapper.eq(StringUtils.hasText(manager), "manager", manager);
-
-        return baseMapper.selectPage(pageEntity, wrapper);
     }
 
     @Override
@@ -120,5 +103,21 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
     private boolean isExist(String name){
         int count = super.count(new QueryWrapper<Department>().eq("name", name));
         return count > 0;
+    }
+
+    @Override
+    public void buildCondition(LambdaQueryWrapper<Department> wrapper, BaseQuery query) {
+        if(query instanceof DepartmentQuery){
+            DepartmentQuery departmentQuery = (DepartmentQuery) query;
+            Long companyId = departmentQuery.getCompanyId();
+            String keyWord = departmentQuery.getKey();
+            String manager = departmentQuery.getManager();
+            wrapper.eq(Department::getCompanyId, companyId);
+            if(StringUtils.hasText(keyWord)){
+                wrapper.like(Department::getCode, keyWord).or()
+                        .like(Department::getName, keyWord);
+            }
+            wrapper.eq(StringUtils.hasText(manager), Department::getManager, manager);
+        }
     }
 }
