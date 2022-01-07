@@ -1,9 +1,11 @@
 package com.alex.member.dto;
 
+import com.alex.common.base.BaseQuery;
 import com.alex.common.valid.ListValue;
 import com.alex.common.valid.group.QueryGroup;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -13,8 +15,9 @@ import java.io.Serializable;
  * @date 2021/12/2
  * @description 查询条件对象
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class UserCompanyQuery implements Serializable {
+public class UserCompanyQuery extends BaseQuery implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "企业ID")

@@ -1,5 +1,6 @@
 package com.alex.member.service.impl;
 
+import com.alex.common.base.BaseQuery;
 import com.alex.common.bean.member.UserCompanyDepartmentPositionTo;
 import com.alex.common.consant.MemUserCompanyConstant;
 import com.alex.common.consant.ResultCodeEnum;
@@ -47,34 +48,33 @@ public class UserCompanyServiceImpl extends ServiceImpl<UserCompanyMapper, UserC
     }
 
     @Override
-    public Page<UserCompany> listPage(Integer page, Integer limit, UserCompanyQuery query) {
-        Page<UserCompany> pageEntity = new Page<>(page, limit);
+    public void buildCondition(LambdaQueryWrapper<UserCompany> wrapper, BaseQuery query) {
+        if(query instanceof UserCompanyQuery){
+            UserCompanyQuery userCompanyQuery = (UserCompanyQuery) query;
+            Long companyId = userCompanyQuery.getCompanyId();
+            if(companyId == null){
+                return;
+            }
 
-        Long companyId = query.getCompanyId();
-        if(companyId == null){
-            return new Page<>();
+            String nickname = userCompanyQuery.getNickname();
+            Long departmentId = userCompanyQuery.getDepartmentId();
+            String workingCity = userCompanyQuery.getWorkingCity();
+            Long workNumber = userCompanyQuery.getWorkNumber();
+            String position = userCompanyQuery.getPosition();
+            Integer jobStatus = userCompanyQuery.getJobStatus();
+            // 已离职的默认不查询
+            if(jobStatus == null){
+                jobStatus = 0;
+            }
+            // 构造条件
+            wrapper.eq(UserCompany::getCompanyId, companyId)
+                    .eq(UserCompany::getJobStatus, jobStatus)
+                    .like(isNotBlank(nickname), UserCompany::getNickname, nickname)
+                    .eq(departmentId != null, UserCompany::getDepartmentId, departmentId)
+                    .like(isNotBlank(workingCity), UserCompany::getWorkingCity, workingCity)
+                    .eq(workNumber != null, UserCompany::getWorkNumber, workNumber)
+                    .like(isNotBlank(position), UserCompany::getPosition, position);
         }
-        String nickname = query.getNickname();
-        Long departmentId = query.getDepartmentId();
-        String workingCity = query.getWorkingCity();
-        Long workNumber = query.getWorkNumber();
-        String position = query.getPosition();
-        Integer jobStatus = query.getJobStatus();
-        // 已离职的默认不查询
-        if(jobStatus == null){
-            jobStatus = 0;
-        }
-        // 构造条件
-        LambdaQueryWrapper<UserCompany> wrapper = Wrappers.lambdaQuery(UserCompany.class)
-                .eq(UserCompany::getCompanyId, companyId)
-                .eq(UserCompany::getJobStatus, jobStatus)
-                .like(isNotBlank(nickname), UserCompany::getNickname, nickname)
-                .eq(departmentId != null, UserCompany::getDepartmentId, departmentId)
-                .like(isNotBlank(workingCity), UserCompany::getWorkingCity, workingCity)
-                .eq(workNumber != null, UserCompany::getWorkNumber, workNumber)
-                .like(isNotBlank(position), UserCompany::getPosition, position);
-
-        return baseMapper.selectPage(pageEntity, wrapper);
     }
 
     @GlobalTransactional(rollbackFor = Exception.class)

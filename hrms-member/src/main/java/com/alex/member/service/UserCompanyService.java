@@ -1,5 +1,6 @@
 package com.alex.member.service;
 
+import com.alex.common.base.BaseService;
 import com.alex.common.bean.member.UserCompanyDepartmentPositionTo;
 import com.alex.member.dto.UserCompanyQuery;
 import com.alex.member.dto.UserCompanyVO;
@@ -17,16 +18,7 @@ import java.util.List;
  * @author _Alexzinv_
  * @since 2021-12-02
  */
-public interface UserCompanyService extends IService<UserCompany> {
-
-    /**
-     * 分页多条件查询公司内的所有员工
-     * @param page 当前页
-     * @param limit 每页限制条数
-     * @param query 查询条件
-     * @return 分页数据
-     */
-    Page<UserCompany> listPage(Integer page, Integer limit, UserCompanyQuery query);
+public interface UserCompanyService extends BaseService<UserCompany> {
 
     /**
      * 更新公司员工信息
