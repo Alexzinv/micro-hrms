@@ -11,4 +11,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface SalaryCommonService extends IService<SalaryCommon> {
 
+    /**
+     * 根据companyId查询
+     * @param companyId 公司id
+     * @return 对象
+     */
+    SalaryCommon getByCompanyId(Long companyId);
 }

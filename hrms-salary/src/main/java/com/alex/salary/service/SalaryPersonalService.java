@@ -10,4 +10,10 @@ import com.alex.salary.entity.SalaryPersonal;
  * @since 2022-01-01
  */
 public interface SalaryPersonalService extends BaseService<SalaryPersonal> {
+
+    /**
+     * 修改
+     * @param sp 修改的数据对象
+     */
+    void update(SalaryPersonal sp);
 }
