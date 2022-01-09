@@ -53,7 +53,7 @@ public class SalaryPersonalController {
 
     @PostMapping("/update")
     public R updateSalaryPersonal(@Validated({UpdateGroup.class}) @RequestBody SalaryPersonal sp){
-        salaryPersonalService.updateById(sp);
+        salaryPersonalService.update(sp);
         return R.ok();
     }
 

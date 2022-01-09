@@ -4,10 +4,7 @@ package com.alex.salary.controller;
 import com.alex.common.util.R;
 import com.alex.common.valid.group.AddGroup;
 import com.alex.common.valid.group.QueryGroup;
-import com.alex.common.valid.group.UpdateGroup;
-import com.alex.salary.dto.RewardsPunishmentQuery;
 import com.alex.salary.dto.SalaryAdjustQuery;
-import com.alex.salary.entity.RewardsPunishment;
 import com.alex.salary.entity.SalaryAdjust;
 import com.alex.salary.service.SalaryAdjustService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -48,12 +45,6 @@ public class SalaryAdjustController {
     @PostMapping("/save")
     public R saveSalaryAdjust(@Validated({AddGroup.class}) @RequestBody SalaryAdjust sa){
         salaryAdjustService.save(sa);
-        return R.ok();
-    }
-
-    @PostMapping("/update")
-    public R updateSalaryAdjust(@Validated({UpdateGroup.class}) @RequestBody SalaryAdjust sa){
-        salaryAdjustService.updateById(sa);
         return R.ok();
     }
 

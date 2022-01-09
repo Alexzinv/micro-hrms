@@ -33,6 +33,12 @@ public class SalaryCommonController {
         return R.ok().data("salaryCommon", salaryCommon);
     }
 
+    @GetMapping("getByCompany/{companyId}")
+    public R getSalaryCommonByCompanyId(@PathVariable("companyId") Long companyId){
+        SalaryCommon salaryCommon = salaryCommonService.getByCompanyId(companyId);
+        return R.ok().data("salaryCommon", salaryCommon);
+    }
+
     @PostMapping("/save")
     public R saveSalaryCommon(@Validated({AddGroup.class}) @RequestBody SalaryCommon sc){
         salaryCommonService.save(sc);

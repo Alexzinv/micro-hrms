@@ -4,7 +4,6 @@ package com.alex.salary.controller;
 import com.alex.common.util.R;
 import com.alex.common.valid.group.AddGroup;
 import com.alex.common.valid.group.QueryGroup;
-import com.alex.common.valid.group.UpdateGroup;
 import com.alex.salary.dto.RewardsPunishmentQuery;
 import com.alex.salary.entity.RewardsPunishment;
 import com.alex.salary.service.RewardsPunishmentService;
@@ -48,12 +47,6 @@ public class RewardsPunishmentController {
     @PostMapping("/save")
     public R saveRewardsPunishment(@Validated({AddGroup.class}) @RequestBody RewardsPunishment rp){
         rewardsPunishmentService.save(rp);
-        return R.ok();
-    }
-
-    @PostMapping("/update")
-    public R updateRewardsPunishment(@Validated({UpdateGroup.class}) @RequestBody RewardsPunishment rp){
-        rewardsPunishmentService.updateById(rp);
         return R.ok();
     }
 
