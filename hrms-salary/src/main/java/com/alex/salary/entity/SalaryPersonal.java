@@ -1,6 +1,8 @@
 package com.alex.salary.entity;
 
 import java.math.BigDecimal;
+
+import com.alex.common.valid.group.AddGroup;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
@@ -10,6 +12,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * 员工薪酬个人表
@@ -30,6 +34,7 @@ public class SalaryPersonal implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "工资公共部分id")
+    @NotNull(groups = AddGroup.class)
     private Long salaryCommonId;
 
     @ApiModelProperty(value = "基本工资")

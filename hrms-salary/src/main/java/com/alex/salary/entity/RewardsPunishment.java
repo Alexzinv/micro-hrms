@@ -1,6 +1,10 @@
 package com.alex.salary.entity;
 
 import java.math.BigDecimal;
+
+import com.alex.common.valid.ListValue;
+import com.alex.common.valid.group.AddGroup;
+import com.alex.common.valid.group.UpdateGroup;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
@@ -10,6 +14,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 /**
  * 奖惩
@@ -30,6 +37,7 @@ public class RewardsPunishment implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "工号")
+    @NotNull(groups = {AddGroup.class})
     private Long salaryPersonalId;
 
     @ApiModelProperty(value = "奖罚原因")
@@ -42,6 +50,7 @@ public class RewardsPunishment implements Serializable {
     private BigDecimal rpMoney;
 
     @ApiModelProperty(value = "奖罚类别，0：奖，1：罚")
+    @ListValue(values = {0, 1}, groups = {AddGroup.class})
     private Integer rpType;
 
     @ApiModelProperty(value = "备注")

@@ -1,15 +1,18 @@
 package com.alex.salary.entity;
 
-import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.alex.common.valid.group.AddGroup;
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 薪酬调整
@@ -30,6 +33,7 @@ public class SalaryAdjust implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "工号")
+    @NotNull(groups = AddGroup.class)
     private Long salaryPersonalId;
 
     @ApiModelProperty(value = "调前薪资")
