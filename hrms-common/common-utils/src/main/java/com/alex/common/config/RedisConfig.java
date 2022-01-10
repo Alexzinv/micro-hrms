@@ -28,6 +28,7 @@ import java.time.Duration;
  */
 @EnableCaching
 @Configuration
+@SuppressWarnings(value="all")
 public class RedisConfig extends CachingConfigurerSupport {
 
 	@Bean
