@@ -9,6 +9,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebExceptionHandler;
@@ -19,6 +21,7 @@ import reactor.core.publisher.Mono;
  * @date 2022/1/10
  * @description
  */
+@Component
 public class SentinelFallbackHandler implements WebExceptionHandler {
     private Mono<Void> writeResponse(ServerResponse response, ServerWebExchange exchange) {
         ServerHttpResponse r = exchange.getResponse();
@@ -29,8 +32,9 @@ public class SentinelFallbackHandler implements WebExceptionHandler {
         return r.writeWith(Mono.just(dataBuffer));
     }
 
+    @NonNull
     @Override
-    public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
+    public Mono<Void> handle(ServerWebExchange exchange, @NonNull Throwable ex) {
         if (exchange.getResponse().isCommitted()) {
             return Mono.error(ex);
         }
