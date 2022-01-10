@@ -19,6 +19,7 @@ public class CorsConfig {
 		config.addAllowedMethod("*");
 		config.addAllowedOrigin("*");
 		config.addAllowedHeader("*");
+		config.setMaxAge(18000L);
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource(new PathPatternParser());
 		source.registerCorsConfiguration("/**", config);

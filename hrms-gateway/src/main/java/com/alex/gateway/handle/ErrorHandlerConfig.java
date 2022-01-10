@@ -22,7 +22,7 @@ import java.util.List;
  * @Description
  */
 @Configuration
-@EnableConfigurationProperties({ServerProperties.class, ResourceProperties.class})
+@EnableConfigurationProperties({ServerProperties.class ,ResourceProperties.class})
 public class ErrorHandlerConfig {
 
 	private final ServerProperties serverProperties;
