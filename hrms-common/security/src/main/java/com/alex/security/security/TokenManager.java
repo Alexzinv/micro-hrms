@@ -1,5 +1,6 @@
 package com.alex.security.security;
 
+import com.alex.common.consant.TokenConstant;
 import io.jsonwebtoken.CompressionCodecs;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -14,17 +15,15 @@ import java.util.Date;
 @Component
 public class TokenManager {
 
-    private final String tokenSignKey = "123456";
-
     public String createToken(String username) {
         long tokenExpiration = 24 * 60 * 60 * 1000;
         return Jwts.builder().setSubject(username)
                 .setExpiration(new Date(System.currentTimeMillis() + tokenExpiration))
-                .signWith(SignatureAlgorithm.HS512, tokenSignKey).compressWith(CompressionCodecs.GZIP).compact();
+                .signWith(SignatureAlgorithm.HS512, TokenConstant.SECRET).compressWith(CompressionCodecs.GZIP).compact();
     }
 
     public String getUserFromToken(String token) {
-        return Jwts.parser().setSigningKey(tokenSignKey).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(TokenConstant.SECRET).parseClaimsJws(token).getBody().getSubject();
     }
 
     public void removeToken(String token) {
