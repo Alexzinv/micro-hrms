@@ -12,9 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @Author Alex
+ * @Author _
  * @Description
  */
+@SuppressWarnings(value = {"all"})
 public class JsonExceptionHandler extends DefaultErrorWebExceptionHandler {
 
 	public JsonExceptionHandler(ErrorAttributes errorAttributes, ResourceProperties resourceProperties,
@@ -30,7 +31,7 @@ public class JsonExceptionHandler extends DefaultErrorWebExceptionHandler {
 		HashMap<String, Object> map = new HashMap<>(6);
 		map.put("success", false);
 		map.put("code", 20005);
-		map.put("message", "网关失败");
+		map.put("message", "网关校验失败");
 		map.put("data", null);
 		return map;
 	}

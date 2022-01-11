@@ -23,6 +23,7 @@ import java.util.List;
  */
 @Configuration
 @EnableConfigurationProperties({ServerProperties.class ,ResourceProperties.class})
+@SuppressWarnings(value = {"deprecation"})
 public class ErrorHandlerConfig {
 
 	private final ServerProperties serverProperties;
