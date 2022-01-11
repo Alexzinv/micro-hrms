@@ -14,6 +14,8 @@ spring:
             refresh: true
           - data-id: zipkin.yml
             refresh: true
+          - data-id: redis.yml
+            refresh: true
           - data-id: hrms-gateway-blacklist.yml
             refresh: true
           - data-id: hrms-gateway-whitelist.yml

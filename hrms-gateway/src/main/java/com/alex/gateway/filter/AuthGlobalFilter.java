@@ -26,7 +26,7 @@ import java.nio.charset.StandardCharsets;
  */
 @Component
 @Slf4j
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class AuthGlobalFilter implements GlobalFilter, Ordered {
 
 	private final RedisTemplate redisTemplate;
@@ -96,11 +96,8 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
 	 */
 	private boolean checkToken(String token) {
 		String s = Jwts.parser().setSigningKey(TokenConstant.SECRET).parseClaimsJws(token).getBody().getSubject();
-		/// Boolean hasKey = redisTemplate.hasKey(s);
-		// log.info("++++++key"+ hasKey);
-		// return hasKey != null && hasKey;
-		// TODO redis不可用
-		return StringUtils.isNotBlank(s);
+		Boolean hasKey = redisTemplate.hasKey(s);
+		return hasKey != null && hasKey;
 	}
 
 	private Mono<Void> outResponse(ServerWebExchange exchange){
