@@ -9,20 +9,20 @@ import java.util.HashSet;
 /**
  * @author _Alexzinv_
  * @date 2022/1/10
- * @description 白名单，无需token
+ * @description 不可访问名单
  */
 @Component
 @RefreshScope
-@ConfigurationProperties(prefix = "url.allow")
-public class WhiteList {
+@ConfigurationProperties(prefix = "url.forbidden")
+public class BlackList {
 
-    private HashSet<String> whiteList = new HashSet<>();
+    private HashSet<String> blackList = new HashSet<>();
 
-    public HashSet<String> getWhiteList() {
-        return whiteList;
+    public HashSet<String> getBlackList() {
+        return blackList;
     }
 
-    public void setWhiteList(HashSet<String> whiteList) {
-        this.whiteList = whiteList;
+    public void setBlackList(HashSet<String> blackList) {
+        this.blackList = blackList;
     }
 }

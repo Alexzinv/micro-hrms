@@ -1,5 +1,8 @@
 spring:
   cloud:
+    sentinel:
+      log:
+        dir: ./log
     nacos:
       config:
         server-addr: 192.168.242.129:8848
@@ -11,6 +14,8 @@ spring:
             refresh: true
           - data-id: zipkin.yml
             refresh: true
-    sentinel:
-      log:
-        dir: ./log
+          - data-id: hrms-gateway-blacklist.yml
+            refresh: true
+          - data-id: hrms-gateway-whitelist.yml
+            refresh: true
+

@@ -1,6 +1,7 @@
 package com.alex.gateway.filter;
 
 import com.alex.common.consant.TokenConstant;
+import com.alex.gateway.util.AccessFilterUtils;
 import com.google.gson.JsonObject;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -26,17 +26,18 @@ import java.nio.charset.StandardCharsets;
  */
 @Component
 @Slf4j
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({"rawtypes"})
 public class AuthGlobalFilter implements GlobalFilter, Ordered {
 
-	private final AntPathMatcher antPathMatcher = new AntPathMatcher();
-	private static final String AUTH = "/**";
-	private static final String INNER = "/**/inner/**";
-	private RedisTemplate<String, Object> redisTemplate;
+	private final RedisTemplate redisTemplate;
+	private final BlackList blackList;
+	private final WhiteList whiteList;
 
 	@Autowired
-	public void setRedisTemplate(RedisTemplate redisTemplate) {
+	public AuthGlobalFilter(RedisTemplate redisTemplate, BlackList blackList, WhiteList whiteList) {
 		this.redisTemplate = redisTemplate;
+		this.blackList = blackList;
+		this.whiteList = whiteList;
 	}
 
 	@Override
@@ -44,21 +45,19 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
 		ServerHttpRequest request = exchange.getRequest();
 		String path = request.getURI().getPath();
 		log.info("=================" + path);
-		//校验用户必须登录
-		if(antPathMatcher.match(AUTH, path)) {
-			if(WhiteList.WHITELIST.contains(path)){
-				return chain.filter(exchange);
-			}
-			String token = getToken(request);
-			if(StringUtils.isBlank(token)) {
-				return outResponse(exchange);
-			}
-			if(!checkToken(token)){
-				return outResponse(exchange);
-			}
+		// 白名单
+		if(AccessFilterUtils.match(path, whiteList.getWhiteList())){
+			return chain.filter(exchange);
 		}
-		//内部服务接口，不允许外部访问
-		if(antPathMatcher.match(INNER, path)) {
+		String token = getToken(request);
+		if(StringUtils.isBlank(token)) {
+			return outResponse(exchange);
+		}
+		if(!checkToken(token)){
+			return outResponse(exchange);
+		}
+		//禁止外部访问接口
+		if(AccessFilterUtils.match(path, blackList.getBlackList())){
 			return outResponse(exchange);
 		}
 		return chain.filter(exchange);
@@ -76,8 +75,6 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
 		message.addProperty("data", "鉴权失败");
 		byte[] bits = message.toString().getBytes(StandardCharsets.UTF_8);
 		DataBuffer buffer = response.bufferFactory().wrap(bits);
-		/// response.setStatusCode(HttpStatus.UNAUTHORIZED);
-		/// 指定编码，否则在浏览器中会中文乱码
 		response.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
 		return response.writeWith(Mono.just(buffer));
 	}
@@ -99,10 +96,10 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
 	 */
 	private boolean checkToken(String token) {
 		String s = Jwts.parser().setSigningKey(TokenConstant.SECRET).parseClaimsJws(token).getBody().getSubject();
-		log.info("---------"+s);
-		// Boolean hasKey = redisTemplate.hasKey(s);
+		/// Boolean hasKey = redisTemplate.hasKey(s);
 		// log.info("++++++key"+ hasKey);
 		// return hasKey != null && hasKey;
+		// TODO redis不可用
 		return StringUtils.isNotBlank(s);
 	}
 
