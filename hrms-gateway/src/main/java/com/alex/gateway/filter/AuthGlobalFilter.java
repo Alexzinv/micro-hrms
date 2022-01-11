@@ -49,15 +49,15 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
 		if(AccessFilterUtils.match(path, whiteList.getWhiteList())){
 			return chain.filter(exchange);
 		}
+		// 禁止外部访问接口
+		if(AccessFilterUtils.match(path, blackList.getBlackList())){
+			return outResponse(exchange);
+		}
 		String token = getToken(request);
 		if(StringUtils.isBlank(token)) {
 			return outResponse(exchange);
 		}
 		if(!checkToken(token)){
-			return outResponse(exchange);
-		}
-		//禁止外部访问接口
-		if(AccessFilterUtils.match(path, blackList.getBlackList())){
 			return outResponse(exchange);
 		}
 		return chain.filter(exchange);
