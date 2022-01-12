@@ -13,6 +13,26 @@ import org.springframework.core.annotation.Order;
  */
 @Configuration
 public class GatewaySentinelConfig {
+
+    // private final List<ViewResolver> viewResolvers;
+    //
+    // private final ServerCodecConfigurer serverCodecConfigurer;
+    //
+    // public GatewaySentinelConfig(ObjectProvider<List<ViewResolver>> viewResolversProvider,
+    //                             ServerCodecConfigurer serverCodecConfigurer) {
+    //     this.viewResolvers = viewResolversProvider.getIfAvailable(Collections::emptyList);
+    //     this.serverCodecConfigurer = serverCodecConfigurer;
+    // }
+    //
+    // /**
+    //  * 限流异常处理器, 暂时使用自定义 SentinelFallbackHandler */
+    // @Bean
+    // @Order(Ordered.HIGHEST_PRECEDENCE)
+    // public SentinelGatewayBlockExceptionHandler sentinelGatewayBlockExceptionHandler() {
+    //     // Register the block exception handler for Spring Cloud Gateway.
+    //     return new SentinelGatewayBlockExceptionHandler(viewResolvers, serverCodecConfigurer);
+    // }
+
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SentinelFallbackHandler sentinelGatewayExceptionHandler() {

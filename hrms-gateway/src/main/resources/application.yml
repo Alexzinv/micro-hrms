@@ -4,3 +4,7 @@ server:
 spring:
   application:
     name: hrms-gateway
+
+  # 允许命名冲突
+  main:
+    allow-bean-definition-overriding: true

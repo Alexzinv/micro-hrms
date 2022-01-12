@@ -1,8 +1,9 @@
 package com.alex.gateway.filter;
 
+import com.alex.common.consant.ResultCodeEnum;
 import com.alex.common.consant.TokenConstant;
+import com.alex.common.util.R;
 import com.alex.gateway.util.AccessFilterUtils;
-import com.google.gson.JsonObject;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -26,15 +27,14 @@ import java.nio.charset.StandardCharsets;
  */
 @Component
 @Slf4j
-@SuppressWarnings({"rawtypes", "unchecked"})
 public class AuthGlobalFilter implements GlobalFilter, Ordered {
 
-	private final RedisTemplate redisTemplate;
+	private final RedisTemplate<String, Object> redisTemplate;
 	private final BlackList blackList;
 	private final WhiteList whiteList;
 
 	@Autowired
-	public AuthGlobalFilter(RedisTemplate redisTemplate, BlackList blackList, WhiteList whiteList) {
+	public AuthGlobalFilter(RedisTemplate<String, Object> redisTemplate, BlackList blackList, WhiteList whiteList) {
 		this.redisTemplate = redisTemplate;
 		this.blackList = blackList;
 		this.whiteList = whiteList;
@@ -69,11 +69,8 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
 	}
 
 	private Mono<Void> out(ServerHttpResponse response) {
-		JsonObject message = new JsonObject();
-		message.addProperty("success", false);
-		message.addProperty("code", 28004);
-		message.addProperty("data", "鉴权失败");
-		byte[] bits = message.toString().getBytes(StandardCharsets.UTF_8);
+		R r = R.err().result(ResultCodeEnum.GATEWAY_AUTH_EXCEPTION);
+		byte[] bits = r.toString().getBytes(StandardCharsets.UTF_8);
 		DataBuffer buffer = response.bufferFactory().wrap(bits);
 		response.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
 		return response.writeWith(Mono.just(buffer));
