@@ -16,29 +16,21 @@ import java.util.Map;
 @Setter
 public class R {
 
-	/**
-	 * 成功 */
+	/** 成功 */
 	private static final int SUCCESS = 20000;
-	/**
-	 * 成功消息 */
+	/** 成功消息 */
 	private static final String SUCCESS_MESSAGE = "操作成功";
-	/**
-	 * 失败 */
+	/** 失败 */
 	private static final int ERROR = 20001;
-	/**
-	 * 失败消息 */
+	/** 失败消息 */
 	private static final String ERROR_MESSAGE = "操作成功";
-	/**
-	 * 是否成功 */
+	/** 是否成功 */
 	private boolean success;
-	/**
-	 * 返回码 */
+	/** 返回码 */
 	private Integer code;
-	/**
-	 * 返回消息 */
+	/** 返回消息 */
 	private String message;
-	/**
-	 * 返回数据 */
+	/** 返回数据 */
 	private Map<String, Object> data = new HashMap<>(32);
 
 	private R(){}
