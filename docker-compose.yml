@@ -1,0 +1,135 @@
+version: "3"
+
+services:
+  nacos:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: nacos
+    ports:
+      - "8848:8848"
+    restart: always
+    entrypoint: ./wait-for-it.sh mysql:3306 -t 0 -- bin/docker-startup.sh
+    depends_on:
+      - mysql
+    environment:
+      - PREFER_HOST_MODE=hostname
+      - MODE=standalone
+      - SPRING_DATASOURCE_PLATFORM=mysql
+      - MYSQL_SERVICE_HOST=mysql
+      - MYSQL_SERVICE_PORT=3306
+      - MYSQL_SERVICE_DB_NAME=nacos_config
+      - MYSQL_SERVICE_USER=root
+      - MYSQL_SERVICE_PASSWORD=root
+      - MYSQL_SERVICE_DB_PARAM=characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useSSL=false&serverTimezone=Japan
+    networks:
+      - micro-hrms
+  seata:
+    image: seataio/seata-server:1.4.2
+    container_name: seata
+    hostname: seata-server
+    restart: always
+    depends_on:
+      - mysql
+      - nacos
+    ports:
+      - "8091:8091"
+    environment:
+      - SEATA_PORT=8091
+      - STORE_MODE=file
+      - SEATA_CONFIG_NAME=file:/root/seata-config/registry
+    volumes:
+      - ./doc/seata/config:/root/seata-config
+    networks:
+      - micro-hrms
+  mysql:
+    image: mysql:8.0.22
+    restart: always
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./doc/sql:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+    networks:
+      - micro-hrms
+  sentinel:
+    image: bladex/sentinel-dashboard:latest
+    restart: on-failure:3
+    container_name: sentinel_dashboard
+    ports:
+      - "8858:8858"
+    networks:
+      - micro-hrms
+  rabbitmq:
+    image: rabbitmq:3.8.19-management
+    hostname: rabbitmq
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=root
+      - RABBITMQ_DEFAULT_PASS=123456
+    networks:
+      - micro-hrms
+  redis:
+    image: redis:6.2.4
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - micro-hrms
+  hrms-gateway:
+    build:
+      context: .
+      dockerfile: ./hrms-gateway/Dockerfile
+    container_name: hrms-gateway
+    command: ./wait-for-it.sh nacos:8848 -t 0 -- java -jar hrms-gateway.jar
+    depends_on:
+      - sentinel
+      - nacos
+      - redis
+    restart: always
+    ports:
+      - "8888:8888"
+    networks:
+      - micro-hrms
+  service_system:
+    build:
+      context: .
+      dockerfile: ./service/service_acl8008/Dockerfile
+    container_name: service_acl8008
+    command: ./wait-for-it.sh nacos:8848 -t 0 -- ./wait-for-it.sh seata:8091 -t 0 -- java -jar service_acl.jar
+    depends_on:
+      - mysql
+      - nacos
+      - redis
+      - seata
+    restart: always
+    ports:
+      - "9000:9000"
+    networks:
+      - micro-hrms
+  hrms-company:
+    build:
+      context: .
+      dockerfile: ./hrms-company/Dockerfile
+    container_name: hrms-company
+    command: ./wait-for-it.sh nacos:8848 -t 0 -- ./wait-for-it.sh seata:8091 -t 0 -- java -jar hrms-company.jar
+    depends_on:
+      - mysql
+      - nacos
+      - rabbitmq
+      - redis
+      - seata
+    restart: always
+    ports:
+      - "9200:9200"
+    networks:
+      - micro-hrms
+
+networks:
+  micro-hrms:
