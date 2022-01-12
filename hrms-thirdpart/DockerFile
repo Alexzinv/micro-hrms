@@ -1,0 +1,6 @@
+FROM adoptopenjdk/openjdk14:ubi
+RUN mkdir /app
+COPY ./hrms-system/target/hrms-thirdpart.jar /app
+COPY ./wait-for-it.sh /app
+WORKDIR /app
+CMD ["java", "-jar", "hrms-thirdpart.jar"]
