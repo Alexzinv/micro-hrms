@@ -96,4 +96,14 @@ public class R {
 		}
 		return this;
 	}
+
+	@Override
+	public String toString() {
+		return "{" +
+				"\"success\":" + success +
+				", \"code\":" + code +
+				", \"message\":\"" + message + '\"' +
+				", \"data\":" + data +
+				'}';
+	}
 }
