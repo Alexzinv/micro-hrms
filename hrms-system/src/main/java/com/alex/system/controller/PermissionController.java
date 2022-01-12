@@ -13,6 +13,8 @@ import com.alex.system.service.RolePermissionService;
 import com.alex.common.util.R;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +28,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/admin/acl/permission")
+@CacheConfig(cacheNames = "permissions")
 public class PermissionController {
     @Autowired
     private PermissionService permissionService;
@@ -76,6 +79,7 @@ public class PermissionController {
     }
 
     @ApiOperation(value = "修改")
+    @CachePut
     @PutMapping("update")
     public R updateById(@Validated({UpdateGroup.class}) @RequestBody Permission permission) {
         permissionService.updateById(permission);
