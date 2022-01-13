@@ -1,0 +1,25 @@
+server:
+  port: 10000
+
+spring:
+  application:
+    name: druid-admin
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    nacos:
+      discovery:
+        enabled: false
+        server-addr: 192.168.242.129:8848
+
+monitor:
+  applications:
+    - hrms-system
+    - hrms-company
+    - hrms-member
+    - hrms-salary
+    - hrms-performance
+    - hrms-statistic
+  login-username: root
+  login-password: root
+
