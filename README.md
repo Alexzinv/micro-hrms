@@ -491,7 +491,7 @@
   	private boolean success;
   	private Integer code;
   	private String message;
-  	private Map<String, Object> data = new HashMap<>(32);
+  	private Map<String, Object> data = new HashMap<>(8);
   
   	private R(){}
   	/** 成功静态方法 @return R */

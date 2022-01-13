@@ -2,7 +2,6 @@ package com.alex.common.util;
 
 import com.alex.common.consant.ResultCodeEnum;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +12,6 @@ import java.util.Map;
  * @Description 统一返回类
  */
 @Getter
-@Setter
 public class R {
 
 	/** 成功 */
@@ -31,7 +29,7 @@ public class R {
 	/** 返回消息 */
 	private String message;
 	/** 返回数据 */
-	private Map<String, Object> data = new HashMap<>(32);
+	private Map<String, Object> data = new HashMap<>(8);
 
 	private R(){}
 
@@ -83,9 +81,9 @@ public class R {
 	public R data(Map<String, Object> map) {
 		if(this.data.isEmpty()){
 			this.data = map;
-		}else {
-			this.data.putAll(map);
+			return this;
 		}
+		this.data.putAll(map);
 		return this;
 	}
 
