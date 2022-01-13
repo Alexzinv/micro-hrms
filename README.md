@@ -30,22 +30,22 @@
 
 ## 项目架构
 
-+ 技术: `Spring Boot` + `Spring Cloud` + `Spring Security` + `Nacos` + `Vue`+ `Mybatis-Plus` + `Mysql`  + `redis` + `zipkin` + `druid`
++ 技术: `Spring Boot` + `Spring Cloud` + `Spring Security` + `Nacos` + `Vue`+ `Mybatis-Plus` + `Mysql`  + `redis` + `zipkin` + `druid` + `sentinel`
 + <img src="https://markdown-alex.oss-cn-chengdu.aliyuncs.com/HRMS/HRMS系统架构.png" alt="hrms架构" style="zoom: 80%;" />
 
 + ```shell
   micro-hrms
   ├─db  项目SQL语句
   │
-  ├─common 公共模块
+  ├─hrms-common 公共模块
   │  ├─aspect 系统日志
   │  ├─exception 异常处理
   │  ├─validator 后台校验
   │  └─xss XSS过滤
   │ 
-  ├─config 配置信息
+  ├─hrms-system 配置信息
   │ 
-  ├─modules 功能模块
+  ├─hrms-thirdpart 功能模块
   │  ├─app API接口模块(APP调用)
   │  ├─job 定时任务模块
   │  ├─oss 文件服务模块
@@ -56,22 +56,54 @@
   ├──resources 
   │  ├─mapper SQL对应的XML文件
   │  └─static 静态资源
-  
   ```
 
 
 
-## 认证过程
+## 认证和校验
+
++ Security认证和授权
+  ```sequence
+    浏览器 -> 授权:输入账号密码，根据账号生成token, 并将{账号:权限}存入redis缓存
+    授权 -> 浏览器:返回授权token
+    浏览器 -> 网关:请求带上授权token
+    网关 -> 浏览器:校验token失败，返回错误信息
+    网关 -> 接口:校验token成功，调用接口
+    接口 -> 浏览器:返回接口数据
+  ```
+  
++ 网关全局过滤器校验流程
+
+  ```flow
+  s=>start: 前端请求
+  e=>end: 无需认证的接口
+  e1=>end: 认证后访问的接口
+  err=>end: 接口不允许外部访问
+  err1=>end: 没有token，校验失败
+  err2=>end: token无效或未登录
+  conw=>condition: 是否在白名单?
+  conb=>condition: 是否在黑名单?
+  contoken=>condition: 是否包含token?
+  opparse=>operation: 解析token得到key
+  conhaskey=>condition: redis是否有对应key
+  
+  s->conb
+  conb(yes)->err
+  conb(no)->conw
+  conw(yes)->e
+  conw(no)->contoken
+  contoken(yes)->opparse->conhaskey
+  contoken(no)->err1
+  conhaskey(yes)->e1
+  conhaskey(no)->err2
+  ```
+  
+  
 
 
 
 
-```sequence
-浏览器 -> 授权:输入账号密码，获取授权token, 并将权限存入缓存
-授权 -> 浏览器:返回授权token
-浏览器 -> 接口:请求带上授权token，调用接口
-接口 -> 浏览器:返回接口数据
-```
+
 
 ## 数据库设计
 
@@ -449,12 +481,10 @@
   @Getter
   @Setter
   public class R {
-  	/**
-  	 * 成功 */
+  	/** 成功 */
   	private static final int SUCCESS = 20000;
   	private static final String SUCCESS_MESSAGE = "操作成功";
-  	/**
-  	 * 失败 */
+  	/** 失败 */
   	private static final int ERROR = 20001;
   	private static final String ERROR_MESSAGE = "操作成功";
       
@@ -464,9 +494,7 @@
   	private Map<String, Object> data = new HashMap<>(32);
   
   	private R(){}
-  	/**
-  	 * 成功静态方法
-  	 * @return R */
+  	/** 成功静态方法 @return R */
   	public static R ok(){
   		R r = new R();
   		r.success = true;
@@ -474,9 +502,7 @@
   		r.message(SUCCESS_MESSAGE);
   		return r;
   	}
-  	/**
-  	 * 失败静态方法
-  	 * @return R */
+  	/** 失败静态方法 @return R */
   	public static R err(){
   		R r = new R();
   		r.success = false;
@@ -517,7 +543,28 @@
   }
   ```
   
++ ControllerAspect
+
+  ```ruby
+  /** @description 输出被调用的controller和方法名字和参数到日志 **/
+  @Slf4j
+  @Aspect
+  @Component
+  public class ControllerAspect {
   
+      @Pointcut("execution(* com.alex.*.controller.*.*(..))")
+      public void controllerMethod(){ }
+  
+      @Before("controllerMethod()")
+      public void before(JoinPoint joinPoint){
+          String className = joinPoint.getTarget().getClass().getName();
+          String methodName = joinPoint.getSignature().getName();
+          Object[] args = joinPoint.getArgs();
+          log.info("\n AspectJ --> className:" + className + " --> methodName: " +
+                  methodName + " --> args: " + Arrays.toString(args));
+      }
+  }
+  ```
   
 + 全局异常处理
 
@@ -534,7 +581,7 @@
   	public R handleValidException(MethodArgumentNotValidException e){
   		log.error("数据校验出现问题{}, 异常类型{}", e.getMessage(), e.getStackTrace());
   		BindingResult bindingResult = e.getBindingResult();
-  		Map<String, String> map = new HashMap<>(16);
+  		Map<String, String> map = new HashMap<>(4);
   	    bindingResult.getFieldErrors().forEach(r -> {
               map.put(r.getDefaultMessage(), r.getField());
   	    });
@@ -561,7 +608,192 @@
   	}
   }
   ```
+  
++ 编码生成工具
 
+  ```ruby
+  /** @description 编码生成工具 */
+  public abstract class CodePrefixUtils {
+      /** 获取最新编码, 根据具体服务实现 @return 最新编码 */
+      protected abstract String getLatestCode();
+  
+      /** 根据前缀生成编码 @param codePrefixEnum 编码前缀枚举 @return 编码 */
+      public synchronized String getCode(CodePrefixEnum codePrefixEnum) {
+          String codePrefix = codePrefixEnum.getPrefix();
+          String code = getLatestCode();
+          // 为空则是第一次添加，初始化，否则按最大值自增
+          if(code == null){
+              return codePrefix + CustomSerialGenerator.initCode();
+          }
+          String newCode = code.replace(codePrefix, "");
+          long value = Long.parseLong(newCode);
+          return codePrefix + ++value;
+      }
+  }
+  ```
+
++ seccurity主配置
+
+  ```ruby
+  /** 配置设置 @param http http请求 @throws Exception 异常 */
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+      http.exceptionHandling()
+      .authenticationEntryPoint(new UnauthorizedEntryPoint())
+      .and().csrf().disable()
+      .authorizeRequests()
+      .anyRequest().authenticated()
+      .and().logout().logoutUrl("/admin/acl/info/logout")
+      .addLogoutHandler(new TokenLogoutHandler(tokenManager,redisTemplate)).and()
+      .addFilter(new TokenLoginFilter(authenticationManager(), tokenManager, redisTemplate))
+      .addFilter(new TokenAuthenticationFilter(authenticationManager(),
+          tokenManager, redisTemplate)).httpBasic();
+      /// 一个用户只能创建一个Session，后登录挤掉先登录用户
+      http.sessionManagement()
+      .maximumSessions(1)
+      .expiredUrl("/admin/acl/login")
+      .maxSessionsPreventsLogin(false)
+      .expiredSessionStrategy(new CustomExpiredSessionStrategy());
+  }
+  ```
+
+  
+
+
++ 网关
+  ```ruby
+  /** @description 全局过滤器 **/
+  @Component
+  @Slf4j
+  public class AuthGlobalFilter implements GlobalFilter, Ordered {
+      private final RedisTemplate<String, Object> redisTemplate;
+      private final BlackList blackList;
+      private final WhiteList whiteList;
+  
+      @Autowired
+      public AuthGlobalFilter(RedisTemplate<String, Object> redisTemplate, BlackList blackList, WhiteList whiteList) {
+          this.redisTemplate = redisTemplate;
+          this.blackList = blackList;
+          this.whiteList = whiteList;
+      }
+  
+      @Override
+      public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+          ServerHttpRequest request = exchange.getRequest();
+          String path = request.getURI().getPath();
+          log.info("=================" + path);
+          // 白名单
+          if(AccessFilterUtils.match(path, whiteList.getWhiteList())){
+              return chain.filter(exchange);
+          }
+          // 禁止外部访问接口
+          if(AccessFilterUtils.match(path, blackList.getBlackList())){
+              return outResponse(exchange);
+          }
+          String token = getToken(request);
+          if(StringUtils.isBlank(token)) {
+              return outResponse(exchange);
+          }
+          if(!checkToken(token)){
+              return outResponse(exchange);
+          }
+          return chain.filter(exchange);
+      }
+  
+      @Override
+      public int getOrder() {
+          return 0;
+      }
+  
+      private Mono<Void> out(ServerHttpResponse response) {
+          R r = R.err().result(ResultCodeEnum.GATEWAY_AUTH_EXCEPTION);
+          byte[] bits = r.toString().getBytes(StandardCharsets.UTF_8);
+          DataBuffer buffer = response.bufferFactory().wrap(bits);
+          response.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
+          return response.writeWith(Mono.just(buffer));
+      }
+  
+      /** 获取请求token */
+      private String getToken(ServerHttpRequest request) {
+          String token = request.getHeaders().getFirst(TokenConstant.AUTHENTICATION);
+          // 如果前端设置了令牌前缀，则裁剪掉前缀
+          if (StringUtils.isNotEmpty(token) && token.startsWith(TokenConstant.PREFIX)) {
+              token = token.replaceFirst(TokenConstant.PREFIX, StringUtils.EMPTY);
+          }
+          return token;
+      }
+  
+      /** 验证token */
+      private boolean checkToken(String token) {
+          String s = Jwts.parser().setSigningKey(TokenConstant.SECRET).parseClaimsJws(token).getBody().getSubject();
+          Boolean hasKey = redisTemplate.hasKey(s);
+          return hasKey != null && hasKey;
+      }
+  
+      private Mono<Void> outResponse(ServerWebExchange exchange){
+          ServerHttpResponse response = exchange.getResponse();
+          return out(response);
+      }
+  }
+  ```
+  
+  ```ruby
+  /** @description 请求限流 */
+  @Configuration
+  public class SentinelRuleConfig {
+  
+      /** 配置限流过滤器 */
+      @Bean
+      @Order(-1)
+      public GlobalFilter sentinelGatewayFilter() {
+          return new SentinelGatewayFilter();
+      }
+  
+      @PostConstruct
+      public void doInit() {
+          initCustomizedApis();
+          initGatewayRules();
+      }
+  
+      /** 网关限流规则 */
+      private void initGatewayRules() {
+          Set<GatewayFlowRule> rules = new HashSet<>();
+          rules.add(new GatewayFlowRule("hrms-system")
+                  // 限流阈值
+                  .setCount(6)
+                  // 时间间隔，单位是秒，默认是 1 秒
+                  .setIntervalSec(2)
+          );
+          rules.add(new GatewayFlowRule("hrms-company")
+                  .setCount(4)
+                  .setIntervalSec(2)
+          );
+          // 加载网关限流规则
+          GatewayRuleManager.loadRules(rules);
+      }
+  
+      /** 网关分组限流 */
+      private void initCustomizedApis() {
+          Set<ApiDefinition> definitions = new HashSet<>();
+          ApiDefinition api1 = new ApiDefinition("hrms-system").setPredicateItems(
+                  new HashSet<>() {{
+                      add(new ApiPathPredicateItem().setPattern("/admin/acl/permission/listAll"));
+                      add(new ApiPathPredicateItem().setPattern("/admin/acl/role/**"));
+                  }});
+  
+          ApiDefinition api2 = new ApiDefinition("hrms-company").setPredicateItems(
+                  new HashSet<>() {{
+                      add(new ApiPathPredicateItem().setPattern("/company/company/listPage/**"));
+                      add(new ApiPathPredicateItem().setPattern("/company/department/list/**"));
+                      add(new ApiPathPredicateItem().setPattern("/company/position/listPage/**"));
+                  }});
+          definitions.add(api1);
+          definitions.add(api2);
+          GatewayApiDefinitionManager.loadApiDefinitions(definitions);
+      }
+  }
+  ```
+  
   
 
 ## 功能截图
