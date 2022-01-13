@@ -22,8 +22,9 @@ import reactor.core.publisher.Mono;
 import java.nio.charset.StandardCharsets;
 
 /**
- * @Author _
- * @Description
+ * @author _Alexzinv_
+ * @date 2022/1/10
+ * @description 网关全局过滤器 校验token
  */
 @Component
 @Slf4j
