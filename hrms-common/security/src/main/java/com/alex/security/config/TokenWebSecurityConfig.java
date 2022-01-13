@@ -2,6 +2,7 @@ package com.alex.security.config;
 
 import com.alex.security.filter.TokenAuthenticationFilter;
 import com.alex.security.filter.TokenLoginFilter;
+import com.alex.security.security.CustomExpiredSessionStrategy;
 import com.alex.security.security.TokenLogoutHandler;
 import com.alex.security.security.TokenManager;
 import com.alex.security.security.UnauthorizedEntryPoint;
@@ -68,14 +69,13 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new TokenAuthenticationFilter(authenticationManager(),
                         tokenManager, redisTemplate)).httpBasic();
 
-        /// 一个用户只能创建一个Session
-        // http.sessionManagement().maximumSessions(1).expiredUrl("/login");
+        /// 一个用户只能创建一个Session，后登录挤掉先登录用户
+        http.sessionManagement()
+                .maximumSessions(1)
+                .expiredUrl("/admin/acl/login")
+                .maxSessionsPreventsLogin(false)
+                .expiredSessionStrategy(new CustomExpiredSessionStrategy());
     }
-
-    // @Override
-    // protected void configure(HttpSecurity http) throws Exception {
-    //     http.authorizeRequests().anyRequest().permitAll().and().logout().permitAll();
-    // }
 
     /**
      * 密码处理
@@ -95,8 +95,7 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) {
         web.ignoring().antMatchers("/api/**",
                 "/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**",
-                "/admin/acl/kaptcha/**", "/druid/stat"
+                "/admin/acl/kaptcha/**", "/druid/**"
         );
-        // web.ignoring().antMatchers("/**");
     }
 }
