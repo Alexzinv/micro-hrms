@@ -11,7 +11,7 @@ import java.util.Date;
  * @Author _Alexzinv_
  * @Date 2021/9/23
  * @Description mybatis在插入和更新时自动填充时间
- * TODO 日期优化为LocalDate
+ *
  */
 @Component
 public class MyMetaObjectHandler implements MetaObjectHandler {

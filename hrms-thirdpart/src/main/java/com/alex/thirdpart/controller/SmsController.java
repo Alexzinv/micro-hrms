@@ -39,7 +39,7 @@ public class SmsController {
         // 生成随机验证码
         code = RandNumUtil.getFourNumRandom();
 
-        /// FIXME 因管控，短信服务暂时无法开通, 需要手动从redis读取
+        /// 因管控，短信服务暂时无法开通, 需要手动从redis读取
         // Map<String, String> map = new HashMap<>(16);
         // map.put("code", code);
 

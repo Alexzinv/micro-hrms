@@ -60,7 +60,7 @@ public class MessageController {
         if(isEmail){
             mailService.send(username, code);
         }else {
-            /// FIXME 发短信（因管控，短信服务暂时无法开通, 将直接放入redis，需要手动从redis读取）
+            ///发短信（因管控，短信服务暂时无法开通, 将直接放入redis，需要手动从redis读取）
             // HashMap<String, Object> map = new HashMap<>(16);
             // map.put("code", code);
             // smsService.send(map, username);
