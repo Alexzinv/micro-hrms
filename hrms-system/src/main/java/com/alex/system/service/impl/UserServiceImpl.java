@@ -1,6 +1,7 @@
 package com.alex.system.service.impl;
 
 
+import com.alex.common.base.BaseQuery;
 import com.alex.common.bean.member.UserCompanyTo;
 import com.alex.common.bean.member.UserPersonalInfoTo;
 import com.alex.common.consant.UserConstant;
@@ -17,11 +18,8 @@ import com.alex.system.service.UserRoleService;
 import com.alex.system.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.seata.spring.annotation.GlobalTransactional;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -44,16 +42,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final MemberClient memberClient;
 
-    /**
-     * 默认头像
-     */
-    private static final String DEFAULT_AVATAR = "https://dev-alex.oss-cn-chengdu.aliyuncs.com/2021-11-24/e4178477-0581-49ef-866b-3b4f758d892c_-666b9fd64787c58a.jpg";
+    /** 默认头像 */
+    private static final String DEFAULT_AVATAR = "https://dev-alex.oss-cn-chengdu.aliyuncs.com" +
+            "/2021-11-24/e4178477-0581-49ef-866b-3b4f758d892c_-666b9fd64787c58a.jpg";
 
     @Autowired
-    public UserServiceImpl(RedisTemplate<String, Object> redisTemplate,
-                           UserRoleService userRoleService,
-                           BCryptPasswordEncoder bCryptPasswordEncoder,
-                           MemberClient memberClient) {
+    public UserServiceImpl(RedisTemplate<String, Object> redisTemplate, UserRoleService userRoleService,
+                           BCryptPasswordEncoder bCryptPasswordEncoder, MemberClient memberClient) {
         this.redisTemplate = redisTemplate;
         this.userRoleService = userRoleService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -101,27 +96,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public Page<User> listPage(Integer current, Integer limit, UserQueryVO userQuery) {
-        Page<User> page = new Page<>(current, limit);
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
+    public void buildCondition(LambdaQueryWrapper<User> wrapper, BaseQuery query) {
+        if(query == null){
+            return;
+        }
 
-        if(userQuery != null){
+        if(query instanceof UserQueryVO){
+            UserQueryVO userQuery = (UserQueryVO) query;
             String name = userQuery.getName();
             Integer enableState = userQuery.getEnableState();
             Long companyId = userQuery.getCompanyId();
             Integer level = userQuery.getLevel();
 
-            // TODO 前端
             if(StringUtils.hasText(name)){
-                wrapper.and(item -> item.eq("username", name).or()
-                        .like("nickname", name)
+                wrapper.and(item -> item.eq(User::getUsername, name).or()
+                        .like(User::getNickname, name)
                 );
             }
-            wrapper.ge(enableState != null, "enable_status", enableState)
-                    .ge(companyId != null, "company_id", companyId)
-                    .ge(level != null, "level", level);
+            wrapper.ge(enableState != null, User::getEnableState, enableState)
+                    .ge(companyId != null, User::getCompanyId, companyId)
+                    .ge(level != null, User::getLevel, level);
         }
-        return baseMapper.selectPage(page, wrapper);
     }
 
     @GlobalTransactional(rollbackFor = Exception.class)
@@ -156,11 +151,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public void updateUser(User user) {
         if(user.getUsername() != null){
-            User localUser = getById(user.getId());
             // 用户账号不允许更改
-            if(localUser != null){
-                user.setUsername(localUser.getUsername());
-            }
+            user.setUsername(null);
         }
 
         if(StringUtils.hasText(user.getPassword())){

@@ -1,18 +1,16 @@
 package com.alex.system.service;
 
+import com.alex.common.base.BaseService;
 import com.alex.system.dto.ForgetPasswordVO;
 import com.alex.system.dto.RegisterVO;
-import com.alex.system.dto.UserQueryVO;
 import com.alex.system.entity.User;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * @Author _Alexzinv_
  * @Date 2021/9/22
  * @Description
  */
-public interface UserService extends IService<User> {
+public interface UserService extends BaseService<User> {
 
     /**
      * 根据账号查询
@@ -26,15 +24,6 @@ public interface UserService extends IService<User> {
      * @param register 注册信息
      */
     void register(RegisterVO register);
-
-    /**
-     * 多条件分页查询用户信息
-     * @param current 当前页
-     * @param limit 每页数量
-     * @param userQuery 查询条件
-     * @return 符合条件的用户
-     */
-    Page<User> listPage(Integer current, Integer limit, UserQueryVO userQuery);
 
     /**
      * 新增用户,并保存信息到关联表，扩展表
