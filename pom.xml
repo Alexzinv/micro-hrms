@@ -20,6 +20,7 @@
         <module>hrms-statistic</module>
         <module>hrms-performance</module>
         <module>hrms-salary</module>
+        <module>druid-admin</module>
     </modules>
 
 

@@ -30,7 +30,7 @@
 
 ## 项目架构
 
-+ 关键技术: `Spring Boot` + `Spring Cloud` + `Spring Security` + `Nacos` + `Vue`+ `Mybatis-Plus` + `Mysql`  + `redis`
++ 技术: `Spring Boot` + `Spring Cloud` + `Spring Security` + `Nacos` + `Vue`+ `Mybatis-Plus` + `Mysql`  + `redis` + `zipkin` + `druid`
 + <img src="https://markdown-alex.oss-cn-chengdu.aliyuncs.com/HRMS/HRMS系统架构.png" alt="hrms架构" style="zoom: 80%;" />
 
 + ```shell
@@ -265,7 +265,8 @@
   ```mysql
   -- 薪酬
   CREATE TABLE `sa_salary_common` (
-      `id`              bigint unsigned        not null primary key comment '企业ID',
+      `id`              bigint unsigned        not null primary key comment '企ID',
+      `company_id`      bigint unsigned        null comment '企业ID',
       `lunch_salary`    decimal(11, 6)         null comment '午餐补助',
       `traffic_salary`  decimal(11, 6)         null comment '交通补助',
       `pension_base`    decimal(11, 6)         null comment '养老金基数',
