@@ -6,7 +6,6 @@ import com.alex.common.util.R;
 import com.alex.common.valid.group.AddGroup;
 import com.alex.common.valid.group.QueryGroup;
 import com.alex.common.valid.group.UpdateGroup;
-import com.alex.common.valid.group.UpdateStatusGroup;
 import com.alex.member.dto.UserCompanyQuery;
 import com.alex.member.dto.UserCompanySaveUpdateTo;
 import com.alex.member.dto.UserCompanyVO;
@@ -21,9 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * <p>
  * user公司扩展表 前端控制器
- * </p>
  *
  * @author _Alexzinv_
  * @since 2021-12-02
@@ -68,10 +65,8 @@ public class UserCompanyController {
         return update ? R.ok() : R.err().message("更新失败");
     }
 
-    /**
-     * 该接口只提供RPC调用
-      */
-    @PostMapping("/updateDepartmentPosition")
+    /** 人员部门岗位信息，跟随部门和岗位同步更新 该接口只能内部服务调用 */
+    @PostMapping("/inner/updateDepartmentPosition")
     public R updateUserCompanyDepartmentPosition(@RequestBody UserCompanyDepartmentPositionTo to){
         userCompanyService.updateUserCompanyDepartmentPosition(to);
         return R.ok();
@@ -83,9 +78,7 @@ public class UserCompanyController {
         return R.ok();
     }
 
-    /**
-     * 查询人员以供关联选择
-     */
+    /** 查询人员以供关联选择 部门主管 */
     @GetMapping("listMembers/{companyId}")
     public R listMembers(@PathVariable("companyId") Long companyId){
         List<UserCompanyVO> userCompanyVOList = userCompanyService.listMembers(companyId);

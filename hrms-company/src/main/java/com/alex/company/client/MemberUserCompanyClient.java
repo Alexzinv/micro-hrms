@@ -21,6 +21,6 @@ public interface MemberUserCompanyClient {
      * @param to 部门岗位数据
      * @return 操作结果
      */
-    @PostMapping("/updateDepartmentPosition")
+    @PostMapping("/member/userCompany/inner/updateDepartmentPosition")
     R updateUserCompanyDepartmentPosition(@RequestBody UserCompanyDepartmentPositionTo to);
 }
