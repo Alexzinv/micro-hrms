@@ -3,6 +3,8 @@ package com.alex.system.controller;
 
 import com.alex.common.valid.group.AddGroup;
 import com.alex.common.valid.group.UpdateGroup;
+import com.alex.system.dto.RoleVO;
+import com.alex.system.dto.stuct.RoleStruct;
 import com.alex.system.entity.Role;
 import com.alex.system.service.RoleService;
 import com.alex.common.util.R;
@@ -66,6 +68,14 @@ public class RoleController {
     public R batchRemove(@RequestBody List<Long> idList) {
         roleService.removeByIds(idList);
         return R.ok();
+    }
+
+    /** 供建立关联查询使用 */
+    @GetMapping("listRole")
+    public R listRole(){
+        List<Role> list = roleService.list();
+        List<RoleVO> roleVOList = RoleStruct.INSTANCE.toRoleVOList(list);
+        return R.ok().data("list", roleVOList);
     }
 
 }
