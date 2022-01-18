@@ -32,4 +32,14 @@ public class MemberDegradeService extends BaseClient implements MemberClient {
     public R savePersonalInfo(UserPersonalInfoTo to) {
         return RESULT;
     }
+
+    @Override
+    public R updateUserCompany(UserCompanyTo to) {
+        return RESULT;
+    }
+
+    @Override
+    public R updatePersonalInfo(UserPersonalInfoTo to) {
+        return RESULT;
+    }
 }

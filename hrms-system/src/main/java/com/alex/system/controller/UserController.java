@@ -69,7 +69,7 @@ public class UserController {
     @Transactional(rollbackFor = Exception.class)
     @PostMapping("save")
     public R save(@Validated({AddGroup.class}) @RequestBody UserVO vo) {
-        List<Long> roleIds = vo.getRoleIds();
+        List<Long> roleIds = vo.getRoleIdList();
         User user = UserStruct.INSTANCE.voToEntity(vo);
         userService.saveUser(user);
         if(!CollectionUtils.isEmpty(roleIds)){
@@ -89,9 +89,10 @@ public class UserController {
     }
 
     @ApiOperation(value = "修改用户")
+    @Transactional(rollbackFor = Exception.class)
     @PutMapping("update")
     public R updateById(@Validated({UpdateGroup.class}) @RequestBody UserVO vo) {
-        List<Long> roleIds = vo.getRoleIds();
+        List<Long> roleIds = vo.getRoleIdList();
         User user = UserStruct.INSTANCE.voToEntity(vo);
         userService.updateUser(user);
         if(!CollectionUtils.isEmpty(roleIds)){
@@ -125,7 +126,7 @@ public class UserController {
     @PostMapping("state")
     public R updateState(@Validated({UpdateStatusGroup.class}) @RequestBody UserStateTo to){
         User user = UserStruct.INSTANCE.userStateToEntity(to);
-        userService.removeById(user);
+        userService.updateById(user);
         return R.ok();
     }
 

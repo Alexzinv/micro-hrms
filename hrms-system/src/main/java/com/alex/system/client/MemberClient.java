@@ -48,6 +48,23 @@ public interface MemberClient {
      * @param to 数据对象
      * @return 操作状态
      */
-    @PostMapping("/save")
+    @PostMapping("/member/userPersonalInfo/save")
     R savePersonalInfo(@RequestBody UserPersonalInfoTo to);
+
+
+    /**
+     * 更新用户公司岗位相关信息
+     * @param to 数据对象
+     * @return 操作状态
+     */
+    @PostMapping("/member/userCompany/update")
+    R updateUserCompany(@RequestBody UserCompanyTo to);
+
+    /**
+     * 更新用户个人资历信息
+     * @param to 数据对象
+     * @return 操作状态
+     */
+    @PostMapping("/member/userPersonalInfo/update")
+    R updatePersonalInfo(@RequestBody UserPersonalInfoTo to);
 }

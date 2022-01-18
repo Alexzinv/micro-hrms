@@ -29,7 +29,7 @@ public class GlobalTransactionalAop {
         if (globalTransaction == null) {
             return;
         }
-        log.info("AOP------- 全局事务调用 -----xid:{} ------》", globalTransaction.getXid());
+        log.info("AOP------- 全局事务调用 -----xid:{} ------", globalTransaction.getXid());
     }
 
     @AfterThrowing(throwing = "throwable", pointcut = "txAnnotation()")
@@ -39,7 +39,7 @@ public class GlobalTransactionalAop {
             return;
         }
 
-        log.warn("AOP------- 全局事务回滚 -----xid:{}------》", globalTransaction.getXid());
+        log.warn("AOP------- 全局事务回滚 -----xid:{} ------", globalTransaction.getXid());
         try {
             globalTransaction.rollback();
         } catch (TransactionException e) {

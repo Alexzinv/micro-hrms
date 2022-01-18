@@ -153,8 +153,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         memberClient.savePersonalInfo(infoTo);
     }
 
+    @GlobalTransactional(rollbackFor = Exception.class)
     @Override
     public void updateUser(User user) {
+         /*
+         - 分别更新，用同一id
+          1.本地用户表
+          2.用户信息扩展表
+          3.公司用户信息表
+         */
         if(user.getUsername() != null){
             // 用户账号不允许更改
             user.setUsername(null);
@@ -163,7 +170,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if(StringUtils.hasText(user.getPassword())){
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         }
-        baseMapper.updateById(user);
+        super.updateById(user);
+        UserCompanyTo userCompanyTo = UserExtensionStruct.INSTANCE.toUserCompany(user);
+        memberClient.updateUserCompany(userCompanyTo);
+        UserPersonalInfoTo infoTo = new UserPersonalInfoTo();
+        infoTo.setId(user.getId());
+        infoTo.setName(user.getNickname());
+        memberClient.updatePersonalInfo(infoTo);
     }
 
     @GlobalTransactional(rollbackFor = Exception.class)

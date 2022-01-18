@@ -43,8 +43,8 @@ public interface UserStruct {
     /**
      * 实体类转vo
      * @param user 用户实体类
-     * @param roleIds 关联角色列表
+     * @param roleIdList 关联角色列表
      * @return vo
      */
-    UserVO entityToVO(User user, List<Long> roleIds);
+    UserVO entityToVO(User user, List<Long> roleIdList);
 }

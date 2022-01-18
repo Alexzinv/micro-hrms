@@ -12,9 +12,6 @@ import com.alex.system.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -23,7 +20,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service("permissionService")
-@CacheConfig(cacheNames = "permissions")
 public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permission> implements PermissionService {
 
     @Autowired
@@ -39,7 +35,6 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         return buildMap(allData);
     }
 
-    @Cacheable
     @Override
     public List<Permission> listAllPermission() {
         // 查询所有数据

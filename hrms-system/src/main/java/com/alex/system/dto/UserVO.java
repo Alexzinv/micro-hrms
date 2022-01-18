@@ -58,12 +58,5 @@ public class UserVO implements Serializable {
 	@ListValue(values = {1, 2, 3}, groups = {AddGroup.class, UpdateGroup.class})
 	private Integer level;
 	/** 关联角色id */
-	private List<Long> roleIds;
-	/** 创建时间 */
-	@TableField(fill = FieldFill.INSERT)
-	private Date createTime;
-	/** 更新时间 */
-	@TableField(fill = FieldFill.INSERT_UPDATE)
-	private Date updateTime;
-
+	private List<Long> roleIdList;
 }

@@ -1,6 +1,7 @@
 package com.alex.system.controller;
 
 import com.alex.common.consant.PermissionConstant;
+import com.alex.common.util.R;
 import com.alex.common.valid.group.AddGroup;
 import com.alex.common.valid.group.UpdateGroup;
 import com.alex.common.valid.group.UpdateStatusGroup;
@@ -9,12 +10,8 @@ import com.alex.system.dto.stuct.PermissionStruct;
 import com.alex.system.entity.Permission;
 import com.alex.system.service.PermissionService;
 import com.alex.system.service.RolePermissionService;
-
-import com.alex.common.util.R;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +25,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/admin/acl/permission")
-@CacheConfig(cacheNames = "permissions")
 public class PermissionController {
     @Autowired
     private PermissionService permissionService;
@@ -79,7 +75,6 @@ public class PermissionController {
     }
 
     @ApiOperation(value = "修改")
-    @CachePut
     @PutMapping("update")
     public R updateById(@Validated({UpdateGroup.class}) @RequestBody Permission permission) {
         permissionService.updateById(permission);
