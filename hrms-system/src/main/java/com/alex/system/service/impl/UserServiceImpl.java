@@ -129,11 +129,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
           3.公司用户信息表
          */
         String username = user.getUsername();
+        Integer enableState = user.getEnableState();
         if(isExist(username)){
             throw new HRMSException(20001, "账号已存在");
         }
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setEnableState(UserConstant.EnableState.ENABLE);
+        if(enableState == null){
+            user.setEnableState(UserConstant.EnableState.ENABLE);
+        }
         super.save(user);
 
         // 查询获取用户id及其他信息

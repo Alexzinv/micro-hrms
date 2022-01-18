@@ -3,6 +3,7 @@ package com.alex.system.service.impl;
 import com.alex.system.entity.UserRole;
 import com.alex.system.mapper.UserRoleMapper;
 import com.alex.system.service.UserRoleService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,6 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
         }
         baseMapper.delete(new QueryWrapper<UserRole>().eq("user_id", userId));
 
-        List<UserRole> userRoleList = new ArrayList<>();
         for(Long roleId : roleIds) {
             if(roleId == null || roleId.equals(0L)) {
                 continue;
@@ -37,8 +37,12 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
             UserRole userRole = new UserRole();
             userRole.setUserId(userId);
             userRole.setRoleId(roleId);
-            userRoleList.add(userRole);
+            super.save(userRole);
         }
-        saveBatch(userRoleList);
+    }
+
+    @Override
+    public List<Long> listRoleIdsByUserId(Long userId) {
+        return baseMapper.selectIdsByUserId(userId);
     }
 }

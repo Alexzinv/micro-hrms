@@ -4,10 +4,7 @@ import com.alex.common.util.R;
 import com.alex.common.valid.group.AddGroup;
 import com.alex.common.valid.group.UpdateGroup;
 import com.alex.common.valid.group.UpdateStatusGroup;
-import com.alex.system.dto.ForgetPasswordVO;
-import com.alex.system.dto.RegisterVO;
-import com.alex.system.dto.UserQueryVO;
-import com.alex.system.dto.UserStateTo;
+import com.alex.system.dto.*;
 import com.alex.system.dto.stuct.UserStruct;
 import com.alex.system.entity.User;
 import com.alex.system.service.RoleService;
@@ -17,6 +14,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.ApiOperation;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,9 +66,16 @@ public class UserController {
     }
 
     @ApiOperation(value = "管理员新增用户")
+    @Transactional(rollbackFor = Exception.class)
     @PostMapping("save")
-    public R save(@Validated({AddGroup.class}) @RequestBody User user) {
+    public R save(@Validated({AddGroup.class}) @RequestBody UserVO vo) {
+        List<Long> roleIds = vo.getRoleIds();
+        User user = UserStruct.INSTANCE.voToEntity(vo);
         userService.saveUser(user);
+        if(!CollectionUtils.isEmpty(roleIds)){
+            User userByUsername = userService.getUserByUsername(user.getUsername());
+            userRoleService.saveUserRoleRelation(userByUsername.getId(), roleIds);
+        }
         return R.ok();
     }
 
@@ -77,13 +83,20 @@ public class UserController {
     @GetMapping("get/{id}")
     public R get(@PathVariable Long id) {
         User user = userService.getById(id);
-        return R.ok().data("data", user);
+        List<Long> roleIds = userRoleService.listRoleIdsByUserId(user.getId());
+        UserVO userVO = UserStruct.INSTANCE.entityToVO(user, roleIds);
+        return R.ok().data("data", userVO);
     }
 
     @ApiOperation(value = "修改用户")
     @PutMapping("update")
-    public R updateById(@Validated({UpdateGroup.class}) @RequestBody User user) {
+    public R updateById(@Validated({UpdateGroup.class}) @RequestBody UserVO vo) {
+        List<Long> roleIds = vo.getRoleIds();
+        User user = UserStruct.INSTANCE.voToEntity(vo);
         userService.updateUser(user);
+        if(!CollectionUtils.isEmpty(roleIds)){
+            userRoleService.saveUserRoleRelation(user.getId(), roleIds);
+        }
         return R.ok();
     }
 

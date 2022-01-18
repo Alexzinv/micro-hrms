@@ -20,5 +20,12 @@ public interface UserRoleService extends IService<UserRole> {
      * @param roleIds 角色列表
      */
     void saveUserRoleRelation(Long userId, List<Long> roleIds);
+
+    /**
+     * 根据用户id查询角色id列表
+     * @param userId 用户id
+     * @return 角色列表
+     */
+    List<Long> listRoleIdsByUserId(Long userId);
 }
 

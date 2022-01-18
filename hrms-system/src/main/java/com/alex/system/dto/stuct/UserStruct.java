@@ -2,9 +2,12 @@ package com.alex.system.dto.stuct;
 
 import com.alex.security.entity.LoginUser;
 import com.alex.system.dto.UserStateTo;
+import com.alex.system.dto.UserVO;
 import com.alex.system.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+
+import java.util.List;
 
 /**
  * @Author _Alexzinv_
@@ -29,4 +32,19 @@ public interface UserStruct {
      * @return 实体类
      */
     User userStateToEntity(UserStateTo to);
+
+    /**
+     * 用户vo对象转实体类
+     * @param vo 视图对象
+     * @return 实体类
+     */
+    User voToEntity(UserVO vo);
+
+    /**
+     * 实体类转vo
+     * @param user 用户实体类
+     * @param roleIds 关联角色列表
+     * @return vo
+     */
+    UserVO entityToVO(User user, List<Long> roleIds);
 }
