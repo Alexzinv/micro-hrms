@@ -24,8 +24,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Objects;
 
 
@@ -162,6 +164,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         }
         baseMapper.updateById(user);
+    }
+
+    @GlobalTransactional(rollbackFor = Exception.class)
+    @Override
+    public void removeByUserIds(List<Long> idList) {
+        if(!CollectionUtils.isEmpty(idList)){
+            idList.forEach(this::removeUser);
+        }
     }
 
     /**

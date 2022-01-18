@@ -5,6 +5,8 @@ import com.alex.system.dto.ForgetPasswordVO;
 import com.alex.system.dto.RegisterVO;
 import com.alex.system.entity.User;
 
+import java.util.List;
+
 /**
  * @Author _Alexzinv_
  * @Date 2021/9/22
@@ -49,5 +51,11 @@ public interface UserService extends BaseService<User> {
      * @return 操作结果
      */
     boolean restorePassword(ForgetPasswordVO vo);
+
+    /**
+     * 根据id列表批量删除
+     * @param idList id列表
+     */
+    void removeByUserIds(List<Long> idList);
 }
 

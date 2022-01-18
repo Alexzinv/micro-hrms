@@ -100,17 +100,10 @@ public class UserController {
         return R.ok();
     }
 
-    @ApiOperation(value = "关联删除用户，包括扩展表")
-    @DeleteMapping("remove/{id}")
-    public R remove(@PathVariable Long id) {
-        userService.removeUser(id);
-        return R.ok();
-    }
-
     @ApiOperation(value = "根据id列表删除用户")
     @DeleteMapping("batchRemove")
     public R batchRemove(@RequestBody List<Long> idList) {
-        userService.removeByIds(idList);
+        userService.removeByUserIds(idList);
         return R.ok();
     }
 
