@@ -71,9 +71,7 @@ public class CompanyController {
         return R.ok();
     }
 
-    /**
-     * 修改审核状态
-     */
+    /** 修改审核状态 */
     @PostMapping("/check")
     public R checkCompany(@Validated({UpdateStatusGroup.class}) @RequestBody CompanyCheckVO vo){
         Company company = CompanyStruct.INSTANCE.checkVoToEntity(vo);
@@ -81,9 +79,7 @@ public class CompanyController {
         return R.ok();
     }
 
-    /**
-     * 修改启用状态
-     */
+    /** 修改启用状态 */
     @PostMapping("/state")
     public R stateCompany(@Validated({UpdateStatusGroup.class}) @RequestBody CompanyStateVO vo){
         Company company = CompanyStruct.INSTANCE.stateVoToEntity(vo);

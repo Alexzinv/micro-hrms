@@ -10,7 +10,6 @@ import com.alex.company.mapper.CompanyMapper;
 import com.alex.company.service.CompanyService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -21,7 +20,6 @@ import java.util.Date;
  * @author _Alexzinv_
  * @since 2021-11-06
  */
-@CacheConfig(cacheNames = "co-company")
 @Service
 public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> implements CompanyService {
 
