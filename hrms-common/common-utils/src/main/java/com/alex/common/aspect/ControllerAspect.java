@@ -27,8 +27,8 @@ public class ControllerAspect {
         String className = joinPoint.getTarget().getClass().getName();
         String methodName = joinPoint.getSignature().getName();
         Object[] args = joinPoint.getArgs();
-        log.info("\n AspectJ --> className:" + className + " --> methodName: " +
-                methodName + " --> args: " + Arrays.toString(args));
+        log.info("\n AspectJ => " + className + "#" +
+                methodName + "() => args: " + Arrays.toString(args));
     }
 
 }
