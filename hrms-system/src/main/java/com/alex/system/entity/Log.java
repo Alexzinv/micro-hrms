@@ -24,10 +24,8 @@ public class Log implements Serializable {
 	@TableId
 	private Long id;
 	/** 用户名 */
-	@NotBlank(groups = {AddGroup.class})
 	private String username;
 	/** 用户操作 */
-	@NotBlank(groups = {AddGroup.class})
 	private String operation;
 	/** 请求方法 */
 	private String method;
@@ -36,7 +34,6 @@ public class Log implements Serializable {
 	/** 执行时长(毫秒) */
 	private Long time;
 	/** IP地址 */
-	@NotBlank(groups = {AddGroup.class})
 	private String ip;
 	/** 创建时间 */
 	private Date createDate;

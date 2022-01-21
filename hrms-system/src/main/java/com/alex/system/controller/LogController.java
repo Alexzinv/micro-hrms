@@ -35,12 +35,6 @@ public class LogController {
         return R.ok().data("records", result.getRecords()).data("total", result.getTotal());
     }
 
-    @PostMapping("save")
-    public R saveLog(@Validated({AddGroup.class}) @RequestBody Log log){
-        logService.save(log);
-        return R.ok();
-    }
-
     @DeleteMapping("delete")
     public R removeLogBatch(List<Long> ids){
         logService.removeByIds(ids);
