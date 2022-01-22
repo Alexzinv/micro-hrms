@@ -1,7 +1,9 @@
 package com.alex.system.service.impl;
 
+import com.alex.common.base.BaseQuery;
 import com.alex.common.consant.CodePrefixEnum;
 import com.alex.common.util.CodePrefixUtils;
+import com.alex.system.dto.RoleQuery;
 import com.alex.system.entity.Role;
 import com.alex.system.entity.RolePermission;
 import com.alex.system.entity.UserRole;
@@ -9,8 +11,8 @@ import com.alex.system.mapper.RoleMapper;
 import com.alex.system.service.RolePermissionService;
 import com.alex.system.service.RoleService;
 import com.alex.system.service.UserRoleService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,13 +45,14 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public Page<Role> listPage(Long page, Long limit, Role role) {
-        Page<Role> pageParam = new Page<>(page, limit);
-        QueryWrapper<Role> wrapper = new QueryWrapper<>();
-        if(StringUtils.hasText(role.getRoleName())) {
-            wrapper.like("role_name",role.getRoleName());
+    public void buildCondition(LambdaQueryWrapper<Role> wrapper, BaseQuery query) {
+        if(query instanceof RoleQuery){
+            RoleQuery condition = (RoleQuery) query;
+            String roleNameOrCode = condition.getRoleNameOrCode();
+            if(StringUtils.hasText(roleNameOrCode)){
+                wrapper.like(Role::getRoleName, roleNameOrCode).or().like(Role::getRoleCode, roleNameOrCode);
+            }
         }
-        return baseMapper.selectPage(pageParam,wrapper);
     }
 
     @Override
@@ -84,7 +87,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             }
         }
 
-        Map<String, Object> roleMap = new HashMap<>(32);
+        Map<String, Object> roleMap = new HashMap<>(4);
         roleMap.put("assignRoles", assignRoles);
         roleMap.put("allRolesList", allRolesList);
         return roleMap;

@@ -3,6 +3,8 @@ package com.alex.system.controller;
 
 import com.alex.common.valid.group.AddGroup;
 import com.alex.common.valid.group.UpdateGroup;
+import com.alex.system.annotation.SysLog;
+import com.alex.system.dto.RoleQuery;
 import com.alex.system.dto.RoleVO;
 import com.alex.system.dto.stuct.RoleStruct;
 import com.alex.system.entity.Role;
@@ -29,9 +31,10 @@ public class RoleController {
     private RoleService roleService;
 
     @ApiOperation(value = "获取角色分页列表")
-    @GetMapping("{page}/{limit}")
-    public R index(@PathVariable("page") Long page, @PathVariable("limit") Long limit, Role role) {
-        Page<Role> result = roleService.listPage(page, limit, role);
+    @PostMapping("{page}/{limit}")
+    public R index(@PathVariable("page") Integer page, @PathVariable("limit") Integer limit,
+                   @RequestBody(required = false) RoleQuery roleQuery) {
+        Page<Role> result = roleService.listPage(page, limit, roleQuery);
         return R.ok().data("records", result.getRecords()).data("total", result.getTotal());
     }
 
@@ -42,7 +45,9 @@ public class RoleController {
         return R.ok().data("data", role);
     }
 
+
     @ApiOperation(value = "新增角色")
+    @SysLog(value = "新增角色")
     @PostMapping("save")
     public R save(@Validated({AddGroup.class}) @RequestBody Role role) {
         roleService.save(role);
@@ -50,6 +55,7 @@ public class RoleController {
     }
 
     @ApiOperation(value = "修改角色")
+    @SysLog(value = "修改角色")
     @PutMapping("update")
     public R updateById(@Validated({UpdateGroup.class}) @RequestBody Role role) {
         roleService.updateById(role);
@@ -57,6 +63,7 @@ public class RoleController {
     }
 
     @ApiOperation(value = "删除角色")
+    @SysLog(value = "删除角色")
     @DeleteMapping("remove/{id}")
     public R remove(@PathVariable Long id) {
         roleService.removeRole(id);
@@ -64,6 +71,7 @@ public class RoleController {
     }
 
     @ApiOperation(value = "根据id列表删除角色")
+    @SysLog(value = "删除角色")
     @DeleteMapping("batchRemove")
     public R batchRemove(@RequestBody List<Long> idList) {
         roleService.removeByIds(idList);
