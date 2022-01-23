@@ -4,7 +4,7 @@
 
 ## 需求分析
 
-本项目旨在实现一个泛用的、鲁棒性强的面向大型企业或组织在高人力管理成本、分配调度难度大情况下的人力资源管理系统。首先对于一个大型组织在面对较多人数的情况下进行统一的合规管理或是指标统计、以及绩效考核等要能发挥协助的作用，并且要能够降低人力资源管理的难度和投入成本，帮助组织提高运行效率并把关注点放到其他相对关键的事务上，更加合理的配置资源。该人力资源系统应该有的功能，包括但不限于人员信息录入、信息修改及删除、绩效管理、权限控制、统计分析等等；系统架构设计，包括包的依赖传递管理，根据不同功能点进行模块划分，各个业务相关的服务之间可以基于生产者消费者模型进行调用。此外，多个服务可以根据需要部署到多台服务器上实现负载均衡，通过注册中心进行耦合，网关负责转发到单个服务，而单个服务可以集成流量控制，实现在大流量下能够做到高可用，流量保护，服务熔断降级等，保证系统的稳定性，最终实现一个基于微服务的大型的具有广泛应用价值的人力资源管理系统。
+本项目旨在实现一个泛用的、鲁棒性强[^1]的面向大型企业或组织在高人力管理成本、分配调度难度大情况下的人力资源管理系统。首先对于一个大型组织在面对较多人数的情况下进行统一的合规管理或是指标统计、以及绩效考核等要能发挥协助的作用，并且要能够降低人力资源管理的难度和投入成本，帮助组织提高运行效率并把关注点放到其他相对关键的事务上，更加合理的配置资源。该人力资源系统应该有的功能，包括但不限于人员信息录入、信息修改及删除、绩效管理、权限控制、统计分析等等；系统架构设计，包括包的依赖传递管理，根据不同功能点进行模块划分，各个业务相关的服务之间可以基于生产者消费者模型进行调用。此外，多个服务可以根据需要部署到多台服务器上实现负载均衡，通过注册中心进行耦合，网关负责转发到单个服务，而单个服务可以集成流量控制，实现在大流量下能够做到高可用，流量保护，服务熔断降级等，保证系统的稳定性，最终实现一个基于微服务的大型的具有广泛应用价值的人力资源管理系统。
 
 + 用户注册：新用户注册，需要验证手机号或邮箱是否存在
 + 短信发送服务：集成三方服务，根据手机号或者邮箱发送验证码
@@ -27,6 +27,8 @@
 + 统计分析：统计每日使用量，注册用户数
 
 
+
+[^1]: 泛用性好的，可覆盖多数情况的
 
 ## 项目架构
 
@@ -66,8 +68,7 @@
   ```sequence
     浏览器 -> 授权:输入账号密码，根据账号生成token, 并将{账号:权限}存入redis缓存
     授权 -> 浏览器:返回授权token
-    浏览器 -> 网关:请求带上授权token
-    网关 -> 浏览器:校验token失败，返回错误信息
+    浏览器 -> 网关:二次请求，并带上授权token
     网关 -> 接口:校验token成功，调用接口
     接口 -> 浏览器:返回接口数据
   ```
@@ -174,6 +175,17 @@
       KEY `idx_role_id` (`role_id`),
       KEY `idx_user_id` (`user_id`)
   ) ENGINE = InnoDB DEFAULT CHARSET=utf8 COMMENT='用户角色关联表';
+  
+  CREATE TABLE `sys_log` (
+      id          bigint        not null comment 'ID' primary key,
+      username    varchar(50)   null comment '用户名',
+      operation   varchar(50)   null comment '用户操作',
+      method      varchar(200)  null comment '请求方法',
+      params      varchar(5000) null comment '请求参数',
+      time        bigint        not null comment '执行时长(毫秒)',
+      ip          varchar(64)   null comment 'IP地址',
+      create_time datetime      null comment '创建时间'
+  )ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统日志';
   ```
   
   <br>
@@ -469,6 +481,27 @@
       PRIMARY KEY (`id`),
       KEY `idx_statistics_day` (`date_calculated`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='网站统计日数据';
+  ```
+
+  
+  
++ seata
+
+  ```mysql
+  -- 全局事务异常回滚表, 配合seata库下的全局表共同发挥作用
+  CREATE TABLE `undo_log` (
+      `id`            bigint(20)       NOT NULL AUTO_INCREMENT,
+      `branch_id`     bigint(20)       NOT NULL,
+      `xid`           varchar(100)     NOT NULL,
+      `context`       varchar(128)     NOT NULL,
+      `rollback_info` longblob         NOT NULL,
+      `log_status`    int(11)          NOT NULL,
+      `log_created`   datetime         NOT NULL,
+      `log_modified`  datetime         NOT NULL,
+      `ext`           varchar(100)     DEFAULT NULL,
+      PRIMARY KEY (`id`),
+      UNIQUE KEY `ux_undo_log` (`xid`,`branch_id`)
+  ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
   ```
 
   
@@ -797,6 +830,4 @@
   
 
 ## 功能截图
-
-
 

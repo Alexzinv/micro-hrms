@@ -5,6 +5,7 @@ import com.alex.common.util.R;
 import com.alex.common.valid.group.AddGroup;
 import com.alex.common.valid.group.UpdateGroup;
 import com.alex.common.valid.group.UpdateStatusGroup;
+import com.alex.system.annotation.SysLog;
 import com.alex.system.dto.PermissionStatusVo;
 import com.alex.system.dto.stuct.PermissionStruct;
 import com.alex.system.entity.Permission;
@@ -43,6 +44,7 @@ public class PermissionController {
     }
 
     @ApiOperation(value = "递归删除权限")
+    @SysLog("删除权限")
     @DeleteMapping("remove/{id}")
     public R remove(@PathVariable("id") Long id) {
         permissionService.removeChildById(id);
@@ -50,6 +52,7 @@ public class PermissionController {
     }
 
     @ApiOperation(value = "给角色分配权限")
+    @SysLog("分配权限")
     @PostMapping("doAssign")
     public R doAssign(Long roleId, @RequestParam List<Long> permissionId) {
         rolePermissionService.saveRolePermissionRelation(roleId,permissionId);
@@ -67,6 +70,7 @@ public class PermissionController {
     }
 
     @ApiOperation(value = "新增")
+    @SysLog("新增权限")
     @PostMapping("save")
     public R save(@Validated({AddGroup.class}) @RequestBody Permission permission) {
         permission.setStatus(PermissionConstant.Status.ENABLE);
@@ -75,6 +79,7 @@ public class PermissionController {
     }
 
     @ApiOperation(value = "修改")
+    @SysLog("修改权限")
     @PutMapping("update")
     public R updateById(@Validated({UpdateGroup.class}) @RequestBody Permission permission) {
         permissionService.updateById(permission);

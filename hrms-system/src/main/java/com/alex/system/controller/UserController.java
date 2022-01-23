@@ -4,6 +4,7 @@ import com.alex.common.util.R;
 import com.alex.common.valid.group.AddGroup;
 import com.alex.common.valid.group.UpdateGroup;
 import com.alex.common.valid.group.UpdateStatusGroup;
+import com.alex.system.annotation.SysLog;
 import com.alex.system.dto.*;
 import com.alex.system.dto.stuct.UserStruct;
 import com.alex.system.entity.User;
@@ -52,6 +53,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "忘记密码")
+    @SysLog("修改密码")
     @PostMapping("forgetPassword")
     public R forgetPassword(@RequestBody ForgetPasswordVO vo){
         boolean isSuccess = userService.restorePassword(vo);
@@ -66,6 +68,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "管理员新增用户")
+    @SysLog("新增用户")
     @Transactional(rollbackFor = Exception.class)
     @PostMapping("save")
     public R save(@Validated({AddGroup.class}) @RequestBody UserVO vo) {
@@ -89,6 +92,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "修改用户")
+    @SysLog("修改用户")
     @Transactional(rollbackFor = Exception.class)
     @PutMapping("update")
     public R updateById(@Validated({UpdateGroup.class}) @RequestBody UserVO vo) {
@@ -102,6 +106,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "根据id列表删除用户")
+    @SysLog("删除用户")
     @DeleteMapping("batchRemove")
     public R batchRemove(@RequestBody List<Long> idList) {
         userService.removeByUserIds(idList);
@@ -116,6 +121,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "根据用户ID分配角色")
+    @SysLog("分配角色")
     @PostMapping("doAssign")
     public R doAssign(@RequestParam Long userId,@RequestParam List<Long> roleId) {
         userRoleService.saveUserRoleRelation(userId,roleId);

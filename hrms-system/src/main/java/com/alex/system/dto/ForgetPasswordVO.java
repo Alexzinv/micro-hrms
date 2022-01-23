@@ -25,7 +25,7 @@ public class ForgetPasswordVO {
     /**
      * 新密码
      */
-    @NotEmpty
+    @NotBlank
     @Length(min = 6, max = 20)
     private String password;
 
