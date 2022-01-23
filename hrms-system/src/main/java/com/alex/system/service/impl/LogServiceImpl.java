@@ -27,8 +27,8 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, Log> implements LogSe
             Date end = condition.getEnd();
 
             wrapper.like(StringUtils.isNotBlank(username), Log::getUsername, username)
-                    .ge(start != null, Log::getCreateDate, start)
-                    .le(end != null, Log::getCreateDate, end);
+                    .ge(start != null, Log::getCreateTime, start)
+                    .le(end != null, Log::getCreateTime, end);
         }
     }
 }
