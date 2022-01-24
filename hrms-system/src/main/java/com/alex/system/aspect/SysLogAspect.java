@@ -71,7 +71,7 @@ public class SysLogAspect {
         log.setUsername(username);
 
         log.setTime(time);
-        log.setCreateDate(Calendar.getInstance().getTime());
+        log.setCreateTime(Calendar.getInstance().getTime());
         logService.save(log);
     }
 }
