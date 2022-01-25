@@ -35,7 +35,7 @@ public class LogController {
     }
 
     @SysLog("删除日志")
-    @DeleteMapping("delete")
+    @DeleteMapping("/delete")
     public R removeLogBatch(List<Long> ids){
         logService.removeByIds(ids);
         return R.ok();
