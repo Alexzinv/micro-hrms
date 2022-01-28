@@ -12,6 +12,8 @@ spring:
         extension-configs:
           - data-id: nacos-sentinel.yml
             refresh: true
+          - data-id: feign-sentinel.yml
+            refresh: true
           - data-id: zipkin.yml
             refresh: true
           - data-id: redis.yml
