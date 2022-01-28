@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 /**
  * IP地址
@@ -47,11 +48,11 @@ public class IPUtils {
         }
         
         ///使用代理，则获取第一个IP地址
-        // if(StringUtils.isEmpty(ip) || ip.length() > 15) {
-        //     if(ip.indexOf(",") > 0) {
-        //         ip = ip.substring(0, ip.indexOf(","));
-        //     }
-        // }
+        if(Objects.requireNonNull(ip).length() > 15) {
+            if(ip.indexOf(",") > 0) {
+                ip = ip.substring(0, ip.indexOf(","));
+            }
+        }
         
         return ip;
     }
