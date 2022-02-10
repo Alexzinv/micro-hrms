@@ -1,6 +1,6 @@
 package com.alex.salary.dto;
 
-import com.alex.common.base.BaseQuery;
+import com.alex.common.base.AbstractBaseQuery;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class SalaryPersonalQuery extends BaseQuery implements Serializable {
+public class SalaryPersonalQuery extends AbstractBaseQuery implements Serializable {
 
     private static final long serialVersionUID = 1L;
 }

@@ -1,6 +1,6 @@
 package com.alex.system.service.impl;
 
-import com.alex.common.base.BaseQuery;
+import com.alex.common.base.AbstractBaseQuery;
 import com.alex.common.consant.CodePrefixEnum;
 import com.alex.common.util.CodePrefixUtils;
 import com.alex.system.dto.RoleQuery;
@@ -45,7 +45,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public void buildCondition(LambdaQueryWrapper<Role> wrapper, BaseQuery query) {
+    public void buildCondition(LambdaQueryWrapper<Role> wrapper, AbstractBaseQuery query) {
         if(query instanceof RoleQuery){
             RoleQuery condition = (RoleQuery) query;
             String roleNameOrCode = condition.getRoleNameOrCode();

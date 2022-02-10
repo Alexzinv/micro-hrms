@@ -18,7 +18,7 @@ public interface BaseService<T> extends IService<T> {
      * @param query 查询条件
      * @return 查询结果
      */
-    default Page<T> listPage(Integer page, Integer limit, BaseQuery query){
+    default Page<T> listPage(Integer page, Integer limit, AbstractBaseQuery query){
          Page<T> pageEntity = new Page<>(page, limit);
          LambdaQueryWrapper<T> wrapper = new LambdaQueryWrapper<>();
          buildCondition(wrapper, query);
@@ -30,5 +30,5 @@ public interface BaseService<T> extends IService<T> {
      * @param wrapper 条件对象
      * @param query 查询条件
      */
-    void buildCondition(LambdaQueryWrapper<T> wrapper, BaseQuery query);
+    void buildCondition(LambdaQueryWrapper<T> wrapper, AbstractBaseQuery query);
 }

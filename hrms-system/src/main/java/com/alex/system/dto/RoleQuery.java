@@ -1,6 +1,6 @@
 package com.alex.system.dto;
 
-import com.alex.common.base.BaseQuery;
+import com.alex.common.base.AbstractBaseQuery;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class RoleQuery extends BaseQuery implements Serializable {
+public class RoleQuery extends AbstractBaseQuery implements Serializable {
 
     private static final long serialVersionUID = 3L;
 

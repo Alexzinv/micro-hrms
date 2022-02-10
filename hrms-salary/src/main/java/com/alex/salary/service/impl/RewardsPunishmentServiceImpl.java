@@ -1,6 +1,6 @@
 package com.alex.salary.service.impl;
 
-import com.alex.common.base.BaseQuery;
+import com.alex.common.base.AbstractBaseQuery;
 import com.alex.salary.dto.RewardsPunishmentQuery;
 import com.alex.salary.entity.RewardsPunishment;
 import com.alex.salary.mapper.RewardsPunishmentMapper;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 public class RewardsPunishmentServiceImpl extends ServiceImpl<RewardsPunishmentMapper, RewardsPunishment> implements RewardsPunishmentService {
 
     @Override
-    public void buildCondition(LambdaQueryWrapper<RewardsPunishment> wrapper, BaseQuery query) {
+    public void buildCondition(LambdaQueryWrapper<RewardsPunishment> wrapper, AbstractBaseQuery query) {
         if(query instanceof RewardsPunishmentQuery){
             RewardsPunishmentQuery rp = (RewardsPunishmentQuery) query;
             Integer type = rp.getRpType();

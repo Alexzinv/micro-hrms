@@ -1,6 +1,6 @@
 package com.alex.salary.service.impl;
 
-import com.alex.common.base.BaseQuery;
+import com.alex.common.base.AbstractBaseQuery;
 import com.alex.salary.dto.SalaryAdjustQuery;
 import com.alex.salary.entity.SalaryAdjust;
 import com.alex.salary.mapper.SalaryAdjustMapper;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class SalaryAdjustServiceImpl extends ServiceImpl<SalaryAdjustMapper, SalaryAdjust> implements SalaryAdjustService {
 
     @Override
-    public void buildCondition(LambdaQueryWrapper<SalaryAdjust> wrapper, BaseQuery query) {
+    public void buildCondition(LambdaQueryWrapper<SalaryAdjust> wrapper, AbstractBaseQuery query) {
         if(query instanceof SalaryAdjustQuery){
             SalaryAdjustQuery rp = (SalaryAdjustQuery) query;
 

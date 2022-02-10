@@ -1,6 +1,6 @@
 package com.alex.salary.service.impl;
 
-import com.alex.common.base.BaseQuery;
+import com.alex.common.base.AbstractBaseQuery;
 import com.alex.salary.dto.SalaryPersonalQuery;
 import com.alex.salary.entity.SalaryAdjust;
 import com.alex.salary.entity.SalaryPersonal;
@@ -27,7 +27,7 @@ public class SalaryPersonalServiceImpl extends ServiceImpl<SalaryPersonalMapper,
     private SalaryAdjustService salaryAdjustService;
 
     @Override
-    public void buildCondition(LambdaQueryWrapper<SalaryPersonal> wrapper, BaseQuery query) {
+    public void buildCondition(LambdaQueryWrapper<SalaryPersonal> wrapper, AbstractBaseQuery query) {
         if(query instanceof SalaryPersonalQuery){
             SalaryPersonalQuery sp = (SalaryPersonalQuery) query;
 

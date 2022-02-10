@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @date 2022/1/4
  * @description
  */
-public abstract class BaseQuery implements Serializable {
+public abstract class AbstractBaseQuery implements Serializable {
 
     private static final long serialVersionUID = 2L;
 

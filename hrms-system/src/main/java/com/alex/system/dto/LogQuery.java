@@ -1,6 +1,6 @@
 package com.alex.system.dto;
 
-import com.alex.common.base.BaseQuery;
+import com.alex.common.base.AbstractBaseQuery;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -13,7 +13,7 @@ import java.util.Date;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class LogQuery extends BaseQuery implements Serializable {
+public class LogQuery extends AbstractBaseQuery implements Serializable {
     private static final long serialVersionUID = 2L;
 
     /** 用户名 */

@@ -1,6 +1,6 @@
 package com.alex.company.dto;
 
-import com.alex.common.base.BaseQuery;
+import com.alex.common.base.AbstractBaseQuery;
 import com.alex.common.valid.ListValue;
 import com.alex.common.valid.group.QueryGroup;
 import io.swagger.annotations.ApiModelProperty;
@@ -17,7 +17,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class PositionQuery extends BaseQuery implements Serializable {
+public class PositionQuery extends AbstractBaseQuery implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

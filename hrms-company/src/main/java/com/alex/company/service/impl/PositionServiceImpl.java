@@ -1,8 +1,7 @@
 package com.alex.company.service.impl;
 
-import com.alex.common.base.BaseQuery;
+import com.alex.common.base.AbstractBaseQuery;
 import com.alex.common.bean.member.UserCompanyDepartmentPositionTo;
-import com.alex.common.bean.member.UserCompanyTo;
 import com.alex.common.consant.CompanyConstant;
 import com.alex.common.consant.PositionConstant;
 import com.alex.common.consant.ResultCodeEnum;
@@ -13,8 +12,6 @@ import com.alex.company.entity.Position;
 import com.alex.company.mapper.PositionMapper;
 import com.alex.company.service.PositionService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +67,7 @@ public class PositionServiceImpl extends ServiceImpl<PositionMapper, Position> i
     }
 
     @Override
-    public void buildCondition(LambdaQueryWrapper<Position> wrapper, BaseQuery query) {
+    public void buildCondition(LambdaQueryWrapper<Position> wrapper, AbstractBaseQuery query) {
         if(query instanceof PositionQuery){
             PositionQuery positionQuery = (PositionQuery) query;
             Long companyId = positionQuery.getCompanyId();

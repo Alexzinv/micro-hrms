@@ -1,7 +1,7 @@
 package com.alex.system.service.impl;
 
 
-import com.alex.common.base.BaseQuery;
+import com.alex.common.base.AbstractBaseQuery;
 import com.alex.common.bean.member.UserCompanyTo;
 import com.alex.common.bean.member.UserPersonalInfoTo;
 import com.alex.common.consant.UserConstant;
@@ -98,7 +98,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public void buildCondition(LambdaQueryWrapper<User> wrapper, BaseQuery query) {
+    public void buildCondition(LambdaQueryWrapper<User> wrapper, AbstractBaseQuery query) {
         if(query == null){
             return;
         }

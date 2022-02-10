@@ -1,6 +1,6 @@
 package com.alex.system.service.impl;
 
-import com.alex.common.base.BaseQuery;
+import com.alex.common.base.AbstractBaseQuery;
 import com.alex.system.dto.LogQuery;
 import com.alex.system.entity.Log;
 import com.alex.system.mapper.LogMapper;
@@ -19,7 +19,7 @@ import java.util.Date;
 @Service("logService")
 public class LogServiceImpl extends ServiceImpl<LogMapper, Log> implements LogService {
     @Override
-    public void buildCondition(LambdaQueryWrapper<Log> wrapper, BaseQuery query) {
+    public void buildCondition(LambdaQueryWrapper<Log> wrapper, AbstractBaseQuery query) {
         if(query instanceof LogQuery){
             LogQuery condition = (LogQuery) query;
             String username = condition.getUsername();

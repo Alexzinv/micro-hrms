@@ -1,6 +1,6 @@
 package com.alex.company.service.impl;
 
-import com.alex.common.base.BaseQuery;
+import com.alex.common.base.AbstractBaseQuery;
 import com.alex.common.consant.CompanyConstant;
 import com.alex.common.consant.ResultCodeEnum;
 import com.alex.common.exception.HRMSException;
@@ -62,7 +62,7 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
     }
 
     @Override
-    public void buildCondition(LambdaQueryWrapper<Company> wrapper, BaseQuery query) {
+    public void buildCondition(LambdaQueryWrapper<Company> wrapper, AbstractBaseQuery query) {
         if(query instanceof CompanyQuery){
             CompanyQuery companyQuery = (CompanyQuery) query;
 

@@ -1,6 +1,6 @@
 package com.alex.company.dto;
 
-import com.alex.common.base.BaseQuery;
+import com.alex.common.base.AbstractBaseQuery;
 import com.alex.common.valid.ListValue;
 import com.alex.common.valid.group.QueryGroup;
 import lombok.Data;
@@ -16,7 +16,7 @@ import java.util.Date;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class CompanyQuery extends BaseQuery implements Serializable {
+public class CompanyQuery extends AbstractBaseQuery implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

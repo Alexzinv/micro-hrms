@@ -1,7 +1,7 @@
 package com.alex.system.dto;
 
 
-import com.alex.common.base.BaseQuery;
+import com.alex.common.base.AbstractBaseQuery;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class UserQueryVO extends BaseQuery {
+public class UserQueryVO extends AbstractBaseQuery {
 
     /**
      * 账号或昵称
