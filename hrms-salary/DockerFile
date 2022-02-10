@@ -1,0 +1,6 @@
+FROM adoptopenjdk/openjdk14:ubi
+RUN mkdir /app
+COPY ./hrms-salary/target/hrms-salary.jar /app
+COPY ./wait-for-it.sh /app
+WORKDIR /app
+CMD ["java", "-jar", "hrms-salary.jar"]

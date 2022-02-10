@@ -97,17 +97,18 @@ services:
       - "8888:8888"
     networks:
       - micro-hrms
-  service_system:
+  hrms-system:
     build:
       context: .
-      dockerfile: ./service/service_acl8008/Dockerfile
-    container_name: service_acl8008
-    command: ./wait-for-it.sh nacos:8848 -t 0 -- ./wait-for-it.sh seata:8091 -t 0 -- java -jar service_acl.jar
+      dockerfile: ./hrms-system/Dockerfile
+    container_name: hrms-system
+    command: ./wait-for-it.sh nacos:8848 -t 0 -- ./wait-for-it.sh seata:8091 -t 0 -- java -jar hrms-system.jar
     depends_on:
       - mysql
       - nacos
       - redis
       - seata
+      - rabbitmq
     restart: always
     ports:
       - "9000:9000"
