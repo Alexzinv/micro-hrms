@@ -52,4 +52,14 @@ public enum ResultCodeEnum {
     public String getMessage(){
         return message;
     }
+
+    /** 根据code获取描述 */
+    public static String getMessageByCode(Integer code){
+        for (ResultCodeEnum r : ResultCodeEnum.values()) {
+            if(r.getCode().equals(code)){
+                return r.getMessage();
+            }
+        }
+        return null;
+    }
 }

@@ -1,6 +1,6 @@
 package com.alex.system.client;
 
-import com.alex.common.base.BaseClient;
+import com.alex.common.base.AbstractBaseClient;
 import com.alex.common.util.R;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * @Description 公司远程调用降级服务
  */
 @Component
-public class CompanyDegradeService extends BaseClient implements CompanyClient {
+public class CompanyDegradeService extends AbstractBaseClient implements CompanyClient {
     @Override
     public R getCompany(Long id) {
         return RESULT;

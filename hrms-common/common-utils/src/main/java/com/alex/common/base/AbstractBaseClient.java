@@ -8,7 +8,7 @@ import com.alex.common.util.R;
  * @date 2021/12/22
  * @description 基础客户端服务
  */
-public abstract class BaseClient {
+public abstract class AbstractBaseClient {
 
     protected static final R RESULT = R.err().result(ResultCodeEnum.SYSTEM_BUSY);
 

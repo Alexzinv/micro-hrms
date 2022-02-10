@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -29,7 +28,6 @@ public class UserCompanySaveUpdateTo implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "账号")
-    @Null(groups = {UpdateGroup.class})
     @NotNull(groups = {AddGroup.class})
     private String username;
 

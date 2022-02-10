@@ -1,6 +1,6 @@
 package com.alex.member.client;
 
-import com.alex.common.base.BaseClient;
+import com.alex.common.base.AbstractBaseClient;
 import com.alex.common.util.R;
 import com.alex.member.dto.UserCompanyRelationDO;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * @description
  */
 @Component
-public class UserClientDegradeService extends BaseClient implements UserClient {
+public class UserClientDegradeService extends AbstractBaseClient implements UserClient {
     @Override
     public R updateById(UserCompanyRelationDO relationDO) {
         return RESULT;
