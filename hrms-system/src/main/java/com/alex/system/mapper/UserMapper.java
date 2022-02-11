@@ -18,4 +18,11 @@ public interface UserMapper extends BaseMapper<User> {
      * @return 是否存在
      */
     Integer isExist(@Param("username") String username);
+
+    /**
+     * 根据日期查询当天注册人数
+     * @param date 日期
+     * @return 统计数
+     */
+    Integer registerCount(@Param("date") String date);
 }

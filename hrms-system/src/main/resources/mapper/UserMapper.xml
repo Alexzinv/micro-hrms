@@ -20,5 +20,8 @@
     <select id="isExist" resultType="java.lang.Integer">
         select 1 from sys_user where username = #{username}
     </select>
+    <select id="registerCount" resultType="java.lang.Integer">
+        select count(id) from sys_user where DATE(create_time) = #{date}
+    </select>
 
 </mapper>

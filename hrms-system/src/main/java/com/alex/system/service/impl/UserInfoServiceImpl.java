@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -65,7 +66,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
         //根据用户id获取操作权限值
         List<String> permissionValueList = permissionService.listPermissionValueByUserId(user.getId());
-        redisTemplate.opsForValue().set(username, permissionValueList);
+        redisTemplate.opsForValue().set(username, permissionValueList, 1L, TimeUnit.DAYS);
 
         result.put("companyId", user.getCompanyId());
         result.put("name", user.getUsername());

@@ -233,6 +233,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return super.updateById(user);
     }
 
+    @Override
+    public Integer registerCount(String date) {
+        return baseMapper.registerCount(date);
+    }
+
     private boolean isExist(String username){
         return baseMapper.isExist(username) != null;
     }

@@ -136,4 +136,10 @@ public class UserController {
         return R.ok();
     }
 
+    @GetMapping("sta/inner/registerCount/{date}")
+    public R registerCount(@PathVariable("date") String date){
+        Integer count = userService.registerCount(date);
+        return R.ok().data("registerCount", count);
+    }
+
 }

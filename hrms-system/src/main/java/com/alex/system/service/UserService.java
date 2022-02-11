@@ -57,5 +57,12 @@ public interface UserService extends BaseService<User> {
      * @param idList id列表
      */
     void removeByUserIds(List<Long> idList);
+
+    /**
+     * 根据日期查询当天注册人数
+     * @param date 日期
+     * @return 统计数
+     */
+    Integer registerCount(String date);
 }
 
