@@ -38,26 +38,18 @@
 + ```shell
   micro-hrms
   ├─db  项目SQL语句
-  │
   ├─hrms-common 公共模块
-  │  ├─aspect 系统日志
-  │  ├─exception 异常处理
-  │  ├─validator 后台校验
-  │  └─xss XSS过滤
-  │ 
-  ├─hrms-system 配置信息
-  │ 
-  ├─hrms-thirdpart 功能模块
-  │  ├─app API接口模块(APP调用)
-  │  ├─job 定时任务模块
-  │  ├─oss 文件服务模块
-  │  └─sys 权限模块
-  │ 
-  ├─RenrenApplication 项目启动类
-  │  
-  ├──resources 
-  │  ├─mapper SQL对应的XML文件
-  │  └─static 静态资源
+  │  ├─common-utils 公共类，配置
+  │  └─security 安全框架
+  ├─hrms-system 系统模块
+  ├─hrms-thirdpart 三方模块
+  ├─hrms-gateway 网关模块
+  ├─hrms-company 公司模块
+  ├─hrms-member 成员模块
+  ├─hrms-salary 薪酬模块
+  ├─hrms-performance 绩效模块
+  ├─hrms-statistic 统计模块
+  ├─
   ```
 
 
@@ -414,37 +406,14 @@
   
   ```mysql
   -- 考勤
-  /*
   CREATE TABLE `atte_attendance`  (
       `id` bigint unsigned NOT NULL primary key COMMENT 'ID',
-      `member_id` bigint unsigned DEFAULT NULL COMMENT '员工编号',
-      `department_id` bigint unsigned COMMENT '部门ID',
-      `atd_statu` tinyint unsigned DEFAULT NULL COMMENT '考情状态 1正常2旷工3迟到4早退5外出6年假7事假8病假9产假10调休11补签',
-      `job_statu` tinyint unsigned NULL DEFAULT NULL COMMENT '职位状态 1在职2离职',
-      `atd_in_time` datetime DEFAULT NULL COMMENT '上班考勤时间',
-      `atd_in_place` varchar(30) DEFAULT NULL COMMENT '考勤地点',
-      `atd_out_time` datetime NULL DEFAULT NULL COMMENT '下班考勤时间',
-      `atd_out_place` varchar(30) DEFAULT NULL COMMENT '下班考情地点',
-      `create_by` varchar(64) DEFAULT NULL COMMENT '创建人',
-      `update_by` varchar(64) DEFAULT NULL COMMENT '更新人',
-      `notes` varchar(255) DEFAULT NULL,
-      `create_time` datetime  COMMENT '创建时间',
-      `update_time` datetime COMMENT '更新时间',
-      `username` varchar(40) DEFAULT NULL,
-      `mobile` varchar(255) DEFAULT NULL,
-      `department_name` varchar(40) DEFAULT NULL,
-      `day` varchar(40) DEFAULT NULL,
-  ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='出勤';
-  */
-  
-  -- 考勤
-  CREATE TABLE `atte_attendance`  (
-      `id` bigint unsigned NOT NULL primary key COMMENT 'ID',
-      `member_id` bigint unsigned DEFAULT NULL COMMENT '员工编号',
-      `atd_in_time` datetime DEFAULT NULL COMMENT '上班考勤时间',
-      `atd_in_place` varchar(30) DEFAULT NULL COMMENT '考勤地点',
-      `atd_out_time` datetime NULL DEFAULT NULL COMMENT '下班考勤时间',
-      `atd_out_place` varchar(30) DEFAULT NULL COMMENT '下班考勤地点',
+      `work_number` bigint unsigned DEFAULT NULL COMMENT '员工编号',
+      `atte_status` tinyint unsigned DEFAULT NULL COMMENT '考勤状态 1正常2旷工3迟到4早退5外出6年假7事假8病假9产假10调休11补签',
+      `work_in_time` datetime DEFAULT NULL COMMENT '上班考勤时间',
+      `work_in_place` varchar(30) DEFAULT NULL COMMENT '考勤地点',
+      `work_out_time` datetime NULL DEFAULT NULL COMMENT '下班考勤时间',
+      `work_out_place` varchar(30) DEFAULT NULL COMMENT '下班考勤地点',
       `notes` varchar(255) DEFAULT NULL COMMENT '备注',
       `create_time` datetime  COMMENT '创建时间',
       `update_time` datetime COMMENT '更新时间',
@@ -474,15 +443,38 @@
   CREATE TABLE `statistics_daily` (
       `id` bigint unsigned NOT NULL primary key COMMENT 'ID',
       `date_calculated` varchar(20) NOT NULL COMMENT '统计日期',
-      `register_num` int(11) NOT NULL DEFAULT '0' COMMENT '注册人数',
-      `login_num` int(11) NOT NULL DEFAULT '0' COMMENT '登录人数',
+      `register_count` int(11) NOT NULL DEFAULT '0' COMMENT '注册人数',
+      `login_count` int(11) NOT NULL DEFAULT '0' COMMENT '登录人数',
       `create_time` datetime  COMMENT '创建时间',
       `update_time` datetime COMMENT '更新时间',
       PRIMARY KEY (`id`),
       KEY `idx_statistics_day` (`date_calculated`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='网站统计日数据';
+  
+  -- 月度统计
+  CREATE TABLE `statistics_monthly` (
+      `id` bigint unsigned NOT NULL primary key COMMENT 'ID',
+      `month_calculated` varchar(20) NOT NULL COMMENT '统计年月',
+      `register_count_month` int(11) NOT NULL DEFAULT '0' COMMENT '当月注册人数',
+      `login_count_month` int(11) NOT NULL DEFAULT '0' COMMENT '当月浏览次数',
+      `create_time` datetime  COMMENT '创建时间',
+      `update_time` datetime COMMENT '更新时间',
+      PRIMARY KEY (`id`),
+      KEY `idx_statistics_month` (`month_calculated`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='网站统计日数据';
+  
+  -- 总数统计
+  CREATE TABLE `statistics_total` (
+      `id` bigint unsigned NOT NULL primary key COMMENT 'ID',
+      `register_total_count` int(11) NOT NULL DEFAULT '0' COMMENT '总注册人数',
+      `login_total_count` int(11) NOT NULL DEFAULT '0' COMMENT '历史浏览人数',
+      `company_total_count` int(11) NOT NULL DEFAULT '0' COMMENT '公司数',
+      `create_time` datetime  COMMENT '创建时间',
+      `update_time` datetime COMMENT '更新时间',
+      PRIMARY KEY (`id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='网站总数统计';
   ```
-
+  
   
   
 + seata
@@ -510,7 +502,7 @@
 
 + 统一数据返回
 
-  ```ruby
+  ```java
   @Getter
   @Setter
   public class R {
@@ -578,7 +570,7 @@
   
 + ControllerAspect
 
-  ```ruby
+  ```java
   /** @description 输出被调用的controller和方法名字和参数到日志 **/
   @Slf4j
   @Aspect
@@ -601,7 +593,7 @@
   
 + 全局异常处理
 
-  ```ruby
+  ```java
   @Slf4j
   @RestControllerAdvice
   public class GlobalExceptionHandler {
@@ -644,7 +636,7 @@
   
 + 编码生成工具
 
-  ```ruby
+  ```java
   /** @description 编码生成工具 */
   public abstract class CodePrefixUtils {
       /** 获取最新编码, 根据具体服务实现 @return 最新编码 */
@@ -667,7 +659,7 @@
 
 + seccurity主配置
 
-  ```ruby
+  ```java
   /** 配置设置 @param http http请求 @throws Exception 异常 */
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -681,7 +673,7 @@
       .addFilter(new TokenLoginFilter(authenticationManager(), tokenManager, redisTemplate))
       .addFilter(new TokenAuthenticationFilter(authenticationManager(),
           tokenManager, redisTemplate)).httpBasic();
-      /// 一个用户只能创建一个Session，后登录挤掉先登录用户
+      // 一个用户只能创建一个Session，后登录挤掉先登录用户
       http.sessionManagement()
       .maximumSessions(1)
       .expiredUrl("/admin/acl/login")
@@ -694,7 +686,7 @@
 
 
 + 网关
-  ```ruby
+  ```java
   /** @description 全局过滤器 **/
   @Component
   @Slf4j
@@ -770,7 +762,7 @@
   }
   ```
   
-  ```ruby
+  ```java
   /** @description 请求限流 */
   @Configuration
   public class SentinelRuleConfig {
