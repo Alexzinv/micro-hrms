@@ -3,10 +3,9 @@ package com.alex.salary.entity;
 import java.math.BigDecimal;
 
 import com.alex.common.valid.group.AddGroup;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -29,9 +28,12 @@ public class SalaryPersonal implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "工号")
-    @TableId(value = "id", type = IdType.INPUT)
+    @ApiModelProperty(value = "id")
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
+
+    @ApiModelProperty(value = "工号")
+    private Long salaryPersonalId;
 
     @ApiModelProperty(value = "工资公共部分id")
     @NotNull(groups = AddGroup.class)
@@ -47,9 +49,11 @@ public class SalaryPersonal implements Serializable {
     private BigDecimal totalSalary;
 
     @ApiModelProperty(value = "创建时间")
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
     @ApiModelProperty(value = "更新时间")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
 
