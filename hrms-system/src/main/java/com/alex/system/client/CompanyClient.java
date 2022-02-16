@@ -1,5 +1,6 @@
 package com.alex.system.client;
 
+import com.alex.common.consant.ServiceNameConstant;
 import com.alex.common.util.R;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * @Date 2021/11/29
  * @Description RPC - CompanyController
  */
-@FeignClient(value = "hrms-company", fallback = CompanyDegradeService.class)
+@FeignClient(value = ServiceNameConstant.COMPANY_SERVICE, fallback = CompanyDegradeService.class)
 @Component
 public interface CompanyClient {
 

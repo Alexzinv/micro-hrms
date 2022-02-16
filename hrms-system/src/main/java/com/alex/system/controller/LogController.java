@@ -40,4 +40,11 @@ public class LogController {
         logService.removeByIds(ids);
         return R.ok();
     }
+
+    /** 日志保存，内部接口调用 */
+    @PostMapping("/inner/save")
+    public R saveLog(@RequestBody Log log){
+        logService.save(log);
+        return R.ok();
+    }
 }

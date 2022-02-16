@@ -1,5 +1,6 @@
 package com.alex.statistic.client;
 
+import com.alex.common.consant.ServiceNameConstant;
 import com.alex.common.util.R;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * @date 2022/2/10
  * @description
  */
-@FeignClient(value = "hrms-system", fallback = SystemClientDegradeService.class)
+@FeignClient(value = ServiceNameConstant.SYSTEM_SERVICE, fallback = SystemClientDegradeService.class)
 @Component
 public interface SystemClient {
 

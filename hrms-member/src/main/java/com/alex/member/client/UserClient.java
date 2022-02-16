@@ -1,5 +1,6 @@
 package com.alex.member.client;
 
+import com.alex.common.consant.ServiceNameConstant;
 import com.alex.common.util.R;
 import com.alex.member.dto.UserCompanyRelationDO;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @date 2021/12/22
  * @description RPC userController
  */
-@FeignClient(value = "hrms-system", fallback = UserClientDegradeService.class)
+@FeignClient(value = ServiceNameConstant.SYSTEM_SERVICE, fallback = UserClientDegradeService.class)
 @Component
 public interface UserClient {
 

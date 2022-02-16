@@ -2,6 +2,7 @@ package com.alex.system.client;
 
 import com.alex.common.bean.member.UserCompanyTo;
 import com.alex.common.bean.member.UserPersonalInfoTo;
+import com.alex.common.consant.ServiceNameConstant;
 import com.alex.common.util.R;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @date 2021/12/2
  * @description member RPC
  */
-@FeignClient(value = "hrms-member", fallback = MemberDegradeService.class)
+@FeignClient(value = ServiceNameConstant.MEMBER_SERVICE, fallback = MemberDegradeService.class)
 @Component
 public interface MemberClient {
 
