@@ -11,7 +11,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -67,8 +66,9 @@ public class SysLogAspect {
         String ipAddr = IPUtils.getIpAddr(request);
         log.setIp(ipAddr);
 
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        log.setUsername(username);
+        /// 改到系统模块
+        // String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        // log.setUsername(username);
 
         log.setTime(time);
         log.setCreateTime(Calendar.getInstance().getTime());
