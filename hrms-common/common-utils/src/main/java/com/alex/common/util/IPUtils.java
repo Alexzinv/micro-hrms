@@ -25,6 +25,11 @@ public class IPUtils {
      * X-Forwarded-For中第一个非unknown的有效IP字符串，则为真实IP地址
 	 */
 	public static String getIpAddr(HttpServletRequest request) {
+
+	    if(request == null){
+	        return null;
+        }
+
     	String ip = null;
         try {
             ip = request.getHeader("x-forwarded-for");
@@ -53,8 +58,8 @@ public class IPUtils {
                 ip = ip.substring(0, ip.indexOf(","));
             }
         }
-        
-        return ip;
+
+        return "0:0:0:0:0:0:0:1".equals(ip) ? "127.0.0.1" : ip;
     }
 	
 }
