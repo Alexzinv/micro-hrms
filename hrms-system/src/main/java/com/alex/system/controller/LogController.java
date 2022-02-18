@@ -7,7 +7,6 @@ import com.alex.system.entity.Log;
 import com.alex.system.service.LogService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,15 +38,6 @@ public class LogController {
     @DeleteMapping("/delete")
     public R removeLogBatch(List<Long> ids){
         logService.removeByIds(ids);
-        return R.ok();
-    }
-
-    /** 日志保存，内部接口调用 */
-    @PostMapping("/inner/save")
-    public R saveLog(@RequestBody Log log){
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        log.setUsername(username);
-        logService.save(log);
         return R.ok();
     }
 }

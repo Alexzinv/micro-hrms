@@ -28,7 +28,8 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, Log> implements LogSe
 
             wrapper.like(StringUtils.isNotBlank(username), Log::getUsername, username)
                     .ge(start != null, Log::getCreateTime, start)
-                    .le(end != null, Log::getCreateTime, end);
+                    .le(end != null, Log::getCreateTime, end)
+                    .orderByDesc(Log::getId);
         }
     }
 }
