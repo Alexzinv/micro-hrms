@@ -1,16 +1,18 @@
-package com.alex.common.aspect;
+package com.alex.system.aspect;
 
-import com.alex.common.annotation.SysLog;
-import com.alex.common.bean.system.Log;
-import com.alex.common.client.LogServiceClient;
 import com.alex.common.util.HttpContextUtils;
 import com.alex.common.util.IPUtils;
+import com.alex.system.annotation.SysLog;
+import com.alex.system.entity.Log;
+import com.alex.system.service.LogService;
+import com.google.gson.Gson;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,10 +28,10 @@ import java.util.Calendar;
 @Aspect
 public class SysLogAspect {
 
-    private final LogServiceClient logService;
+    private final LogService logService;
 
     @Autowired
-    public SysLogAspect(LogServiceClient logService) {
+    public SysLogAspect(LogService logService) {
         this.logService = logService;
     }
 
@@ -60,18 +62,18 @@ public class SysLogAspect {
         log.setMethod(className + "." + methodName + "()");
 
         Object[] args = point.getArgs();
-        log.setParams(Arrays.toString(args));
+        String params = new Gson().toJson(args);
+        log.setParams(params);
 
         HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
         String ipAddr = IPUtils.getIpAddr(request);
         log.setIp(ipAddr);
 
-        /// 改到系统模块
-        // String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        // log.setUsername(username);
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        log.setUsername(username);
 
         log.setTime(time);
         log.setCreateTime(Calendar.getInstance().getTime());
-        logService.saveLog(log);
+        logService.save(log);
     }
 }
