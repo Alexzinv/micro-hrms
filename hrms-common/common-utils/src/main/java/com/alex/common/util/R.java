@@ -3,6 +3,7 @@ package com.alex.common.util;
 import com.alex.common.consant.ResultCodeEnum;
 import lombok.Getter;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +13,8 @@ import java.util.Map;
  * @Description 统一返回类
  */
 @Getter
-public class R {
+public class R implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	/** 成功 */
 	private static final int SUCCESS = 20000;

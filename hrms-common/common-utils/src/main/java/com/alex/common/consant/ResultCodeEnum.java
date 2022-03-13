@@ -29,7 +29,9 @@ public enum ResultCodeEnum {
     /** 远程事务异常 */
     GLOBAL_TRANSACTIONAL_EXCEPTION(20010, "远程事务保存失败"),
     /** 网关鉴权失败 */
-    GATEWAY_AUTH_EXCEPTION(20011, "网关鉴权失败");
+    GATEWAY_AUTH_EXCEPTION(20011, "网关鉴权失败"),
+    /** REDIS服务异常 */
+    REDIS_EXCEPTION(20012, "Redis异常");
 
     /**
      * 状态码

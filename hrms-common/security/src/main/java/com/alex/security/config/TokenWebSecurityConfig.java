@@ -69,7 +69,7 @@ public class TokenWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new TokenAuthenticationFilter(authenticationManager(),
                         tokenManager, redisTemplate)).httpBasic();
 
-        /// 一个用户只能创建一个Session，后登录挤掉先登录用户
+        // 一个用户只能创建一个Session，后登录挤掉先登录用户
         http.sessionManagement()
                 .maximumSessions(1)
                 .expiredUrl("/admin/acl/login")

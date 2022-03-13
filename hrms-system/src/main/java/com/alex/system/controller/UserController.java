@@ -1,5 +1,6 @@
 package com.alex.system.controller;
 
+import com.alex.common.consant.CacheNameConstant;
 import com.alex.common.util.R;
 import com.alex.common.valid.group.AddGroup;
 import com.alex.common.valid.group.UpdateGroup;
@@ -13,8 +14,9 @@ import com.alex.system.service.UserRoleService;
 import com.alex.system.service.UserService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.ApiOperation;
-import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
@@ -29,6 +31,7 @@ import java.util.Map;
  * @Date 2021/9/22
  * @Description 用户
  */
+@CacheConfig(cacheNames = {CacheNameConstant.System.USER})
 @RestController
 @RequestMapping("/admin/acl/user")
 public class UserController {
@@ -44,6 +47,7 @@ public class UserController {
         this.userRoleService = userRoleService;
     }
 
+    @Cacheable(key = "'list'", unless = "#result.data.isEmpty()")
     @ApiOperation(value = "获取用户分页列表")
     @GetMapping("{page}/{limit}")
     public R index(@PathVariable Integer page, @PathVariable Integer limit,

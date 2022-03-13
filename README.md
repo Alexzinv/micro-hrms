@@ -292,6 +292,28 @@
       `create_time`     datetime               null comment '创建时间',
       `update_time`     datetime               null comment '更新时间'
   )  ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户个人信息';
+  
+  CREATE TABLE `mem_user_transfer` (
+      `id`                        bigint unsigned         NOT NULL primary key COMMENT 'ID',
+      `company_id`                bigint                  null comment '企业ID',
+      `afterDepartment`           varchar(32)             null comment '调动后部门',
+      `afterPosition`             varchar(32)             null comment '调动后职位',
+      `transferDate`              date                    null comment '调动日期',
+      `reason`                    varchar(255)            null comment '调动原因',
+      `notes`                     varchar(255)            null comment '备注',
+      `create_time`               datetime                null comment '创建时间',
+      KEY `idx_company_id` (`company_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 comment '员工调职表';
+  
+  CREATE TABLE `mem_user_train` (
+      `id`                        bigint unsigned         NOT NULL primary key COMMENT 'ID',
+      `company_id`                bigint                  null comment '企业ID',
+      `trainDate`                 date                    null comment '培训日期',
+      `trainContent`              varchar(255)            null comment '培训内容',
+      `notes`                     varchar(255)            null comment '备注',
+      `create_time`               datetime                null comment '创建时间',
+      KEY `idx_company_id` (`company_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 comment '员工培训表';
   ```
 
   <br>
@@ -358,40 +380,6 @@
   
   <br>
   
-+ 培训管理
-
-  ```mysql
-  -- 培训
-  CREATE TABLE `em_train` (
-      `id` bigint unsigned NOT NULL primary key COMMENT 'ID',
-      `member_id` bigint unsigned DEFAULT NULL COMMENT '员工编号',
-      `train_date` date DEFAULT NULL COMMENT '培训日期',
-      `train_content` varchar(255) DEFAULT NULL COMMENT '培训内容',
-      `notes` varchar(255) DEFAULT NULL COMMENT '备注',
-      `create_time` datetime  COMMENT '创建时间',
-      `update_time` datetime COMMENT '更新时间',
-      KEY `pid` (`mid`)
-  ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='培训';
-  
-  -- 员工调动
-  CREATE TABLE `em_transfer` (
-      `id` bigint unsigned NOT NULL primary key COMMENT 'ID',
-      `member_id` bigint unsigned DEFAULT NULL COMMENT '员工编号',
-      `after_dep_id` bigint unsigned DEFAULT NULL COMMENT '调动后部门',
-      `after_job_id` bigint unsigned DEFAULT NULL COMMENT '调动后职位',
-      `transfer_date` date DEFAULT NULL COMMENT '调动日期',
-      `reason` varchar(255) DEFAULT NULL COMMENT '调动原因',
-      `notes` varchar(255) DEFAULT NULL,
-      `create_time` datetime  COMMENT '创建时间',
-      `update_time` datetime COMMENT '更新时间',
-      KEY `pid` (`mid`)
-  ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='人员变动';
-  ```
-  
-  <br>
-  
-  
-  
 + 考勤
 
   > 1. 员工基本信息管理，增加，删除，修改
@@ -407,31 +395,54 @@
   ```mysql
   -- 考勤
   CREATE TABLE `atte_attendance`  (
-      `id` bigint unsigned NOT NULL primary key COMMENT 'ID',
-      `work_number` bigint unsigned DEFAULT NULL COMMENT '员工编号',
-      `atte_status` tinyint unsigned DEFAULT NULL COMMENT '考勤状态 1正常2旷工3迟到4早退5外出6年假7事假8病假9产假10调休11补签',
-      `work_in_time` datetime DEFAULT NULL COMMENT '上班考勤时间',
-      `work_in_place` varchar(30) DEFAULT NULL COMMENT '考勤地点',
-      `work_out_time` datetime NULL DEFAULT NULL COMMENT '下班考勤时间',
-      `work_out_place` varchar(30) DEFAULT NULL COMMENT '下班考勤地点',
-      `notes` varchar(255) DEFAULT NULL COMMENT '备注',
-      `create_time` datetime  COMMENT '创建时间',
-      `update_time` datetime COMMENT '更新时间',
+      `id`              bigint unsigned       NOT NULL primary key COMMENT 'ID',
+      `user_id`         bigint unsigned       DEFAULT NULL COMMENT '用户id',
+      `company_id`      bigint unsigned       COMMENT '企业ID',
+      `department_id`   bigint unsigned       COMMENT '部门ID',
+      `atte_status`     tinyint unsigned      DEFAULT NULL COMMENT '考勤状态 1正常2旷工3迟到4早退5外出6年假7事假8病假9产假10调休11补签',
+      `work_in_time`    datetime              DEFAULT NULL COMMENT '上班考勤时间',
+      `work_in_place`   varchar(30)           DEFAULT NULL COMMENT '考勤地点',
+      `work_out_time`   datetime              NULL DEFAULT NULL COMMENT '下班考勤时间',
+      `work_out_place`  varchar(30)           DEFAULT NULL COMMENT '下班考勤地点',
+      `notes`           varchar(255)          DEFAULT NULL COMMENT '备注',
+      `create_time`     datetime              COMMENT '创建时间',
+      `update_time`     datetime              COMMENT '更新时间',
+      KEY `idx_user_id` (`user_id`),
+      KEY `idx_company_id` (`company_id`),
+      KEY `idx_department_id` (`department_id`)
   ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='出勤';
   
   -- 考勤统计
   CREATE TABLE `atte_archive_monthly`  (
-      `id` bigint unsigned NOT NULL primary key COMMENT 'ID',
-      `enterprise_id` bigint unsigned COMMENT '企业ID',
-      `department_id` bigint unsigned COMMENT '部门ID',
-      `archive_year` varchar(36) DEFAULT NULL COMMENT '归档年份',
-      `archive_month` varchar(36) DEFAULT NULL COMMENT '归档月份',
-      `total_member_num` int(36) DEFAULT NULL COMMENT '总人数',
-      `full_atte_member_num` int(36) DEFAULT NULL COMMENT '全勤人数',
-      `is_archived` int(20) DEFAULT NULL COMMENT '是否归档(0已经归档1没有归档)',
-      `notes` varchar(255) DEFAULT NULL,
-      UNIQUE INDEX `enterprise_id`(`enterprise_id`, `department_id`, `archive_year`, `archive_month`) USING BTREE
-  ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4;
+       `id`                 bigint unsigned    NOT NULL primary key COMMENT 'ID',
+       `company_id`         bigint unsigned    COMMENT '企业ID',
+       `department_id`      bigint unsigned    COMMENT '部门ID',
+       `archive_year`       varchar(36)        DEFAULT NULL COMMENT '归档年份',
+       `archive_month`      varchar(36)        DEFAULT NULL COMMENT '归档月份',
+       `total_member_num`   int(36)            DEFAULT NULL COMMENT '总人数',
+       `full_atte_member_num` int(36)          DEFAULT NULL COMMENT '全勤人数',
+       `is_archived`        int(20)            DEFAULT NULL COMMENT '是否归档(0已经归档1没有归档)',
+       `notes`              varchar(255)       DEFAULT NULL,
+       `create_time`     datetime              COMMENT '创建时间',
+       KEY `idx_company_id` (`company_id`),
+       KEY `idx_department_id` (`department_id`)
+  ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 comment='考勤归档';
+  
+  -- 考勤配置
+  CREATE TABLE `atte_attendance_config`  (
+      `id`                   bigint unsigned       NOT NULL primary key COMMENT 'ID',
+      `company_id`           bigint unsigned       COMMENT '企业ID',
+      `department_id`        bigint unsigned       COMMENT '部门ID',
+      `morning_start_time`   time                  DEFAULT NULL COMMENT '上午打卡时间',
+      `morning_end_time`     time                  DEFAULT NULL COMMENT '上午打卡时间',
+      `afternoon_start_time` time                  DEFAULT NULL COMMENT '下午打卡时间',
+      `afternoon_end_time`   time                  DEFAULT NULL COMMENT '下午打卡时间',
+      `notes`                varchar(255)          DEFAULT NULL comment '备注',
+      `create_time`          datetime              COMMENT '创建时间',
+      `update_time`          datetime              COMMENT '更新时间',
+      KEY `idx_company_id` (`company_id`),
+      KEY `idx_department_id` (`department_id`)
+  ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '考勤配置表' ROW_FORMAT = Compact;
   ```
   
   <br>
@@ -441,38 +452,48 @@
   ```mysql
   -- 日常统计
   CREATE TABLE `statistics_daily` (
-      `id` bigint unsigned NOT NULL primary key COMMENT 'ID',
-      `date_calculated` varchar(20) NOT NULL COMMENT '统计日期',
-      `register_count` int(11) NOT NULL DEFAULT '0' COMMENT '注册人数',
-      `login_count` int(11) NOT NULL DEFAULT '0' COMMENT '登录人数',
-      `create_time` datetime  COMMENT '创建时间',
-      `update_time` datetime COMMENT '更新时间',
-      PRIMARY KEY (`id`),
-      KEY `idx_statistics_day` (`date_calculated`)
+      `id`                  bigint unsigned    NOT NULL primary key COMMENT 'ID',
+      `calculate_date`     datetime           NOT NULL COMMENT '统计日期',
+      `register_count`      int(11)            NOT NULL DEFAULT '0' COMMENT '注册人数',
+      `login_count`         int(11)            NOT NULL DEFAULT '0' COMMENT '登录人数',
+      `create_time`         datetime           COMMENT '创建时间',
+      `update_time`         datetime           COMMENT '更新时间',
+      KEY `idx_statistics_day` (`calculate_date`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='网站统计日数据';
   
   -- 月度统计
   CREATE TABLE `statistics_monthly` (
-      `id` bigint unsigned NOT NULL primary key COMMENT 'ID',
-      `month_calculated` varchar(20) NOT NULL COMMENT '统计年月',
-      `register_count_month` int(11) NOT NULL DEFAULT '0' COMMENT '当月注册人数',
-      `login_count_month` int(11) NOT NULL DEFAULT '0' COMMENT '当月浏览次数',
-      `create_time` datetime  COMMENT '创建时间',
-      `update_time` datetime COMMENT '更新时间',
-      PRIMARY KEY (`id`),
-      KEY `idx_statistics_month` (`month_calculated`)
+      `id`                   bigint unsigned     NOT NULL primary key COMMENT 'ID',
+      `calculate_date`       varchar(20)         NOT NULL COMMENT '统计年月',
+      `register_count_month` int(11)             NOT NULL DEFAULT '0' COMMENT '当月注册人数',
+      `login_count_month`    int(11)             NOT NULL DEFAULT '0' COMMENT '当月浏览次数',
+      `create_time`          datetime            COMMENT '创建时间',
+      `update_time`          datetime            COMMENT '更新时间',
+      KEY `idx_statistics_date` (`calculate_date`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='网站统计日数据';
   
   -- 总数统计
   CREATE TABLE `statistics_total` (
-      `id` bigint unsigned NOT NULL primary key COMMENT 'ID',
-      `register_total_count` int(11) NOT NULL DEFAULT '0' COMMENT '总注册人数',
-      `login_total_count` int(11) NOT NULL DEFAULT '0' COMMENT '历史浏览人数',
-      `company_total_count` int(11) NOT NULL DEFAULT '0' COMMENT '公司数',
-      `create_time` datetime  COMMENT '创建时间',
-      `update_time` datetime COMMENT '更新时间',
-      PRIMARY KEY (`id`)
+      `id`                   bigint unsigned     NOT NULL primary key COMMENT 'ID',
+      `register_total_count` int(11)             NOT NULL DEFAULT '0' COMMENT '总注册人数',
+      `login_total_count`    int(11)             NOT NULL DEFAULT '0' COMMENT '历史浏览人数',
+      `company_total_count`  int(11)             NOT NULL DEFAULT '0' COMMENT '公司数',
+      `create_time`          datetime            COMMENT '创建时间',
+      `update_time`          datetime            COMMENT '更新时间',
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='网站总数统计';
+  
+  -- 公司人员统计
+  CREATE TABLE `statistic_company_data`(
+      `id`                   bigint unsigned     NOT NULL primary key COMMENT 'ID',
+      `company_member_num`   int(11)             NOT NULL DEFAULT '0' COMMENT '公司总人数',
+      `month_recruit_num`    int(11)             NOT NULL DEFAULT '0' COMMENT '当月新加入人数',
+      `month_resigning_num`  int(11)             NOT NULL DEFAULT '0' COMMENT '当月离职人数',
+      `calculate_date`       varchar(20)         NOT NULL COMMENT '统计年月',
+      `create_time`          datetime            COMMENT '创建时间',
+      `update_time`          datetime            COMMENT '更新时间',
+      KEY `idx_statistics_company_date` (`calculate_date`)
+      ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='月公司人数变动统计';
+  )
   ```
   
   
