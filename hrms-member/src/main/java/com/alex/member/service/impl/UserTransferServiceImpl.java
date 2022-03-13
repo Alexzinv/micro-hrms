@@ -9,6 +9,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 员工调职表 服务实现类
@@ -26,5 +28,10 @@ public class UserTransferServiceImpl extends ServiceImpl<UserTransferMapper, Use
             UserTransferQuery condition = (UserTransferQuery) query;
 
         }
+    }
+
+    @Override
+    public List<UserTransfer> listByUserCompanyId(Long userCompanyId) {
+        return baseMapper.selectList(new LambdaQueryWrapper<UserTransfer>().eq(UserTransfer::getUserCompanyId, userCompanyId));
     }
 }

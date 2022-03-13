@@ -22,7 +22,7 @@ public class CodeGenerator {
 		GlobalConfig gc = new GlobalConfig();
 		String projectPath = System.getProperty("user.dir");
 		System.out.println(projectPath);
-		gc.setOutputDir("D:\\Coding\\Java\\综合项目\\micro-hrms\\hrms-member" + "/src/main/java");
+		gc.setOutputDir("D:\\Coding\\Java\\综合项目\\micro-hrms\\hrms-statistic" + "/src/main/java");
 		gc.setAuthor("_Alexzinv_");
 		gc.setOpen(false); //生成后是否打开资源管理器
 		gc.setFileOverride(false); //重新生成时文件是否覆盖
@@ -49,7 +49,7 @@ public class CodeGenerator {
 		// 4、包配置
 		PackageConfig pc = new PackageConfig();
 		pc.setParent("com.alex");
-		pc.setModuleName("member"); //模块名 parent.serviceedu
+		pc.setModuleName("statistic"); //模块名 parent.serviceedu
 		pc.setController("controller");
 		pc.setEntity("entity");
 		pc.setService("service");
@@ -59,9 +59,9 @@ public class CodeGenerator {
 		// 5、策略配置
 		StrategyConfig strategy = new StrategyConfig();
 		// strategy.setInclude("edu_course", "edu_course_description", "edu_chapter", "edu_video");
-		strategy.setInclude("mem_user_company", "mem_user_personal_info");
+		strategy.setInclude("statistics_daily", "statistics_monthly", "statistics_total", "statistics_company_data");
 		strategy.setNaming(NamingStrategy.underline_to_camel);//数据库表映射到实体的命名策略
-		strategy.setTablePrefix("mem" + "_"); //生成实体时去掉表前缀
+		strategy.setTablePrefix("statistics_" + "_"); //生成实体时去掉表前缀
 
 		strategy.setColumnNaming(NamingStrategy.underline_to_camel);//数据库表字段映射到实体的命名策略
 		strategy.setEntityLombokModel(true); // lombok 模型 @Accessors(chain = true) setter链式操作

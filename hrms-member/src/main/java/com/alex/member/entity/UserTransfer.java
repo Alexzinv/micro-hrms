@@ -29,10 +29,13 @@ public class UserTransfer implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "员工ID")
-    @TableId(value = "id", type = IdType.INPUT)
-    @NotNull(groups = {AddGroup.class})
+    @ApiModelProperty(value = "ID")
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
+
+    @ApiModelProperty(value = "用户ID")
+    @NotNull(groups = {AddGroup.class})
+    private Long userCompanyId;
 
     @ApiModelProperty(value = "企业ID")
     @NotNull(groups = {AddGroup.class})

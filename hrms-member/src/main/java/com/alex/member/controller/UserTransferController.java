@@ -35,8 +35,14 @@ public class UserTransferController {
 
     @GetMapping("/get/{id}")
     public R getUserTransfer(@PathVariable("id") Long id){
-        UserTransfer userCompany = userTransferService.getById(id);
-        return R.ok().data("userCompany", userCompany);
+        UserTransfer userTransfer = userTransferService.getById(id);
+        return R.ok().data("data", userTransfer);
+    }
+
+    @GetMapping("/listUserTransfer/{userCompanyId}")
+    public R listUserTransfer(@PathVariable("userCompanyId") Long userCompanyId){
+        List<UserTransfer> userTransfer = userTransferService.listByUserCompanyId(userCompanyId);
+        return R.ok().data("data", userTransfer);
     }
 
     @PostMapping("/listPage/{page}/{limit}")
