@@ -1,7 +1,7 @@
 package com.alex.statistic.service;
 
+import com.alex.common.base.BaseService;
 import com.alex.statistic.entity.StatisticsDaily;
-import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author _Alexzinv_
  * @since 2022-03-13
  */
-public interface StatisticsDailyService extends IService<StatisticsDaily> {
+public interface StatisticsDailyService extends BaseService<StatisticsDaily> {
 
 }
