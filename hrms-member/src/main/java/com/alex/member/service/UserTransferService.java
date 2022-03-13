@@ -1,7 +1,7 @@
 package com.alex.member.service;
 
+import com.alex.common.base.BaseService;
 import com.alex.member.entity.UserTransfer;
-import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author _Alexzinv_
  * @since 2022-02-27
  */
-public interface UserTransferService extends IService<UserTransfer> {
+public interface UserTransferService extends BaseService<UserTransfer> {
 
 }

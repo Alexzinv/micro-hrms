@@ -1,13 +1,16 @@
 package com.alex.member.entity;
 
+import com.alex.common.valid.group.AddGroup;
 import com.baomidou.mybatisplus.annotation.*;
-
-import java.util.Date;
-import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -30,12 +33,15 @@ public class UserTrain implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "企业ID")
+    @NotNull(groups = {AddGroup.class})
     private Long companyId;
 
     @ApiModelProperty(value = "培训日期")
+    @NotNull(groups = {AddGroup.class})
     private Date trainDate;
 
     @ApiModelProperty(value = "培训内容")
+    @NotBlank(groups = {AddGroup.class})
     private String trainContent;
 
     @ApiModelProperty(value = "备注")

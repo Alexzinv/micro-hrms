@@ -1,8 +1,11 @@
 package com.alex.member.service.impl;
 
+import com.alex.common.base.AbstractBaseQuery;
+import com.alex.member.dto.UserTransferQuery;
 import com.alex.member.entity.UserTransfer;
 import com.alex.member.mapper.UserTransferMapper;
 import com.alex.member.service.UserTransferService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -17,4 +20,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserTransferServiceImpl extends ServiceImpl<UserTransferMapper, UserTransfer> implements UserTransferService {
 
+    @Override
+    public void buildCondition(LambdaQueryWrapper<UserTransfer> wrapper, AbstractBaseQuery query) {
+        if(query instanceof UserTransferQuery){
+            UserTransferQuery condition = (UserTransferQuery) query;
+
+        }
+    }
 }

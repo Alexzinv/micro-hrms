@@ -72,9 +72,9 @@ public class UserCompanyController {
         return R.ok();
     }
 
-    @DeleteMapping("/delete/{id}")
-    public R deleteUserCompany(@PathVariable("id") Long id){
-        userCompanyService.removeById(id);
+    @DeleteMapping("/deleteBatch")
+    public R deleteUserCompany(@RequestBody List<Long> ids){
+        userCompanyService.removeByIds(ids);
         return R.ok();
     }
 

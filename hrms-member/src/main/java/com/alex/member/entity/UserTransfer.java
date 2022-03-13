@@ -1,5 +1,6 @@
 package com.alex.member.entity;
 
+import com.alex.common.valid.group.AddGroup;
 import com.baomidou.mybatisplus.annotation.*;
 
 import java.util.Date;
@@ -8,6 +9,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * <p>
@@ -25,23 +29,28 @@ public class UserTransfer implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "ID")
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
+    @ApiModelProperty(value = "员工ID")
+    @TableId(value = "id", type = IdType.INPUT)
+    @NotNull(groups = {AddGroup.class})
     private Long id;
 
     @ApiModelProperty(value = "企业ID")
+    @NotNull(groups = {AddGroup.class})
     private Long companyId;
 
     @ApiModelProperty(value = "调动后部门")
+    @NotBlank(groups = {AddGroup.class})
     private String afterDepartment;
 
     @ApiModelProperty(value = "调动后职位")
+    @NotBlank(groups = {AddGroup.class})
     private String afterPosition;
 
     @ApiModelProperty(value = "调动日期")
     private Date transferDate;
 
     @ApiModelProperty(value = "调动原因")
+    @NotBlank(groups = {AddGroup.class})
     private String reason;
 
     @ApiModelProperty(value = "备注")
