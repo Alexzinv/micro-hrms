@@ -1,5 +1,7 @@
 package com.alex.attendance.entity;
 
+import com.alex.common.valid.ListValue;
+import com.alex.common.valid.group.AddGroup;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
@@ -9,6 +11,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * <p>
@@ -31,15 +35,18 @@ public class Attendance implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "用户id")
+    @NotNull(groups = {AddGroup.class})
     private Long userId;
 
     @ApiModelProperty(value = "企业ID")
+    @NotNull(groups = {AddGroup.class})
     private Long companyId;
 
     @ApiModelProperty(value = "部门ID")
     private Long departmentId;
 
     @ApiModelProperty(value = "考勤状态 1正常2旷工3迟到4早退5外出6年假7事假8病假9产假10调休11补签")
+    @ListValue(values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11})
     private Integer atteStatus;
 
     @ApiModelProperty(value = "上班考勤时间")
