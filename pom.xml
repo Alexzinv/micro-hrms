@@ -18,9 +18,9 @@
         <module>hrms-company</module>
         <module>hrms-member</module>
         <module>hrms-statistic</module>
-        <module>hrms-performance</module>
         <module>hrms-salary</module>
         <module>druid-admin</module>
+        <module>hrms-attendance</module>
     </modules>
 
 
