@@ -1,6 +1,0 @@
-FROM adoptopenjdk/openjdk14:ubi
-RUN mkdir /app
-COPY ./hrms-performance/target/hrms-performance.jar /app
-COPY ./wait-for-it.sh /app
-WORKDIR /app
-CMD ["java", "-jar", "hrms-performance.jar"]
