@@ -6,6 +6,7 @@ import com.alex.statistic.entity.StatisticsDaily;
 import com.alex.statistic.service.StatisticsDailyService;
 import com.alex.statistic.vo.StatisticsDailyQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +35,13 @@ public class StatisticsDailyController {
     public R getArchiveData(@PathVariable("archiveId") Long archiveId) {
         StatisticsDaily byId = statisticsDailyService.getById(archiveId);
         return R.ok().data("data", byId);
+    }
+
+    @ApiOperation("统计某一天信息")
+    @GetMapping("/date/{date}")
+    public R countStat(@PathVariable("date") String date) {
+        statisticsDailyService.countDaily(date);
+        return R.ok();
     }
 
     @PostMapping("/listPage/{page}/{limit}")

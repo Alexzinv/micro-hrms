@@ -13,4 +13,9 @@ import com.alex.statistic.entity.StatisticsDaily;
  */
 public interface StatisticsDailyService extends BaseService<StatisticsDaily> {
 
+    /**
+     * 统计某天信息
+     * @param date 日期
+     */
+    void countDaily(String date);
 }
