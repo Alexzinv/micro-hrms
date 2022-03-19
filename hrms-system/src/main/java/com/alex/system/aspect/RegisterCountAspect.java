@@ -1,12 +1,11 @@
 package com.alex.system.aspect;
 
-import org.springframework.messaging.support.MessageBuilder;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -18,24 +17,22 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 @Aspect
 @Component
-public class LoginCountAspect {
+public class RegisterCountAspect {
 
     private final ThreadPoolExecutor threadPoolExecutor;
     private final StreamBridge streamBridge;
 
     @Autowired
-    public LoginCountAspect(ThreadPoolExecutor threadPoolExecutor, StreamBridge streamBridge) {
+    public RegisterCountAspect(ThreadPoolExecutor threadPoolExecutor, StreamBridge streamBridge) {
         this.threadPoolExecutor = threadPoolExecutor;
         this.streamBridge = streamBridge;
     }
 
-    @Pointcut("execution(* com.alex.system.controller.UserInfoController.info(..))")
-    public void loginUser() {}
-
-    /** 统计登陆次数+1 */
-    @Before("loginUser()")
-    public void loginCount() {
-        threadPoolExecutor.execute(() -> streamBridge.send("loginCount-out-0",
+    /** 统计注册人数+1 */
+    @Before("execution(* com.alex.system.controller.UserController.register(..))")
+    public void countRegister() {
+        threadPoolExecutor.execute(() ->
+                streamBridge.send("registerCount-out-0",
                 MessageBuilder.withPayload(LocalDate.now().toString()).build()));
     }
 }

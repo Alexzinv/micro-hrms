@@ -1,5 +1,6 @@
 package com.alex.system.controller;
 
+import com.alex.common.consant.CacheNameConstant;
 import com.alex.common.consant.PermissionConstant;
 import com.alex.common.util.R;
 import com.alex.common.valid.group.AddGroup;
@@ -13,6 +14,8 @@ import com.alex.system.service.PermissionService;
 import com.alex.system.service.RolePermissionService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +27,7 @@ import java.util.List;
  * @Date 2021/9/22
  * @Description 权限接口
  */
+@CacheConfig(cacheNames = {CacheNameConstant.System.PERMISSION})
 @RestController
 @RequestMapping("/admin/acl/permission")
 public class PermissionController {
@@ -34,6 +38,7 @@ public class PermissionController {
     private RolePermissionService rolePermissionService;
 
     @ApiOperation(value = "查询所有权限")
+    // @Cacheable(key = "'list'")
     @GetMapping("listAll")
     public R listPermissions() {
         /// map方式封装

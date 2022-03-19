@@ -3,3 +3,35 @@ server:
 spring:
   application:
     name: hrms-system
+
+  cloud:
+    stream:
+      #服务的整合处理
+      bindings:
+        loginCount-out-0:
+          # 表示要使用的Exchange名称定义,交换模式默认是topic;把SpringCloud stream的消息输出通道绑定到RabbitMQ的login-stat-exchange交换器。
+          destination: login-stat-exchange
+          # 消息类型
+          content-type: application/json
+          # 要绑定的消息服务的具体设置
+          default-binder: defaultRabbit
+          group: login-register-group
+        registerCount-out-0:
+          destination: register-stat-exchange
+          content-type: application/json
+          default-binder: defaultRabbit
+          group: login-register-group
+      rabbit:
+        bindings:
+          loginCount-out-0:
+            producer:
+              # 消息60秒不消费转入死信队列
+              ttl: 60000
+              # 启动死信队列
+              autoBindDlq: true
+              # 死信队列交换机
+              deadLetterExchange: dead-letter-exchange
+          registerCount-out-0:
+            producer:
+              autoBindDlq: true
+              deadLetterExchange: dead-letter-exchange
