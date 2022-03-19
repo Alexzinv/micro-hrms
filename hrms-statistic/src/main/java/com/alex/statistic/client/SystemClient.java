@@ -1,7 +1,6 @@
 package com.alex.statistic.client;
 
 import com.alex.common.consant.ServiceNameConstant;
-import com.alex.common.util.R;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,5 +21,5 @@ public interface SystemClient {
      * @return 总数
      */
     @GetMapping("/admin/acl/user/sta/inner/registerCount/{date}")
-    R registerCount(@PathVariable("date") String date);
+    Integer registerCount(@PathVariable("date") String date);
 }

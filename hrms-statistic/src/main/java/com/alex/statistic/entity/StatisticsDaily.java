@@ -32,7 +32,7 @@ public class StatisticsDaily implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "统计日期")
-    private Date calculateDate;
+    private String calculateDate;
 
     @ApiModelProperty(value = "注册人数")
     private Integer registerCount;

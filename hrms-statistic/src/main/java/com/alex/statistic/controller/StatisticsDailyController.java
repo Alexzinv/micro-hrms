@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -31,17 +32,17 @@ public class StatisticsDailyController {
         this.statisticsDailyService = statisticsDailyService;
     }
 
-    @GetMapping("/{archiveId}")
-    public R getArchiveData(@PathVariable("archiveId") Long archiveId) {
-        StatisticsDaily byId = statisticsDailyService.getById(archiveId);
-        return R.ok().data("data", byId);
-    }
-
-    @ApiOperation("统计某一天信息")
     @GetMapping("/date/{date}")
     public R countStat(@PathVariable("date") String date) {
         statisticsDailyService.countDaily(date);
         return R.ok();
+    }
+
+    @GetMapping("/show/{begin}/{end}")
+    public R showData(@PathVariable("begin") String begin,
+                      @PathVariable("end") String end) {
+        Map<String, Object> map = statisticsDailyService.showData(begin, end);
+        return R.ok().data(map);
     }
 
     @PostMapping("/listPage/{page}/{limit}")

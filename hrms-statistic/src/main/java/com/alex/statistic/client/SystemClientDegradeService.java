@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class SystemClientDegradeService extends AbstractBaseClient implements SystemClient {
 
     @Override
-    public R registerCount(String date) {
-        return RESULT;
+    public Integer registerCount(String date) {
+        return 0;
     }
 }
