@@ -1,6 +1,7 @@
 package com.alex.statistic.service.impl;
 
 import com.alex.common.base.AbstractBaseQuery;
+import com.alex.common.cache.MybatisRedisCacheConfig;
 import com.alex.statistic.client.SystemClient;
 import com.alex.statistic.entity.StatisticsDaily;
 import com.alex.statistic.mapper.StatisticsDailyMapper;
@@ -8,6 +9,7 @@ import com.alex.statistic.service.StatisticsDailyService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.annotations.CacheNamespace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
  * @since 2022-03-13
  */
 @Service
+@CacheNamespace(implementation = MybatisRedisCacheConfig.class, eviction = MybatisRedisCacheConfig.class)
 public class StatisticsDailyServiceImpl extends ServiceImpl<StatisticsDailyMapper, StatisticsDaily> implements StatisticsDailyService {
 
     @Autowired
