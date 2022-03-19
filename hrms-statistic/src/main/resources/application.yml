@@ -4,3 +4,35 @@ server:
 spring:
   application:
     name: hrms-statistic
+
+  cloud:
+    stream:
+      bindings:
+        # input
+        statLoginCount-in-0:
+          # 表示要使用的Exchange名称定义
+          destination: login-stat-exchange
+          # 消息类型
+          content-type: application/json
+          # 要绑定的消息服务的具体设置
+          default-binder: defaultRabbit
+          group: statistic
+        statRegisterCount-in-0:
+          destination: register-stat-exchange
+          content-type: application/json
+          default-binder: defaultRabbit
+          group: statistic
+      rabbit:
+        bindings:
+          statLoginCount-in-0:
+            consumer:
+              #启用死信队列，默认会生成一个DLX EXCHANGE，当消息重复消费失败后
+              autoBindDlq: true
+              #绑定exchange
+              deadLetterExchange: dead-letter-exchange
+          statRegisterCount-in-0:
+            consumer:
+              autoBindDlq: true
+              deadLetterExchange: dead-letter-exchange
+    function:
+      definition: statLoginCount;statRegisterCount

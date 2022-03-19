@@ -23,3 +23,5 @@ spring:
             refresh: true
           - data-id: zipkin.yml
             refresh: true
+          - data-id: rabbitmq.yml
+            refresh: true
