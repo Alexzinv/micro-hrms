@@ -1,12 +1,11 @@
 package com.alex.attendance.entity;
 
+import com.alex.common.base.BaseEntity;
 import com.alex.common.valid.ListValue;
 import com.alex.common.valid.group.AddGroup;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -27,7 +26,7 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper = false)
 @TableName("atte_archive_monthly")
 @ApiModel(value="ArchiveMonthly对象", description="考勤归档")
-public class ArchiveMonthly implements Serializable {
+public class ArchiveMonthly extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -62,9 +61,5 @@ public class ArchiveMonthly implements Serializable {
     private Integer isArchived;
 
     private String notes;
-
-    @ApiModelProperty(value = "创建时间")
-    private Date createTime;
-
 
 }

@@ -1,18 +1,18 @@
 package com.alex.attendance.entity;
 
+import com.alex.common.base.BaseEntity;
 import com.alex.common.valid.ListValue;
 import com.alex.common.valid.group.AddGroup;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * <p>
@@ -26,7 +26,7 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper = false)
 @TableName("atte_attendance")
 @ApiModel(value="Attendance对象", description="出勤")
-public class Attendance implements Serializable {
+public class Attendance extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -63,12 +63,4 @@ public class Attendance implements Serializable {
 
     @ApiModelProperty(value = "备注")
     private String notes;
-
-    @ApiModelProperty(value = "创建时间")
-    private Date createTime;
-
-    @ApiModelProperty(value = "更新时间")
-    private Date updateTime;
-
-
 }
